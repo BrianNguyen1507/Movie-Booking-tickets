@@ -10,7 +10,9 @@ class MovieDetailPage extends StatefulWidget {
 class _MovieDetailPageState extends State<MovieDetailPage> {
   @override
   Widget renderBannerDetail(BuildContext context) {
-    return Container();
+    return Container(
+      child: const Text('building'),
+    );
   }
 
   Widget build(BuildContext context) {
