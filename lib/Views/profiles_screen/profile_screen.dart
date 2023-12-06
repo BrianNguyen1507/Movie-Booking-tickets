@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_booking/Views/order_tickets/order_tickets_screen.dart';
 import 'package:movie_booking/Views/profiles_screen/Confirmdialog.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -76,45 +77,63 @@ class _Profile_PageState extends State<ProfilePage> {
             SizedBox(
               height: 60,
               width: double.infinity,
-              child: Column(children: [
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    width: double.infinity,
-                    height: double.infinity,
-                    child: Row(children: [
-                      const Text(
-                        'Orders',
-                        style: TextStyle(
-                          color: Color(0xFF181725),
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TicketInfoScreen()),
+                  );
+                },
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 16),
+                        width: double.infinity,
+                        height: double.infinity,
+                        child: Row(
+                          children: [
+                            const Text(
+                              'Orders',
+                              style: TextStyle(
+                                color: Color(0xFF181725),
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const Expanded(
+                              child: SizedBox(
+                                width: double.infinity,
+                                height: double.infinity,
+                              ),
+                            ),
+                            SizedBox(
+                              child: IconButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => TicketInfoScreen(),
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(Icons.keyboard_arrow_right),
+                                iconSize: 40,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      const Expanded(
-                        child: SizedBox(
-                          width: double.infinity,
-                          height: double.infinity,
-                          child: SizedBox(),
-                        ),
-                      ),
-                      SizedBox(
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.keyboard_arrow_right),
-                          iconSize: 40,
-                        ),
-                      ),
-                    ]),
-                  ),
+                    ),
+                    Container(
+                      color: const Color(0xFFE2E2E2),
+                      height: 1,
+                      width: double.infinity,
+                      child: const SizedBox(),
+                    ),
+                  ],
                 ),
-                Container(
-                  color: const Color(0xFFE2E2E2),
-                  height: 1,
-                  width: double.infinity,
-                  child: const SizedBox(),
-                ),
-              ]),
+              ),
             ),
             SizedBox(
               height: 60,
