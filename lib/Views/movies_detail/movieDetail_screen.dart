@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:movie_booking/Views/buyticket_screen/buy_tickets_screen.dart';
+import 'package:movie_booking/Views/home_screen/HomePage.dart';
+import 'package:movie_booking/Views/index/index.dart';
 import 'package:movie_booking/Views/movies_detail/widgets/detail_widget.dart';
 
 class MovieDetailPage extends StatefulWidget {
@@ -9,8 +12,6 @@ class MovieDetailPage extends StatefulWidget {
 }
 
 class _MovieDetailPageState extends State<MovieDetailPage> {
- 
-
   Widget renderbanner(BuildContext context) {
     return Container(
       width: double.infinity,
@@ -26,8 +27,6 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
   }
 
   double total = 0.0;
-  
-  
 
   Widget renderBooking(BuildContext context) {
     return Container(
@@ -43,7 +42,9 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
             style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromARGB(255, 41, 189, 58),
                 elevation: 0.0),
-            onPressed: () {},
+            onPressed: () {
+              _onRegisterPress(context);
+            },
             child: const Text(
               'BOOKING',
               style: TextStyle(
@@ -54,8 +55,6 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
           ),
         ));
   }
-
-
 
   Widget renderBody(BuildContext context) {
     return Expanded(
@@ -79,7 +78,25 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        toolbarHeight: 30,
+        elevation: 1,
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const IndexPage(
+                        title: '',
+                      )),
+            );
+          },
+          icon: const Icon(Icons.arrow_back),
+        ),
+      ),
       body: Container(
           constraints: const BoxConstraints.expand(),
           child: Column(
@@ -100,4 +117,12 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
           )),
     );
   }
+}
+
+_onRegisterPress(BuildContext context) {
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SeatSelectionScreen(),
+      ));
 }
