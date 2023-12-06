@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_booking/Colors/ColorValues.dart';
-import 'package:movie_booking/Views/bottomnav_bar/BottomNavigator.dart';
+import 'package:movie_booking/Views/index/index.dart';
 import 'package:movie_booking/Views/movies_detail/movieDetail_screen.dart';
 
 class CustomDrawer extends StatefulWidget {
@@ -45,7 +45,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const BottomNavBar(
+                    builder: (context) => const IndexPage(
                       title: '',
                       initialIndex: 0,
                     ),
@@ -73,7 +73,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const BottomNavBar(
+                    builder: (context) => const IndexPage(
                       title: '',
                       initialIndex: 1,
                     ),
@@ -101,7 +101,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const BottomNavBar(
+                    builder: (context) => const IndexPage(
                       title: '',
                       initialIndex: 2,
                     ),
@@ -129,7 +129,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const BottomNavBar(
+                    builder: (context) => const IndexPage(
                       title: '',
                       initialIndex: 3,
                     ),
