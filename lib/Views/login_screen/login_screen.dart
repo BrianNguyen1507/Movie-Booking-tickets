@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_booking/Colors/ColorValues.dart';
-import 'package:movie_booking/Views/bottomnav_bar/BottomNavigator.dart';
+import 'package:movie_booking/Views/index/index.dart';
 import 'package:movie_booking/Views/register_screen/register_screen.dart';
 
 class LoginPage extends StatefulWidget {
@@ -179,7 +179,7 @@ _onLoginSuccess(BuildContext context) {
   Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => const BottomNavBar(
+        builder: (context) => const IndexPage(
           title: '',
         ),
       ));
