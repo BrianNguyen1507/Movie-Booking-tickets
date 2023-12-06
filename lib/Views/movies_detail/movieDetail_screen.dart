@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:movie_booking/Views/buyticket_screen/buy_tickets_screen.dart';
-import 'package:movie_booking/Views/home_screen/HomePage.dart';
 import 'package:movie_booking/Views/index/index.dart';
 import 'package:movie_booking/Views/movies_detail/widgets/detail_widget.dart';
 
