@@ -15,7 +15,7 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 3), () {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (context) => const LoginPage(),
       ));
@@ -39,32 +39,8 @@ class _SplashScreenState extends State<SplashScreen>
                 ],
               ),
               image: DecorationImage(
-                image: AssetImage('assets/images/moviebanner2.png'),
+                image: AssetImage('assets/images/splashSceen.png'),
               )),
-          child: const Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Opacity(
-                opacity: 0.87,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    top: 200,
-                    left: 0,
-                  ),
-                  child: Text(
-                    "Watch Your favourite Movies everytime and anytime.",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w600),
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.end,
-                  ),
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );
