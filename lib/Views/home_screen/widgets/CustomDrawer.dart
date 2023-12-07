@@ -156,14 +156,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   fontSize: 18,
                 ),
               ),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MovieDetailPage(),
-                  ),
-                );
-              },
+              onTap: () {},
             ),
           ],
         ),

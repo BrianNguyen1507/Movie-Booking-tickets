@@ -1,5 +1,6 @@
 import 'package:movie_booking/Colors/ColorValues.dart';
 import 'package:movie_booking/Views/home_screen/widgets/AutoScrolling.dart';
+import 'package:movie_booking/Views/movies_detail/movieDetail_screen.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -126,7 +127,14 @@ class _HomePageState extends State<HomePage> {
                         buttonsColor,
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MovieDetailPage(),
+                        ),
+                      );
+                    },
                     child: const Text('Booking')),
               ),
             ],

@@ -69,6 +69,6 @@ final List<String> images = [
   'assets/images/movie_banner.jpg',
   'assets/images/movie_banner.jpg',
   'assets/images/movie_banner.jpg',
-  'assets/images/moviebanner2.png',
+  'assets/images/logoTickets.png',
   // ... other image paths
 ];
