@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_booking/Colors/ColorValues.dart';
 import 'package:movie_booking/Views/index/index.dart';
-import 'package:movie_booking/Views/movies_detail/movieDetail_screen.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
