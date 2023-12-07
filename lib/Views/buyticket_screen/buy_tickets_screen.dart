@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_booking/Views/Finish_payment/finish_payment_screen.dart';
 import 'package:movie_booking/Views/movies_detail/movieDetail_screen.dart';
 import 'package:movie_booking/model/seats/seats.dart';
 import 'package:movie_booking/model/datetime/datetime.dart';
@@ -194,7 +195,10 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
                   height: 50,
                   margin: const EdgeInsets.all(8.0),
                   child: Center(
-                    child: Text(seat.id),
+                    child: Text(
+                      seat.id,
+                      style: const TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
               );
@@ -252,7 +256,7 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
   Widget renderConfirmPayment(BuildContext context) {
     List<String> selectedSeats = getSelectedSeats();
     int totalSelectedSeats = selectedSeats.length;
-    double numseat = 13.0;
+    double numseat = 13.0; //dummy toltal of tickets
     double total = numseat * totalSelectedSeats;
     return Container(
       width: double.infinity,
@@ -316,7 +320,14 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
                   backgroundColor: const Color.fromARGB(255, 41, 189, 58),
                   elevation: 0.0,
                 ),
-                onPressed: () {}, //event to payment session selected
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SummaryPaymentPage(),
+                    ),
+                  );
+                }, //event to payment session selected
                 child: const Text(
                   'Finish Payment',
                   style: TextStyle(
@@ -342,7 +353,7 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
         backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () {
-            Navigator.push(
+            Navigator.pop(
               context,
               MaterialPageRoute(builder: (context) => const MovieDetailPage()),
             );
