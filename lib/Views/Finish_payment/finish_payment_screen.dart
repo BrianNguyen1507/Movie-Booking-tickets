@@ -85,7 +85,7 @@ class _SummaryPaymentPageState extends State<SummaryPaymentPage> {
                     color: Colors.grey,
                   ),
                   Text(
-                    'x2 Adult Stand-2D',
+                    ' x2 Adult Stand-2D',
                     style: TextStyle(
                       color: Colors.grey,
                       fontSize: 20,
@@ -126,7 +126,10 @@ class _SummaryPaymentPageState extends State<SummaryPaymentPage> {
         ),
         Text(
           method,
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle(
+            color: Colors.grey,
+            fontSize: 20,
+          ),
         ),
       ],
     );
@@ -150,7 +153,7 @@ class _SummaryPaymentPageState extends State<SummaryPaymentPage> {
                     color: Colors.grey,
                   ),
                   Text(
-                    'Subtotal :',
+                    ' Subtotal :',
                     style: TextStyle(
                       color: Colors.grey,
                       fontSize: 20,
