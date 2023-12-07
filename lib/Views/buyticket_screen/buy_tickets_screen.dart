@@ -65,10 +65,10 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
 
 //dump data seats not available
   bool isSeatReserved(String seatId, String day, String time) {
-    if ((day == 'Sun' &&
+    if ((day == 'Sunday' &&
             time == '11:30 AM' &&
             (seatId == 'A1' || seatId == 'A2' || seatId == 'A3')) ||
-        (day == 'Mon' &&
+        (day == 'Monday' &&
             time == '11:30 AM' &&
             (seatId == 'D1' || seatId == 'D2' || seatId == 'D3'))) {
       return true;
@@ -89,54 +89,30 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
   }
 
   Widget renderSelectDate(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: DateTimeModel.listDate
-              .take(DateTimeModel.listDate.length ~/ 2)
-              .map((date) {
-            return Padding(
-              padding: const EdgeInsets.only(left: 5),
+    return SizedBox(
+      height: 50,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: DateTimeModel.listDate.map((date) {
+          return Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: SizedBox(
+              height: 30,
               child: ElevatedButton(
                 onPressed: () => handleDateSelection(date),
                 style: ElevatedButton.styleFrom(
                   elevation: 0,
-                  backgroundColor: Colors.grey,
+                  backgroundColor: Colors.grey[800],
                 ),
                 child: Text(
                   date.day.toString(),
                   style: const TextStyle(fontSize: 14),
                 ),
               ),
-            );
-          }).toList(),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: DateTimeModel.listDate
-              .skip(DateTimeModel.listDate.length ~/ 2)
-              .map((date) {
-            return Padding(
-              padding: const EdgeInsets.only(left: 5),
-              child: ElevatedButton(
-                onPressed: () => handleDateSelection(date),
-                style: ElevatedButton.styleFrom(
-                  elevation: 0,
-                  backgroundColor: date == selectedDateTime.selectedTime
-                      ? Colors.blue
-                      : Colors.grey,
-                ),
-                child: Text(
-                  date.day.toString(),
-                  style: const TextStyle(fontSize: 14),
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ],
+            ),
+          );
+        }).toList(),
+      ),
     );
   }
 
@@ -162,7 +138,7 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
 
   Widget renderScreenTv(BuildContext context) {
     return Container(
-      color: Colors.black,
+      color: Colors.transparent,
       child: Center(
         child: Container(
           width: 400.0,
@@ -281,6 +257,7 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
+        border: Border(top: BorderSide(color: Colors.grey)),
         color: Colors.transparent,
       ),
       child: Padding(
@@ -384,17 +361,13 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
           renderSelectTime(context),
           renderNote(context),
           const Divider(
-            color: Colors.white,
+            color: Colors.grey,
             thickness: 1,
           ),
           //TV Screen
           renderScreenTv(context),
           // Seat Selection
           renderSeats(context),
-          const Divider(
-            color: Colors.white,
-            thickness: 1,
-          ),
           // Selected Information
           renderConfirmPayment(context),
         ],
