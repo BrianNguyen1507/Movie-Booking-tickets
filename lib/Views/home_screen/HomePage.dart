@@ -1,4 +1,4 @@
-import 'package:movie_booking/Colors/ColorValues.dart';
+import 'package:movie_booking/Colors/colorvalues.dart';
 import 'package:movie_booking/Views/home_screen/widgets/AutoScrolling.dart';
 import 'package:movie_booking/Views/movies_detail/movieDetail_screen.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
