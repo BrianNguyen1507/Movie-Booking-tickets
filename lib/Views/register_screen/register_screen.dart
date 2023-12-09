@@ -18,10 +18,6 @@ final TextEditingController _firstNameDkController = TextEditingController();
 final TextEditingController _lastNameDkController = TextEditingController();
 final TextEditingController _addressDkController = TextEditingController();
 final TextEditingController _numberphoneDkController = TextEditingController();
-final List<String> _gender = [
-  'Male',
-  'Female',
-];
 
 enum Gender {
   Male,
@@ -38,7 +34,6 @@ bool _isChecked = false;
 class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
-    String? selectedValue;
     return Scaffold(
       backgroundColor: Colors.black,
       body: SingleChildScrollView(
