@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:movie_booking/Colors/ColorValues.dart';
+import 'package:movie_booking/Colors/colorvalues.dart';
 import 'package:movie_booking/Views/login_screen/login_screen.dart';
+import 'package:movie_booking/handle/handle_register/handleregister.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -10,13 +11,28 @@ class RegisterPage extends StatefulWidget {
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
-bool _isObscurePass = true;
-bool _isObscureConf = true;
+final TextEditingController _emailDkController = TextEditingController();
+final TextEditingController _passwordDkController = TextEditingController();
+final TextEditingController _repasswordDkController = TextEditingController();
+final TextEditingController _firstNameDkController = TextEditingController();
+final TextEditingController _lastNameDkController = TextEditingController();
+final TextEditingController _addressDkController = TextEditingController();
+final TextEditingController _numberphoneDkController = TextEditingController();
 final List<String> _gender = [
   'Male',
   'Female',
 ];
 
+enum Gender {
+  Male,
+  Female,
+}
+
+Gender? selectedGender;
+
+final List<Gender> _genders = [Gender.Male, Gender.Female];
+bool _isObscurePass = true;
+bool _isObscureConf = true;
 bool _isChecked = false;
 
 class _RegisterPageState extends State<RegisterPage> {
@@ -57,13 +73,14 @@ class _RegisterPageState extends State<RegisterPage> {
                         fontWeight: FontWeight.bold),
                   ),
                   const Gap(10),
-                  const SizedBox(
+                  SizedBox(
                     width: 350,
                     child: TextField(
+                      controller: _emailDkController,
                       keyboardType: TextInputType.emailAddress,
-                      style: TextStyle(color: Colors.white70),
+                      style: const TextStyle(color: Colors.white70),
                       obscureText: false,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         contentPadding: EdgeInsets.only(left: 10, right: 10),
                         filled: true,
                         focusedBorder: OutlineInputBorder(
@@ -84,6 +101,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   SizedBox(
                     width: 350,
                     child: TextField(
+                      controller: _passwordDkController,
                       style: const TextStyle(color: Colors.white70),
                       obscureText: _isObscurePass,
                       decoration: InputDecoration(
@@ -119,6 +137,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   SizedBox(
                     width: 350,
                     child: TextField(
+                      controller: _repasswordDkController,
                       style: const TextStyle(color: Colors.white70),
                       obscureText: _isObscureConf,
                       decoration: InputDecoration(
@@ -151,16 +170,17 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   const Gap(10),
-                  const Center(
+                  Center(
                       child: SizedBox(
                     width: 350.0,
                     child: Row(
                       children: <Widget>[
                         Expanded(
                           child: TextField(
-                            style: TextStyle(color: Colors.white70),
+                            controller: _firstNameDkController,
+                            style: const TextStyle(color: Colors.white70),
                             obscureText: false,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               contentPadding:
                                   EdgeInsets.only(left: 10, right: 10),
                               filled: true,
@@ -178,12 +198,13 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                         ),
-                        Gap(10),
+                        const Gap(10),
                         Expanded(
                           child: TextField(
-                            style: TextStyle(color: Colors.white70),
+                            controller: _lastNameDkController,
+                            style: const TextStyle(color: Colors.white70),
                             obscureText: false,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               contentPadding:
                                   EdgeInsets.only(left: 10, right: 10),
                               filled: true,
@@ -207,41 +228,48 @@ class _RegisterPageState extends State<RegisterPage> {
                   const Gap(10),
                   SizedBox(
                     width: 350.0,
-                    child: DropdownButtonFormField<String>(
-                      value: selectedValue,
-                      onChanged: (String? value) {
+                    child: DropdownButtonFormField<Gender>(
+                      value: selectedGender,
+                      onChanged: (Gender? value) {
                         // Update the selected value when an item is chosen.
-                        selectedValue = value;
+                        setState(() {
+                          selectedGender = value;
+                        });
                       },
                       dropdownColor: const Color.fromARGB(255, 70, 70, 70),
                       decoration: const InputDecoration(
                         labelText: 'Gender',
                         labelStyle: TextStyle(color: Colors.white70),
                         focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: buttonsColor, width: 3.0)),
+                          borderSide:
+                              BorderSide(color: buttonsColor, width: 3.0),
+                        ),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
                               BorderSide(color: Colors.white70, width: 1.0),
                         ),
                       ),
-                      items: _gender.map((String gender) {
-                        return DropdownMenuItem<String>(
+                      items: _genders.map((Gender gender) {
+                        return DropdownMenuItem<Gender>(
                           value: gender,
-                          child: Text(gender),
+                          child: Text(gender
+                              .toString()
+                              .split('.')
+                              .last), // Display 'Male' or 'Female'
                         );
                       }).toList(),
                       style: const TextStyle(color: Colors.white70),
                     ),
                   ),
                   const Gap(10),
-                  const SizedBox(
+                  SizedBox(
                     width: 350,
                     child: TextField(
+                      controller: _addressDkController,
                       keyboardType: TextInputType.streetAddress,
-                      style: TextStyle(color: Colors.white70),
+                      style: const TextStyle(color: Colors.white70),
                       obscureText: false,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         contentPadding: EdgeInsets.only(left: 10, right: 10),
                         filled: true,
                         focusedBorder: OutlineInputBorder(
@@ -259,13 +287,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   const Gap(10),
-                  const SizedBox(
+                  SizedBox(
                     width: 350,
                     child: TextField(
+                      controller: _numberphoneDkController,
                       keyboardType: TextInputType.number,
-                      style: TextStyle(color: Colors.white70),
+                      style: const TextStyle(color: Colors.white70),
                       obscureText: false,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         contentPadding: EdgeInsets.only(left: 10, right: 10),
                         filled: true,
                         focusedBorder: OutlineInputBorder(
@@ -311,16 +340,17 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                             RichText(
                               text: const TextSpan(
-                                  text:
-                                      'I have read, I understand, and I agree to ',
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text: 'the terms',
-                                      style: TextStyle(
-                                          color: buttonsColor,
-                                          decoration: TextDecoration.underline),
-                                    )
-                                  ]),
+                                text:
+                                    'I have read, I understand, and I agree to ',
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: 'the terms',
+                                    style: TextStyle(
+                                        color: buttonsColor,
+                                        decoration: TextDecoration.underline),
+                                  )
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -334,7 +364,16 @@ class _RegisterPageState extends State<RegisterPage> {
                                 elevation: 0.0),
                             onPressed: _isChecked
                                 ? () {
-                                    _onRegistrationSuccess(context);
+                                    HandleRegister.validateRegistration(
+                                      context,
+                                      _emailDkController.text,
+                                      _passwordDkController.text,
+                                      _repasswordDkController.text,
+                                      _firstNameDkController.text,
+                                      _lastNameDkController.text,
+                                      _numberphoneDkController.text,
+                                      _addressDkController.text,
+                                    );
                                   }
                                 : null,
                             child: const Text(
@@ -366,12 +405,4 @@ _onbackbutton(BuildContext context) {
       builder: (context) => const LoginPage(),
     ),
   );
-}
-
-_onRegistrationSuccess(BuildContext context) {
-  Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const LoginPage(),
-      ));
 }
