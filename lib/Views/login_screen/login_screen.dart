@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:movie_booking/Colors/ColorValues.dart';
-import 'package:movie_booking/Views/index/index.dart';
+import 'package:movie_booking/Colors/colorvalues.dart';
+import 'package:movie_booking/handle/handle_login/handleLogin.dart';
 import 'package:movie_booking/Views/register_screen/register_screen.dart';
 
 class LoginPage extends StatefulWidget {
@@ -9,6 +9,10 @@ class LoginPage extends StatefulWidget {
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
+
+HandleLogin _handleLogin = HandleLogin();
+final TextEditingController _usernameController = TextEditingController();
+final TextEditingController _passwordController = TextEditingController();
 
 class _LoginPageState extends State<LoginPage> {
   @override
@@ -58,6 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: SizedBox(
                         width: 350.0,
                         child: TextField(
+                          controller: _usernameController,
                           style: const TextStyle(color: Colors.white70),
                           obscureText: false,
                           decoration: InputDecoration(
@@ -89,6 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: SizedBox(
                         width: 350.0,
                         child: TextField(
+                          controller: _passwordController,
                           style: const TextStyle(color: Colors.white70),
                           obscureText: true,
                           decoration: InputDecoration(
@@ -125,7 +131,11 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         onPressed: () {
-                          _onLoginSuccess(context);
+                          _handleLogin.handleLogin(
+                            context,
+                            _usernameController.text,
+                            _passwordController.text,
+                          );
                         },
                         child: const Text('Next'),
                       ),
@@ -172,15 +182,5 @@ _onRegisterPress(BuildContext context) {
       context,
       MaterialPageRoute(
         builder: (context) => const RegisterPage(),
-      ));
-}
-
-_onLoginSuccess(BuildContext context) {
-  Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const IndexPage(
-          title: '',
-        ),
       ));
 }
