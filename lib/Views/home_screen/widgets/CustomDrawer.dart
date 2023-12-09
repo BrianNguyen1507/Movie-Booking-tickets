@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movie_booking/Colors/ColorValues.dart';
+import 'package:movie_booking/Colors/colorvalues.dart';
 import 'package:movie_booking/Views/index/index.dart';
 
 class CustomDrawer extends StatefulWidget {

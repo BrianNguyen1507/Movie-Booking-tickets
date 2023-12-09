@@ -4,7 +4,7 @@ import 'package:movie_booking/Views/home_screen/HomePage.dart';
 import 'package:movie_booking/Views/showtimes_screen/showtime_screen.dart';
 import 'package:movie_booking/Views/store_screen/store_screen.dart';
 import 'package:movie_booking/Views/profiles_screen/profile_screen.dart';
-import 'package:movie_booking/Colors/ColorValues.dart';
+import 'package:movie_booking/Colors/colorvalues.dart';
 
 class IndexPage extends StatefulWidget {
   const IndexPage({super.key, required String title, int? initialIndex})
