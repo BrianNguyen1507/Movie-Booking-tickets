@@ -15,6 +15,7 @@ class HandleLogin extends StatefulWidget {
 class HandleLoginState extends State<HandleLogin> {
   final String testEmail = "admin@gmail.com";
   final String testPass = "123123Hh@";
+//dummy account .
 
   bool validateInput(String username, String password) {
     RegExp emailRegex =
@@ -42,8 +43,8 @@ class HandleLoginState extends State<HandleLogin> {
 
     if (username == testEmail && password == testPass) {
       // Successful login
-      _onLoginSuccess(context);
       _showSnackBarSuccess(context);
+      _onLoginSuccess(context);
     } else {
       // Failed login
       _showSnackBarFail(context);
@@ -85,7 +86,6 @@ class HandleLoginState extends State<HandleLogin> {
       ),
     );
   }
-
 
   void _onLoginSuccess(BuildContext context) {
     Navigator.pushReplacement(
