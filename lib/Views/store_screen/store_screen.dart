@@ -28,7 +28,7 @@ class _StoreState extends State<Store> {
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
       child: Card(
-        color: Colors.grey.shade400,
+        color: Colors.grey.shade100,
         elevation: 0,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
