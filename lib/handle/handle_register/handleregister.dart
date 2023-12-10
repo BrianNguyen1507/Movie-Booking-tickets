@@ -85,9 +85,8 @@ class HandleRegisterState extends State<HandleRegister> {
       return;
     }
     RegExp phoneRegex = RegExp(r'^0\d{9,10}$');
-    if (phone == null || phone.isEmpty || !phoneRegex.hasMatch(phone)) {
+    if (phone.isEmpty || !phoneRegex.hasMatch(phone)) {
       _showSnackBar(context, "Invalid phone number");
-      print(phone);
       return;
     }
     // Successful registration
