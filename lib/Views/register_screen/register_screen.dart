@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:movie_booking/Colors/colorvalues.dart';
 import 'package:movie_booking/Views/login_screen/login_screen.dart';
-import 'package:movie_booking/handle/handle_register/handleregister.dart';
+import 'package:movie_booking/utils/handle_register/handleregister.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -369,6 +369,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       _addressDkController.text,
                                       _numberphoneDkController.text,
                                     );
+                                    _resetText();
                                   }
                                 : null,
                             child: const Text(
@@ -391,6 +392,16 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
+}
+
+_resetText() {
+  _emailDkController.text = "";
+  _passwordDkController.text = "";
+  _repasswordDkController.text = "";
+  _firstNameDkController.text = "";
+  _lastNameDkController.text = "";
+  _addressDkController.text = "";
+  _numberphoneDkController.text = "";
 }
 
 _onbackbutton(BuildContext context) {

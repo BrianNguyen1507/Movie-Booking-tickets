@@ -136,6 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                             _usernameController.text,
                             _passwordController.text,
                           );
+                          _resetText();
                         },
                         child: const Text('Next'),
                       ),
@@ -175,6 +176,11 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+}
+
+_resetText() {
+  _usernameController.text = "";
+  _passwordController.text = "";
 }
 
 _onRegisterPress(BuildContext context) {

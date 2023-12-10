@@ -79,11 +79,13 @@ class HandleRegisterState extends State<HandleRegister> {
     }
 
     // Check if address is valid (between 6 and 30 characters)
-    RegExp addressRegex = RegExp(r'^.{6,50}$');
+    RegExp addressRegex = RegExp(r'^.{6,30}$');
+
     if (!addressRegex.hasMatch(address)) {
       _showSnackBar(context, "Invalid address");
       return;
     }
+
     RegExp phoneRegex = RegExp(r'^0\d{9,10}$');
     if (phone.isEmpty || !phoneRegex.hasMatch(phone)) {
       _showSnackBar(context, "Invalid phone number");
