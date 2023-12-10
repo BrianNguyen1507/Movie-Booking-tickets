@@ -11,21 +11,21 @@ class HandleRegister extends StatefulWidget {
     BuildContext context,
     String username,
     String password,
+    String repassword,
     String firstname,
     String lastname,
-    String phone,
     String address,
-    String repassword,
+    String phone,
   ) {
     HandleRegisterState().validateRegistration(
       context,
-      username,
-      password,
-      repassword,
-      firstname,
-      lastname,
-      phone,
+      username.trim(),
+      password.trim(),
+      repassword.trim(),
+      firstname.trim(),
+      lastname.trim(),
       address,
+      phone.trim(),
     );
   }
 }
@@ -35,11 +35,11 @@ class HandleRegisterState extends State<HandleRegister> {
     BuildContext context,
     String username,
     String password,
+    String repassword,
     String firstname,
     String lastname,
-    String phone,
     String address,
-    String repassword,
+    String phone,
   ) {
     RegExp emailRegex =
         RegExp(r'^(?=.{8,50}$)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$');
@@ -59,30 +59,35 @@ class HandleRegisterState extends State<HandleRegister> {
     }
 
     // Check if passwords match
-    if (repassword != password) {
+    if (repassword.trim() != password.trim()) {
       _showSnackBar(context, "Passwords do not match");
+      print("repassword: ${repassword.trim()}");
+      print("password: ${password.trim()}");
+
       return;
     }
     // Check if name is valid (between 6 and 30 characters)
-    RegExp nameRegex = RegExp(r'^.{6,30}$');
+    RegExp nameRegex = RegExp(r'^.{1,30}$');
     if (!nameRegex.hasMatch(firstname)) {
-      _showSnackBar(context, "Invalid frist name");
+      _showSnackBar(context, "Invalid first name");
+
       return;
     }
     if (!nameRegex.hasMatch(lastname)) {
       _showSnackBar(context, "Invalid last name");
       return;
     }
-    // Check if phone is invalid (doesn't match the pattern)
-    RegExp phoneRegex = RegExp(r'^0\d{10}$');
-    if (phoneRegex.hasMatch(phone)) {
-      _showSnackBar(context, "Invalid phone number");
-      return;
-    }
+
     // Check if address is valid (between 6 and 30 characters)
-    RegExp addressRegex = RegExp(r'^.{6,30}$');
+    RegExp addressRegex = RegExp(r'^.{6,50}$');
     if (!addressRegex.hasMatch(address)) {
       _showSnackBar(context, "Invalid address");
+      return;
+    }
+    RegExp phoneRegex = RegExp(r'^0\d{9,10}$');
+    if (phone == null || phone.isEmpty || !phoneRegex.hasMatch(phone)) {
+      _showSnackBar(context, "Invalid phone number");
+      print(phone);
       return;
     }
     // Successful registration

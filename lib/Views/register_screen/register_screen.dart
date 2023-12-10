@@ -366,8 +366,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                       _repasswordDkController.text,
                                       _firstNameDkController.text,
                                       _lastNameDkController.text,
-                                      _numberphoneDkController.text,
                                       _addressDkController.text,
+                                      _numberphoneDkController.text,
                                     );
                                   }
                                 : null,
