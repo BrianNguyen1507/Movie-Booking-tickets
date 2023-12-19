@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_booking/Colors/colorvalues.dart';
-import 'package:movie_booking/handle/handle_login/handleLogin.dart';
+import 'package:movie_booking/utils/handle_login/handlelogin.dart';
 import 'package:movie_booking/Views/register_screen/register_screen.dart';
 
 class LoginPage extends StatefulWidget {
@@ -10,11 +10,15 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-HandleLogin _handleLogin = const HandleLogin();
-final TextEditingController _usernameController = TextEditingController();
-final TextEditingController _passwordController = TextEditingController();
-
 class _LoginPageState extends State<LoginPage> {
+  final HandleLogin _handleLogin = HandleLogin();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  void _resetText() {
+    _usernameController.text = "";
+    _passwordController.text = "";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10)),
                             label: const Text(
-                              'Email',
+                              'Username',
                               style: TextStyle(color: Colors.white70),
                             ),
                           ),
@@ -136,7 +140,6 @@ class _LoginPageState extends State<LoginPage> {
                             _usernameController.text,
                             _passwordController.text,
                           );
-                          _resetText();
                         },
                         child: const Text('Next'),
                       ),
@@ -176,11 +179,6 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-}
-
-_resetText() {
-  _usernameController.text = "";
-  _passwordController.text = "";
 }
 
 _onRegisterPress(BuildContext context) {

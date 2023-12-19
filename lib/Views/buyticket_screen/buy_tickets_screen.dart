@@ -46,7 +46,7 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
     return List.generate(
       6,
       (rowIndex) => List.generate(
-        4,
+        6,
         (seatIndex) {
           final seatId =
               '${String.fromCharCode(65 + rowIndex)}${seatIndex + 1}';

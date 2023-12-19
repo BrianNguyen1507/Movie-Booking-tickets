@@ -1,47 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:movie_booking/Views/index/index.dart';
+import 'package:movie_booking/model/users/User.dart';
 
 class HandleLogin extends StatefulWidget {
   const HandleLogin({Key? key}) : super(key: key);
 
   @override
-  HandleLoginState createState() => HandleLoginState();
+  _HandleLoginState createState() => _HandleLoginState();
 
-  void handleLogin(BuildContext context, String username, String password) {
-    HandleLoginState()._handleLogin(context, username, password);
-  }
-}
-
-class HandleLoginState extends State<HandleLogin> {
-  final String testEmail = "admin@gmail.com";
-  final String testPass = "123123Hh@";
-//dummy account .
-
-  bool validateInput(String username, String password) {
-    RegExp emailRegex =
-        RegExp(r'^(?=.{8,50}$)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$');
-    RegExp passwordRegex = RegExp(r'^.{6,50}$');
-    bool isPasswordValid = passwordRegex.hasMatch(password);
-    bool isEmailValid = emailRegex.hasMatch(username);
-
-    return isEmailValid && isPasswordValid;
-  }
-
-  void handleLogin(BuildContext context, String username, String password) {
-    _handleLogin(context, username, password);
-  }
-
-  void _handleLogin(BuildContext context, String username, String password) {
-    if (username == "" || password == "") {
+  Future<void> handleLogin(
+      BuildContext context, String username, String password) async {
+    if (username.isEmpty || password.isEmpty) {
       _showSnackBarInvalid(context);
       return;
     }
-    if (!validateInput(username, password)) {
+    if (!validateInput(password)) {
       _showSnackBarInvalid(context);
       return;
     }
 
-    if (username == testEmail && password == testPass) {
+    final myUser = User(
+      name: '',
+      phoneNumber: '',
+      level: '',
+      gender: '',
+      address: '',
+      username: username,
+      password: password,
+    );
+
+    final isAuthenticated = await myUser.authenticate();
+    if (isAuthenticated) {
       // Successful login
       _showSnackBarSuccess(context);
       _onLoginSuccess(context);
@@ -98,6 +87,14 @@ class HandleLoginState extends State<HandleLogin> {
     );
   }
 
+  bool validateInput(String password) {
+    // Password regex pattern
+    RegExp passwordRegex = RegExp(r'^.{6,50}$');
+    return passwordRegex.hasMatch(password);
+  }
+}
+
+class _HandleLoginState extends State<HandleLogin> {
   @override
   Widget build(BuildContext context) {
     return Container();
