@@ -64,7 +64,7 @@ class HandleLogin extends StatefulWidget {
         behavior: SnackBarBehavior.floating,
         content: Align(
           alignment: Alignment.bottomCenter,
-          child: Text('Invalid email or password'),
+          child: Text('Invalid user name or password'),
         ),
       ),
     );
@@ -84,7 +84,7 @@ class HandleLogin extends StatefulWidget {
   bool validateInput(String username, String password) {
     RegExp usernameRegex = RegExp(r'^[a-zA-Z0-9_-]{6,20}$');
     bool isUsernameValid = usernameRegex.hasMatch(username);
-    RegExp passwordRegex = RegExp(r'^.{6,50}$');
+    RegExp passwordRegex = RegExp(r'^.{4,50}$');
     bool isPasswordValid = passwordRegex.hasMatch(password);
     return isUsernameValid && isPasswordValid;
   }

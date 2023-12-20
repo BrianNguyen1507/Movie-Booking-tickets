@@ -4,26 +4,42 @@ import 'dart:convert';
 class AuthenticationService {
   static Future<bool> authenticate(String username, String password) async {
     try {
-      const apiUrl = 'https://your-authentication-api.com/authenticate';
+      const apiUrl = "http://192.168.2.100:8083/cinema/login";
       final response = await http.post(
         Uri.parse(apiUrl),
-        body: {
-          'user_name': username,
-          'password': password,
+        headers: {
+          'Content-Type': 'application/json',
         },
+        body: json.encode({
+          "user_name": username,
+          "password": password,
+        }),
       );
 
-      if (response.statusCode == 200) {
-        final responseData = json.decode(response.body);
-        final bool isAuthenticated = responseData['authenticated'];
-        return isAuthenticated;
-      } else {
-        // Handle authentication errors
-        print('Authentication Error: ${response.statusCode}');
+      try {
+        if (response.statusCode == 200) {
+          final dynamic responseData = json.decode(response.body);
+          print('JSON Response: $responseData');
+          final String username = responseData['user_name'];
+          final String userPassword = responseData['password'];
+          final dynamic id = responseData['id'];
+          final bool isAuthenticated = id != null;
+          if (isAuthenticated) {
+            print('Authentication successful for user: $username');
+            return true;
+          } else {
+            print('Authentication failed for user: $username');
+            return false;
+          }
+        } else {
+          print('Authentication Error: ${response.statusCode}');
+          return false;
+        }
+      } catch (error) {
+        print('Exception: $error');
         return false;
       }
     } catch (error) {
-      // Handle exceptions
       print('Exception: $error');
       return false;
     }
