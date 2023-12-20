@@ -23,14 +23,24 @@ enum Gender {
   Female,
 }
 
+String _gender = "";
+List<String> _genders = ["Male", "Female"];
 Gender? selectedGender;
 
-final List<Gender> _genders = [Gender.Male, Gender.Female];
 bool _isObscurePass = true;
 bool _isObscureConf = true;
 bool _isChecked = false;
 
 class _RegisterPageState extends State<RegisterPage> {
+  void _resetText() {
+    _usernameDkController.text = "";
+    _passwordDkController.text = "";
+    _repasswordDkController.text = "";
+    _NameDkController.text = "";
+    _addressDkController.text = "";
+    _numberphoneDkController.text = "";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,7 +95,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               BorderSide(color: Colors.white70, width: 1.0),
                         ),
                         label: Text(
-                          'User name',
+                          'Email',
                           style: TextStyle(color: Colors.white70),
                         ),
                       ),
@@ -219,13 +229,10 @@ class _RegisterPageState extends State<RegisterPage> {
                               BorderSide(color: Colors.white70, width: 1.0),
                         ),
                       ),
-                      items: _genders.map((Gender gender) {
+                      items: _genders.map((String gender) {
                         return DropdownMenuItem<Gender>(
-                          value: gender,
-                          child: Text(gender
-                              .toString()
-                              .split('.')
-                              .last), // Display 'Male' or 'Female'
+                          value: gender == 'Male' ? Gender.Male : Gender.Female,
+                          child: Text(gender),
                         );
                       }).toList(),
                       style: const TextStyle(color: Colors.white70),
@@ -334,16 +341,18 @@ class _RegisterPageState extends State<RegisterPage> {
                                 elevation: 0.0),
                             onPressed: _isChecked
                                 ? () {
-                                    HandleRegister.validateRegistration(
+                                    HandleRegisterState handleRegisterState =
+                                        HandleRegisterState();
+                                    handleRegisterState.validateRegistration(
                                       context,
                                       _usernameDkController.text,
                                       _passwordDkController.text,
                                       _repasswordDkController.text,
                                       _NameDkController.text,
+                                      _gender,
                                       _addressDkController.text,
                                       _numberphoneDkController.text,
                                     );
-                                    _resetText();
                                   }
                                 : null,
                             child: const Text(
@@ -366,15 +375,6 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
-}
-
-_resetText() {
-  _usernameDkController.text = "";
-  _passwordDkController.text = "";
-  _repasswordDkController.text = "";
-  _NameDkController.text = "";
-  _addressDkController.text = "";
-  _numberphoneDkController.text = "";
 }
 
 _onbackbutton(BuildContext context) {
