@@ -20,6 +20,8 @@ class AuthenticationService {
         if (response.statusCode == 200) {
           final dynamic responseData = json.decode(response.body);
           print('JSON Response: $responseData');
+          final String username = responseData['user_name'];
+          final String userPassword = responseData['password'];
           final dynamic id = responseData['id'];
           final bool isAuthenticated = id != null;
           if (isAuthenticated) {
