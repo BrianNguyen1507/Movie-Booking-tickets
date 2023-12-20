@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_booking/Views/index/index.dart';
-import 'package:movie_booking/model/users/User.dart';
+import 'package:movie_booking/services/authenticate.dart';
 
 class HandleLogin extends StatefulWidget {
   const HandleLogin({Key? key}) : super(key: key);
@@ -14,22 +14,16 @@ class HandleLogin extends StatefulWidget {
       _showSnackBarInvalid(context);
       return;
     }
-    if (!validateInput(password)) {
+    if (!validateInput(username, password)) {
       _showSnackBarInvalid(context);
       return;
     }
 
-    final myUser = User(
-      name: '',
-      phoneNumber: '',
-      level: '',
-      gender: '',
-      address: '',
-      username: username,
-      password: password,
+    final isAuthenticated = await AuthenticationService.authenticate(
+      username,
+      password,
     );
 
-    final isAuthenticated = await myUser.authenticate();
     if (isAuthenticated) {
       // Successful login
       _showSnackBarSuccess(context);
@@ -87,10 +81,12 @@ class HandleLogin extends StatefulWidget {
     );
   }
 
-  bool validateInput(String password) {
-    // Password regex pattern
+  bool validateInput(String username, String password) {
+    RegExp usernameRegex = RegExp(r'^[a-zA-Z0-9_-]{6,20}$');
+    bool isUsernameValid = usernameRegex.hasMatch(username);
     RegExp passwordRegex = RegExp(r'^.{6,50}$');
-    return passwordRegex.hasMatch(password);
+    bool isPasswordValid = passwordRegex.hasMatch(password);
+    return isUsernameValid && isPasswordValid;
   }
 }
 

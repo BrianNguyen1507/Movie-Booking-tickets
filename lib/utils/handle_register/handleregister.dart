@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:movie_booking/Views/login_screen/login_screen.dart';
+import 'package:movie_booking/model/users/User.dart';
 
 class HandleRegister extends StatefulWidget {
   const HandleRegister({Key? key}) : super(key: key);
@@ -14,20 +15,18 @@ class HandleRegister extends StatefulWidget {
     String username,
     String password,
     String repassword,
-    String firstname,
-    String lastname,
+    String name,
     String address,
-    String phone,
+    String phoneNumber,
   ) {
     HandleRegisterState().validateRegistration(
       context,
       username.trim(),
       password.trim(),
       repassword.trim(),
-      firstname.trim(),
-      lastname.trim(),
-      address,
-      phone.trim(),
+      name.trim(),
+      address.trim(),
+      phoneNumber.trim(),
     );
   }
 }
@@ -38,10 +37,9 @@ class HandleRegisterState extends State<HandleRegister> {
     String username,
     String password,
     String repassword,
-    String firstname,
-    String lastname,
+    String name,
     String address,
-    String phone,
+    String phoneNumber,
   ) async {
     // Validate input
     if (!isValidEmail(username)) {
@@ -60,48 +58,46 @@ class HandleRegisterState extends State<HandleRegister> {
       return;
     }
 
-    // Validate other fields if needed...
+    // Create a User instance with registration data
+    User user = User(
+      name: name,
+      phoneNumber: phoneNumber,
+      level: 'Dong', // You can set an initial level or leave it empty
+      gender: 'Nam', // You can set an initial gender or leave it empty
+      address: address,
+      account: {
+        'user_name': username,
+        'password': password,
+      },
+    );
 
     // API call for user registration
-    final registrationSuccess = await registerUser(
-      username,
-      password,
-      firstname,
-      lastname,
-      address,
-      phone,
-    );
+    final registrationSuccess = await registerUser(user);
 
     if (registrationSuccess) {
       // Successful registration
+      // ignore: use_build_context_synchronously
       onRegistrationSuccess(context);
+      // ignore: use_build_context_synchronously
       _showSnackBar(context, "Registration successful");
     } else {
       // Registration failed
+      // ignore: use_build_context_synchronously
       _showSnackBar(context, "Registration failed");
     }
   }
 
-  Future<bool> registerUser(
-    String username,
-    String password,
-    String firstname,
-    String lastname,
-    String address,
-    String phone,
-  ) async {
+  Future<bool> registerUser(User user) async {
     try {
-      const apiUrl =
-          'https://api.example.com/register'; // Replace with your API URL
+      const apiUrl = 'https://api.example.com/register'; //API post to regis
       final response = await http.post(
         Uri.parse(apiUrl),
         body: {
-          'username': username,
-          'password': password,
-          'firstname': firstname,
-          'lastname': lastname,
-          'address': address,
-          'phone': phone,
+          'user_name': user.account['user_name'],
+          'password': user.account['password'],
+          'name': user.name,
+          'phoneNumber': user.phoneNumber,
+          'address': user.address,
         },
       );
 

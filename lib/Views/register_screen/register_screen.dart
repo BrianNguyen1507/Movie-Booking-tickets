@@ -11,11 +11,10 @@ class RegisterPage extends StatefulWidget {
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
-final TextEditingController _emailDkController = TextEditingController();
+final TextEditingController _usernameDkController = TextEditingController();
 final TextEditingController _passwordDkController = TextEditingController();
 final TextEditingController _repasswordDkController = TextEditingController();
-final TextEditingController _firstNameDkController = TextEditingController();
-final TextEditingController _lastNameDkController = TextEditingController();
+final TextEditingController _NameDkController = TextEditingController();
 final TextEditingController _addressDkController = TextEditingController();
 final TextEditingController _numberphoneDkController = TextEditingController();
 
@@ -71,7 +70,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   SizedBox(
                     width: 350,
                     child: TextField(
-                      controller: _emailDkController,
+                      controller: _usernameDkController,
                       keyboardType: TextInputType.emailAddress,
                       style: const TextStyle(color: Colors.white70),
                       obscureText: false,
@@ -86,7 +85,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               BorderSide(color: Colors.white70, width: 1.0),
                         ),
                         label: Text(
-                          'Email',
+                          'User name',
                           style: TextStyle(color: Colors.white70),
                         ),
                       ),
@@ -172,7 +171,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       children: <Widget>[
                         Expanded(
                           child: TextField(
-                            controller: _firstNameDkController,
+                            controller: _NameDkController,
                             style: const TextStyle(color: Colors.white70),
                             obscureText: false,
                             decoration: const InputDecoration(
@@ -187,31 +186,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     color: Colors.white70, width: 1.0),
                               ),
                               label: Text(
-                                'First Name',
-                                style: TextStyle(color: Colors.white70),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Gap(10),
-                        Expanded(
-                          child: TextField(
-                            controller: _lastNameDkController,
-                            style: const TextStyle(color: Colors.white70),
-                            obscureText: false,
-                            decoration: const InputDecoration(
-                              contentPadding:
-                                  EdgeInsets.only(left: 10, right: 10),
-                              filled: true,
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: buttonsColor, width: 3.0)),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Colors.white70, width: 1.0),
-                              ),
-                              label: Text(
-                                'Last Name',
+                                'Name',
                                 style: TextStyle(color: Colors.white70),
                               ),
                             ),
@@ -361,11 +336,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                 ? () {
                                     HandleRegister.validateRegistration(
                                       context,
-                                      _emailDkController.text,
+                                      _usernameDkController.text,
                                       _passwordDkController.text,
                                       _repasswordDkController.text,
-                                      _firstNameDkController.text,
-                                      _lastNameDkController.text,
+                                      _NameDkController.text,
                                       _addressDkController.text,
                                       _numberphoneDkController.text,
                                     );
@@ -395,11 +369,10 @@ class _RegisterPageState extends State<RegisterPage> {
 }
 
 _resetText() {
-  _emailDkController.text = "";
+  _usernameDkController.text = "";
   _passwordDkController.text = "";
   _repasswordDkController.text = "";
-  _firstNameDkController.text = "";
-  _lastNameDkController.text = "";
+  _NameDkController.text = "";
   _addressDkController.text = "";
   _numberphoneDkController.text = "";
 }
