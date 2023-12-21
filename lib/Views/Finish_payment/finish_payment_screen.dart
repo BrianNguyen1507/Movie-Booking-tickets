@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_booking/Views/order_tickets/order_tickets_screen.dart';
 
 class SummaryPaymentPage extends StatefulWidget {
   const SummaryPaymentPage({Key? key}) : super(key: key);
@@ -207,7 +208,12 @@ class _SummaryPaymentPageState extends State<SummaryPaymentPage> {
         onPressed: () {
           // Add logic to handle the selected payment method
           if (selectedPaymentMethod.isNotEmpty) {
-            // Process the selected payment method
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => TicketInfoScreen(),
+              ),
+            );
             print('Selected Payment Method: $selectedPaymentMethod');
           } else {
             // Display an error message or handle accordingly

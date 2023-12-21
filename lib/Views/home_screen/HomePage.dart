@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'dart:convert';
 import 'package:gap/gap.dart';
 import 'package:movie_booking/Colors/colorvalues.dart';
 import 'package:movie_booking/Views/home_screen/widgets/AutoScrolling.dart';
@@ -8,7 +7,6 @@ import 'package:movie_booking/Views/movies_detail/movieDetail_screen.dart';
 import 'package:movie_booking/services/converter.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:movie_booking/model/film/film.dart';
 import 'package:movie_booking/Views/home_screen/widgets/CustomDrawer.dart';
 import 'package:movie_booking/services/fetchingData.dart';
@@ -26,17 +24,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     filmsFuture = ListFeatured.fetchData("1-11-2023", "1-1-2024");
-  }
-
-  @override
-  List<Widget> _buildImageWidgets(List<String> posters) {
-    return posters.map((poster) {
-      // Decode base64 string to Uint8List
-      Uint8List imageBytes = base64Decode(poster);
-
-      // Display the image using Image.memory
-      return Image.memory(imageBytes);
-    }).toList();
   }
 
   Widget _buildListItem(BuildContext context, int index, List<Film> films) {

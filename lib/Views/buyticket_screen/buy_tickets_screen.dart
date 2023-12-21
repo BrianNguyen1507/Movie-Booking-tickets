@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:movie_booking/Views/Finish_payment/finish_payment_screen.dart';
-import 'package:movie_booking/Views/movies_detail/movieDetail_screen.dart';
 import 'package:movie_booking/model/seats/seats.dart';
 import 'package:movie_booking/model/datetime/datetime.dart';
 
@@ -353,10 +352,9 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
         backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () {
-            // Navigator.pop(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => const MovieDetailPage(filmId: film.id,)),
-            // );
+            Navigator.pop(
+              context,
+            );
           },
           icon: const Icon(Icons.arrow_back),
         ),

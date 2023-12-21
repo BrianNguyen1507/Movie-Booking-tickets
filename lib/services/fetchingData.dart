@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'dart:ffi';
+
 import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
+
 import 'package:movie_booking/model/film/film.dart';
 import 'package:movie_booking/model/category/category.dart';
 import 'package:movie_booking/services/converter.dart';

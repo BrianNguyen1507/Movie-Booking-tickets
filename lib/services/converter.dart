@@ -1,9 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'dart:io';
-
-import 'package:flutter/material.dart';
 
 String byteToStringConvert(String str) {
   List<int> bytes = base64.decode(str);
