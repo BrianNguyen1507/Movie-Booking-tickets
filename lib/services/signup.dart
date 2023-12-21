@@ -12,7 +12,7 @@ class SignUpService {
     String password,
   ) async {
     try {
-      const apiUrl = "http://192.168.2.100:8083/cinema/register";
+      const apiUrl = "http://192.168.1.3:8083/cinema/register";
       final response = await http.post(
         Uri.parse(apiUrl),
         headers: {

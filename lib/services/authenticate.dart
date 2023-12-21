@@ -4,7 +4,7 @@ import 'dart:convert';
 class AuthenticationService {
   static Future<bool> authenticate(String username, String password) async {
     try {
-      const apiUrl = "http://192.168.2.100:8083/cinema/login";
+      const apiUrl = "http://192.168.1.3:8083/cinema/login";
       final response = await http.post(
         Uri.parse(apiUrl),
         headers: {
@@ -19,9 +19,7 @@ class AuthenticationService {
       try {
         if (response.statusCode == 200) {
           final dynamic responseData = json.decode(response.body);
-          print('JSON Response: $responseData');
           final String username = responseData['user_name'];
-          final String userPassword = responseData['password'];
           final dynamic id = responseData['id'];
           final bool isAuthenticated = id != null;
           if (isAuthenticated) {

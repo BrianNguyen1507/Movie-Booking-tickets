@@ -353,10 +353,10 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
         backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(
-              context,
-              MaterialPageRoute(builder: (context) => const MovieDetailPage()),
-            );
+            // Navigator.pop(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => const MovieDetailPage(filmId: film.id,)),
+            // );
           },
           icon: const Icon(Icons.arrow_back),
         ),

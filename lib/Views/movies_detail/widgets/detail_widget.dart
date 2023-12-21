@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_booking/Views/movies_detail/widgets/expandableText_widget.dart';
+import 'package:movie_booking/model/film/film.dart';
 
 class DetailWidget extends StatelessWidget {
   const DetailWidget({super.key});

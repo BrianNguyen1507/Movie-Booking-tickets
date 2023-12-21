@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:movie_booking/Views/buyticket_screen/buy_tickets_screen.dart';
 import 'package:movie_booking/Views/index/index.dart';
 import 'package:movie_booking/Views/movies_detail/widgets/detail_widget.dart';
+import 'package:movie_booking/model/film/film.dart';
 
 class MovieDetailPage extends StatefulWidget {
-  const MovieDetailPage({super.key});
+  final int filmId;
+
+  const MovieDetailPage({required this.filmId, Key? key}) : super(key: key);
 
   @override
   State<MovieDetailPage> createState() => _MovieDetailPageState();
@@ -27,32 +30,34 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
 
   double total = 0.0;
 
-  Widget renderBooking(BuildContext context) {
+  Widget renderBooking(BuildContext context, int movieId) {
     return Container(
-        height: 100,
-        color: Colors.white,
-        padding: const EdgeInsets.all(10),
-        alignment: Alignment.center,
+      height: 100,
+      color: Colors.white,
+      padding: const EdgeInsets.all(10),
+      alignment: Alignment.center,
+      width: double.infinity,
+      child: SizedBox(
+        height: 50.0,
         width: double.infinity,
-        child: SizedBox(
-          height: 50.0,
-          width: double.infinity,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 41, 189, 58),
-                elevation: 0.0),
-            onPressed: () {
-              _onRegisterPress(context);
-            },
-            child: const Text(
-              'BOOKING',
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-              ),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color.fromARGB(255, 41, 189, 58),
+            elevation: 0.0,
+          ),
+          onPressed: () {
+            _onRegisterPress(context);
+          },
+          child: const Text(
+            'BOOKING',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.white,
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   Widget renderBody(BuildContext context) {
@@ -88,40 +93,45 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const IndexPage(
-                        title: '',
-                      )),
+                builder: (context) => const IndexPage(
+                  title: '',
+                ),
+              ),
             );
           },
           icon: const Icon(Icons.arrow_back),
         ),
       ),
       body: Container(
-          constraints: const BoxConstraints.expand(),
-          child: Column(
-            children: [
-              Expanded(
-                child: SizedBox(
-                  width: double.infinity,
-                  height: double.infinity,
-                  child: Column(
-                    children: [
-                      renderBody(context),
-                      renderBooking(context),
-                    ],
-                  ),
+        constraints: const BoxConstraints.expand(),
+        child: Column(
+          children: [
+            Expanded(
+              child: SizedBox(
+                width: double.infinity,
+                height: double.infinity,
+                child: Column(
+                  children: [
+                    renderBody(context),
+                    renderBooking(context, 1), // Thay 1 bằng ID của phim
+                  ],
                 ),
-              )
-            ],
-          )),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
 
-_onRegisterPress(BuildContext context) {
+_onRegisterPress(
+  BuildContext context,
+) {
   Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SeatSelectionScreen(),
-      ));
+    context,
+    MaterialPageRoute(
+      builder: (context) => SeatSelectionScreen(),
+    ),
+  );
 }

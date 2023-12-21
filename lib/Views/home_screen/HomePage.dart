@@ -1,3 +1,7 @@
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+import 'dart:convert';
+import 'package:gap/gap.dart';
 import 'package:movie_booking/Colors/colorvalues.dart';
 import 'package:movie_booking/Views/home_screen/widgets/AutoScrolling.dart';
 import 'package:movie_booking/Views/movies_detail/movieDetail_screen.dart';
@@ -6,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:movie_booking/model/film/film.dart';
 import 'package:movie_booking/Views/home_screen/widgets/CustomDrawer.dart';
+import 'package:movie_booking/services/fetchingData.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,73 +20,27 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Film> ListFilm = [
-    Film('assets/images/movie_banner.jpg', 'John Wick 4',
-        'Kịch tính, Lãng mạng', 20, DateTime(2023, 08, 24)),
-    Film('assets/images/movie_banner.jpg', 'Đêm kinh hoàng', 'Kinh dị', 10,
-        DateTime(2023, 08, 24)),
-    Film('assets/images/movie_banner.jpg', 'Kẻ kiến tạo', 'Viễn tưởng', 25,
-        DateTime(2023, 08, 24)),
-    Film('assets/images/movie_banner.jpg', 'Vầng trăng máu', 'Hình sự, Gây cấn',
-        50, DateTime(2023, 08, 24)),
-    Film('assets/images/movie_banner.jpg', 'DumpStack', 'Kinh dị', 25,
-        DateTime(2023, 08, 24)),
-    Film('assets/images/movie_banner.jpg', '123123123', 'Hình sự, Gây cấn', 50,
-        DateTime(2023, 08, 24)),
-  ];
-  Widget _listHorizon(BuildContext context, int index) {
-    Film film = ListFilm[index];
-    return Card(
-      color: Colors.grey.shade100,
-      elevation: 0,
-      child: ClipRRect(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Image.asset(
-              film.imagePath,
-              fit: BoxFit.cover,
-              width: 120,
-              height: 180,
-            ),
-            Container(
-              padding: const EdgeInsets.only(right: 30),
-              child: Column(
-                children: [
-                  SizedBox(
-                    child: Text(
-                      film.title,
-                      style: const TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        DateFormat('dd-MM-yyyy').format(film.dateRelease),
-                        style: const TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black54),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+  late Future<List<Film>> filmsFuture;
+  @override
+  void initState() {
+    super.initState();
+    filmsFuture = ListFeatured.fetchData("1-11-2023", "1-1-2024");
   }
 
-  Widget _buildListItem(BuildContext context, int index) {
-    Film film = ListFilm[index];
+  @override
+  List<Widget> _buildImageWidgets(List<String> posters) {
+    return posters.map((poster) {
+      // Decode base64 string to Uint8List
+      Uint8List imageBytes = base64Decode(poster);
+
+      // Display the image using Image.memory
+      return Image.memory(imageBytes);
+    }).toList();
+  }
+
+  Widget _buildListItem(BuildContext context, int index, List<Film> films) {
+    Film film = films[index];
+
     return SizedBox(
       width: 150,
       child: Card(
@@ -92,54 +51,104 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               Image.asset(
-                film.imagePath,
-                fit: BoxFit.cover,
-                width: 150,
-                height: 210,
+                'assets/images/movie_banner.jpg',
+                height: 200,
+                fit: BoxFit.fitHeight,
               ),
+              const Gap(10),
               Text(
                 film.title,
                 style: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 5),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    film.describe,
-                    style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black54),
-                  ),
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
                 ),
               ),
+              Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        film.categories
+                            .map((category) => category.name)
+                            .join(', '),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.black54,
+                        ),
+                      ))),
               Container(
                 padding: const EdgeInsets.only(top: 10),
                 height: 40.0,
                 width: 100.0,
                 child: ElevatedButton(
-                    style: const ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(
-                        buttonsColor,
-                      ),
+                  style: const ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll(
+                      buttonsColor,
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const MovieDetailPage(),
-                        ),
-                      );
-                    },
-                    child: const Text('Booking')),
+                  ),
+                  onPressed: () {
+                    print('ID of film clicked :' + film.id.toString());
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MovieDetailPage(filmId: film.id),
+                      ),
+                    );
+                  },
+                  child: const Text('Booking'),
+                ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  static Future<ui.Image> bytesToImage(Uint8List imgBytes) async {
+    ui.Codec codec = await ui.instantiateImageCodec(imgBytes);
+    ui.FrameInfo frame;
+    try {
+      frame = await codec.getNextFrame();
+    } finally {
+      codec.dispose();
+    }
+    return frame.image;
+  }
+
+  Widget _listHorizon(BuildContext context, int index, List<Film> films) {
+    Film film = films[index];
+
+    return Card(
+      color: Colors.grey.shade100,
+      elevation: 0,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            padding: const EdgeInsets.only(right: 30),
+            child: Column(
+              children: [
+                // Customize this part based on your needs
+                Image.asset(
+                  'assets/images/movie_banner.jpg',
+                  height: 200,
+                  fit: BoxFit.fitHeight,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  film.title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -192,36 +201,53 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             Container(
-                decoration: const BoxDecoration(color: Colors.white70),
-                width: 200,
-                height: 100,
-                child: const Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Now Showing',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
+              decoration: const BoxDecoration(color: Colors.white70),
+              width: 200,
+              height: 100,
+              child: const Align(
+                alignment: Alignment.center,
+                child: Text(
+                  'Now Showing',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
-                )),
+                ),
+              ),
+            ),
             Container(
               width: double.infinity,
               height: 330,
               decoration: const BoxDecoration(
                 color: Colors.white,
               ),
-              child: Container(
-                color: Colors.white70,
-                padding: const EdgeInsets.only(),
-                child: ScrollSnapList(
-                  itemBuilder: _buildListItem,
-                  itemCount: ListFilm.length,
-                  itemSize: 150,
-                  onItemFocus: (index) {},
-                  dynamicItemSize: false,
-                  initialIndex: 1,
-                ),
+              child: FutureBuilder<List<Film>>(
+                future: filmsFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Text('No Film available now');
+                  } else {
+                    List<Film> films = snapshot.data!;
+                    return SizedBox(
+                      height: 330, // Set a fixed height here
+                      child: ScrollSnapList(
+                        itemBuilder: (context, index) {
+                          return _buildListItem(context, index, films);
+                        },
+                        itemCount: films.length,
+                        itemSize: 150,
+                        onItemFocus: (index) {},
+                        dynamicItemSize: true,
+                        initialIndex: 1,
+                      ),
+                    );
+                  }
+                },
               ),
             ),
           ],
@@ -253,19 +279,8 @@ class _HomePageState extends State<HomePage> {
           ),
           Container(
             color: Colors.transparent,
-            child: SizedBox(
+            child: const SizedBox(
               width: double.infinity,
-              child: Column(
-                children: List.generate(
-                  ListFilm.length,
-                  (index) => GestureDetector(
-                    onTap: () {
-                      print('Item tapped at index $index');
-                    },
-                    child: _listHorizon(context, index),
-                  ),
-                ),
-              ),
             ),
           ),
         ],
