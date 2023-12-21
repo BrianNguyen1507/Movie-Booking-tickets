@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:movie_booking/Colors/colorvalues.dart';
 import 'package:movie_booking/Views/home_screen/widgets/AutoScrolling.dart';
 import 'package:movie_booking/Views/movies_detail/movieDetail_screen.dart';
+import 'package:movie_booking/services/converter.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -50,8 +51,8 @@ class _HomePageState extends State<HomePage> {
           borderRadius: const BorderRadius.all(Radius.circular(10)),
           child: Column(
             children: [
-              Image.asset(
-                'assets/images/movie_banner.jpg',
+              Image.memory(
+                toUint(film.posters),
                 height: 200,
                 fit: BoxFit.fitHeight,
               ),
@@ -92,7 +93,9 @@ class _HomePageState extends State<HomePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => MovieDetailPage(filmId: film.id),
+                        builder: (context) => MovieDetailPage(
+                          film: film,
+                        ),
                       ),
                     );
                   },
@@ -132,8 +135,8 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 // Customize this part based on your needs
-                Image.asset(
-                  'assets/images/movie_banner.jpg',
+                Image.memory(
+                  toUint(film.posters),
                   height: 200,
                   fit: BoxFit.fitHeight,
                 ),
@@ -242,7 +245,7 @@ class _HomePageState extends State<HomePage> {
                         itemCount: films.length,
                         itemSize: 150,
                         onItemFocus: (index) {},
-                        dynamicItemSize: true,
+                        dynamicItemSize: false,
                         initialIndex: 1,
                       ),
                     );

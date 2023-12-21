@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:ffi';
+import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -27,6 +28,10 @@ class ListFeatured {
       print('Network Request Error: $error');
       return List.empty();
     }
+  }
+  static toUint8(String str) {
+    Uint8List imageBytes = base64Decode(str);
+    return imageBytes;
   }
 
   static List<Film> _handleResponse(http.Response response) {
