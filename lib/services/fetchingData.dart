@@ -29,6 +29,7 @@ class ListFeatured {
       return List.empty();
     }
   }
+
   static toUint8(String str) {
     Uint8List imageBytes = base64Decode(str);
     return imageBytes;
