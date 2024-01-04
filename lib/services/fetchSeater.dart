@@ -89,18 +89,16 @@ class ListFeatured {
               title: responseData["title"],
               date: responseData["date"],
               seat: seats);
-         
+
           print(threater);
         } else {
           print('Authentication Error: ${response.statusCode}');
         }
       } catch (error) {
         print('JSON Parsing Error: $error');
-      
       }
     } catch (error) {
       print('Network Request Error: $error');
     }
-  
   }
 }
