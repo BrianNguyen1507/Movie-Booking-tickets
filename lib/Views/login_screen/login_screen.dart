@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:movie_booking/Colors/colorvalues.dart';
 import 'package:movie_booking/utils/handle_login/handlelogin.dart';
 import 'package:movie_booking/Views/register_screen/register_screen.dart';
 
@@ -14,15 +13,11 @@ class _LoginPageState extends State<LoginPage> {
   final HandleLogin _handleLogin = const HandleLogin();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  void _resetText() {
-    _usernameController.text = "";
-    _passwordController.text = "";
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(
                           fontSize: 50.0,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white),
+                          color: Colors.blue),
                     ),
                   ),
                 ),
@@ -51,13 +46,13 @@ class _LoginPageState extends State<LoginPage> {
                   child: Text(
                     'Put your email address to continue',
                     style: TextStyle(
-                      color: Colors.white70,
+                      color: Color.fromARGB(255, 107, 189, 255),
                       fontSize: 17.0,
                     ),
                   ),
                 ),
                 const SizedBox(
-                  height: 36.0,
+                  height: 100.0,
                 ),
                 Column(
                   children: [
@@ -67,25 +62,21 @@ class _LoginPageState extends State<LoginPage> {
                         width: 350.0,
                         child: TextField(
                           controller: _usernameController,
-                          style: const TextStyle(color: Colors.white70),
+                          style: const TextStyle(color: Colors.black),
                           obscureText: false,
                           decoration: InputDecoration(
                             contentPadding:
                                 const EdgeInsets.only(left: 10, right: 10),
-                            filled: true,
                             focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: buttonsColor, width: 3.0)),
+                                borderSide:
+                                    BorderSide(color: Colors.blue, width: 3.0)),
                             enabledBorder: const OutlineInputBorder(
                               borderSide:
-                                  BorderSide(color: Colors.white70, width: 1.0),
+                                  BorderSide(color: Colors.black54, width: 1.0),
                             ),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10)),
-                            label: const Text(
-                              'Username',
-                              style: TextStyle(color: Colors.white70),
-                            ),
+                            labelText: "Email",
                           ),
                         ),
                       ),
@@ -99,25 +90,21 @@ class _LoginPageState extends State<LoginPage> {
                         width: 350.0,
                         child: TextField(
                           controller: _passwordController,
-                          style: const TextStyle(color: Colors.white70),
+                          style: const TextStyle(color: Colors.black),
                           obscureText: true,
                           decoration: InputDecoration(
                             contentPadding:
                                 const EdgeInsets.only(left: 10, right: 10),
-                            filled: true,
                             focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: buttonsColor, width: 3.0)),
+                                borderSide:
+                                    BorderSide(color: Colors.blue, width: 3.0)),
                             enabledBorder: const OutlineInputBorder(
                               borderSide:
-                                  BorderSide(color: Colors.white70, width: 1.0),
+                                  BorderSide(color: Colors.black54, width: 1.0),
                             ),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10)),
-                            label: const Text(
-                              'Password',
-                              style: TextStyle(color: Colors.white70),
-                            ),
+                            labelText: "Password",
                           ),
                         ),
                       ),
@@ -131,44 +118,62 @@ class _LoginPageState extends State<LoginPage> {
                       child: ElevatedButton(
                         style: const ButtonStyle(
                           backgroundColor: MaterialStatePropertyAll(
-                            buttonsColor,
+                            Colors.blue,
+                          ),
+                          shape: MaterialStatePropertyAll(
+                            RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              side: BorderSide(color: Colors.white70),
+                            ),
                           ),
                         ),
                         onPressed: () {
-                          _handleLogin.handleLogin(
-                            context,
-                            _usernameController.text,
-                            _passwordController.text,
-                          );
+                          setState(() {
+                            _handleLogin.handleLogin(
+                              context,
+                              _usernameController.text,
+                              _passwordController.text,
+                            );
+                          });
                         },
-                        child: const Text('Next'),
+                        child: const Text(
+                          'Next',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
                       ),
                     ),
                     const Center(
                       heightFactor: 5,
                       child: Text(
                         "Don't have an Account?",
-                        style: TextStyle(color: Colors.white70),
+                        style: TextStyle(color: Colors.grey, fontSize: 15),
                       ),
                     ),
                     SizedBox(
                       width: 350.0,
                       height: 50.0,
                       child: ElevatedButton(
-                          style: const ButtonStyle(
-                              backgroundColor: MaterialStatePropertyAll(
-                                Colors.transparent,
-                              ),
-                              shape: MaterialStatePropertyAll(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(5)),
-                                      side:
-                                          BorderSide(color: Colors.white70)))),
-                          onPressed: () {
-                            _onRegisterPress(context);
-                          },
-                          child: const Text('Register')),
+                        style: const ButtonStyle(
+                          backgroundColor: MaterialStatePropertyAll(
+                            Colors.grey,
+                          ),
+                          shape: MaterialStatePropertyAll(
+                            RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              side: BorderSide(color: Colors.white70),
+                            ),
+                          ),
+                        ),
+                        onPressed: () {
+                          _onRegisterPress(context);
+                        },
+                        child: const Text(
+                          'Resgister',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                      ),
                     ),
                   ],
                 ),
