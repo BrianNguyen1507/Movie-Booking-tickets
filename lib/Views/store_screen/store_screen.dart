@@ -68,8 +68,8 @@ class _StoreState extends State<Store> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 5),
                     child: Align(
                       alignment: Alignment.center,
                       child: CounterWidget(),

@@ -4,6 +4,8 @@ import 'package:movie_booking/model/seats/seats.dart';
 import 'package:movie_booking/model/datetime/datetime.dart';
 
 class SeatSelectionScreen extends StatefulWidget {
+  const SeatSelectionScreen({super.key});
+
   @override
   _SeatSelectionScreenState createState() => _SeatSelectionScreenState();
 }

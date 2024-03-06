@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class AutoScrollingBanner extends StatefulWidget {
+  const AutoScrollingBanner({super.key});
+
   @override
   _AutoScrollingBannerState createState() => _AutoScrollingBannerState();
 }

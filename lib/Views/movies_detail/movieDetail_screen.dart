@@ -76,7 +76,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
               Row(
                 children: [
                   Container(
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     child: Image.memory(
                       toUint(widget.film.posters),
                       width: 150,
@@ -193,6 +193,6 @@ _onRegisterPress(BuildContext context) {
   Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SeatSelectionScreen(),
+        builder: (context) => const SeatSelectionScreen(),
       ));
 }

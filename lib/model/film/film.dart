@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:movie_booking/model/category/category.dart';
 
 class Film {

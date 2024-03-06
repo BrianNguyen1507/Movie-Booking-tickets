@@ -11,7 +11,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final HandleLogin _handleLogin = HandleLogin();
+  final HandleLogin _handleLogin = const HandleLogin();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   void _resetText() {

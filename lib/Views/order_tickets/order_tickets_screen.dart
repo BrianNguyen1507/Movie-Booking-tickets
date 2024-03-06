@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class TicketInfoScreen extends StatefulWidget {
+  const TicketInfoScreen({super.key});
+
   @override
   _TicketInfoScreenState createState() => _TicketInfoScreenState();
 }
@@ -37,7 +39,7 @@ class _TicketInfoScreenState extends State<TicketInfoScreen> {
 class TicketCard extends StatelessWidget {
   final TicketInfo ticketInfo;
 
-  TicketCard({required this.ticketInfo});
+  const TicketCard({super.key, required this.ticketInfo});
 
   @override
   Widget build(BuildContext context) {

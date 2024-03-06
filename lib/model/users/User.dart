@@ -15,5 +15,5 @@ class User {
     required String gender,
     required this.address,
     required this.account,
-  }) : this.gender = gender == "Nam" ? Gender.Nam : Gender.Nu;
+  }) : gender = gender == "Nam" ? Gender.Nam : Gender.Nu;
 }

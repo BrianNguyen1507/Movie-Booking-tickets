@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   onPressed: () {
-                    print('ID of film clicked :' + film.id.toString());
+                    print('ID of film clicked :${film.id}');
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -144,7 +144,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget renderbanner(BuildContext context) {
-    return AutoScrollingBanner();
+    return const AutoScrollingBanner();
   }
 
   Widget searchbar(BuildContext context) {

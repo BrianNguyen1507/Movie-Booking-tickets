@@ -81,7 +81,7 @@ class _Profile_PageState extends State<ProfilePage> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => TicketInfoScreen()),
+                    MaterialPageRoute(builder: (context) => const TicketInfoScreen()),
                   );
                 },
                 child: Column(
@@ -113,7 +113,7 @@ class _Profile_PageState extends State<ProfilePage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => TicketInfoScreen(),
+                                      builder: (context) => const TicketInfoScreen(),
                                     ),
                                   );
                                 },

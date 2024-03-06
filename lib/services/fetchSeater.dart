@@ -1,12 +1,8 @@
-import 'dart:ffi';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:movie_booking/model/film/film.dart';
-import 'package:movie_booking/model/category/category.dart';
 import 'package:movie_booking/model/threater.dart';
-import 'package:movie_booking/services/converter.dart';
 
 void main() {
   runApp(const MaterialApp(
