@@ -1,19 +1,30 @@
-enum Gender { Nam, Nu }
+import 'Account.dart';
 
 class User {
   final String name;
   final String phoneNumber;
   final String level;
-  final Gender gender;
   final String address;
-  final Map<String, String> account;
+  final Account account;
 
   User({
     required this.name,
     required this.phoneNumber,
     required this.level,
-    required String gender,
     required this.address,
     required this.account,
-  }) : gender = gender == "Nam" ? Gender.Nam : Gender.Nu;
+  });
+
+  factory User.fromJson(Map<String, dynamic> userData) {
+    return User(
+      name: userData['name'],
+      phoneNumber: userData['phoneNumber'],
+      level: userData['level'],
+      address: userData['address'],
+      account: Account(
+        username: userData['account']['user_name'],
+        password: userData['account']['password'],
+      ),
+    );
+  }
 }
