@@ -23,16 +23,11 @@ class Film {
     required this.categories,
   });
 
-  // Factory method to create a Film instance from a JSON map
   factory Film.fromJson(Map<String, dynamic> json) {
-    // Ensure that 'posters' is parsed correctly as a List<String>
     List<String> postersList = List<String>.from(json['posters'] ?? []);
-
-    // Ensure that 'categories' is parsed correctly as a List<Category>
     List<Category> categoriesList = List<Category>.from(
       (json['categories'] ?? []).map((category) => Category.fromJson(category)),
     );
-
     return Film(
       id: json['id'],
       posters: postersList,
