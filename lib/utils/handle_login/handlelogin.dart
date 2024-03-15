@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:movie_booking/Views/index/index.dart';
+import 'package:movie_booking/model/users/Account.dart';
+import 'package:movie_booking/model/users/User.dart';
 import 'package:movie_booking/services/authenticate.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class HandleLogin extends StatefulWidget {
   const HandleLogin({Key? key}) : super(key: key);
@@ -11,63 +14,57 @@ class HandleLogin extends StatefulWidget {
   Future<void> handleLogin(
       BuildContext context, String username, String password) async {
     if (username.isEmpty || password.isEmpty) {
-      _showSnackBarInvalid(context);
+      _showToastInvalid();
       return;
     }
     if (!validateInput(username, password)) {
-      _showSnackBarInvalid(context);
+      _showToastInvalid();
       return;
     }
 
-    final isAuthenticated = await AuthenticationService.authenticate(
-      username,
-      password,
+    final user = User(
+      name: '',
+      level: '',
+      phoneNumber: '',
+      address: '',
+      account: Account(
+        username: username,
+        password: password,
+      ),
     );
 
+    final isAuthenticated = await AuthenticationService.authenticate(user);
+
     if (isAuthenticated) {
-      // Successful login
-      _showSnackBarSuccess(context);
+      _showToastSuccess();
       _onLoginSuccess(context);
     } else {
-      // Failed login
-      _showSnackBarFail(context);
+      _showToastFail();
     }
   }
 
-  void _showSnackBarSuccess(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        behavior: SnackBarBehavior.floating,
-        content: Align(
-          alignment: Alignment.bottomCenter,
-          child: Text('Login successful!'),
-        ),
-      ),
+  void _showToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.grey[600],
+      textColor: Colors.white,
+      fontSize: 16.0,
     );
   }
 
-  void _showSnackBarFail(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        behavior: SnackBarBehavior.floating,
-        content: Align(
-          alignment: Alignment.bottomCenter,
-          child: Text('Not found'),
-        ),
-      ),
-    );
+  void _showToastSuccess() {
+    _showToast('Login successful!');
   }
 
-  void _showSnackBarInvalid(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        behavior: SnackBarBehavior.floating,
-        content: Align(
-          alignment: Alignment.bottomCenter,
-          child: Text('Invalid user name or password'),
-        ),
-      ),
-    );
+  void _showToastFail() {
+    _showToast('Not found');
+  }
+
+  void _showToastInvalid() {
+    _showToast('Invalid user name or password');
   }
 
   void _onLoginSuccess(BuildContext context) {
