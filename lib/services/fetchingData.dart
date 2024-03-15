@@ -1,9 +1,8 @@
 import 'dart:convert';
-
 import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:http/http.dart' as http;
-
 import 'package:movie_booking/model/film/film.dart';
 import 'package:movie_booking/model/category/category.dart';
 import 'package:movie_booking/services/converter.dart';
@@ -11,7 +10,7 @@ import 'package:movie_booking/services/converter.dart';
 class ListFeatured {
   static Future<List<Film>> fetchData(String dateStart, String dateEnd) async {
     try {
-      const apiUrl = "http://192.168.1.3:8083/cinema/listfeatured";
+      const apiUrl = "http://192.168.2.3:8083/cinema/listfeatured";
       final response = await http.post(
         Uri.parse(apiUrl),
         headers: {
@@ -30,9 +29,9 @@ class ListFeatured {
     }
   }
 
-  static toUint8(String str) {
-    Uint8List imageBytes = base64Decode(str);
-    return imageBytes;
+  // Renamed the method to reflect its functionality
+  static Uint8List base64ToUint8(String str) {
+    return base64Decode(str);
   }
 
   static List<Film> _handleResponse(http.Response response) {
@@ -62,12 +61,25 @@ class ListFeatured {
           );
         }));
       } else {
-        print('Authentication Error: ${response.statusCode}');
+        print('Authentication Error: ${response.statusCode}  ');
         return List.empty();
       }
     } catch (error) {
       print('JSON Parsing Error: $error');
       return List.empty();
+    }
+  }
+
+  static Future<ui.Image> bytesToImage(String base64String) async {
+    try {
+      Uint8List imgBytes =
+          base64ToUint8(base64String); // Using the renamed method
+      ui.Codec codec = await ui.instantiateImageCodec(imgBytes);
+      ui.FrameInfo frame = await codec.getNextFrame();
+      return frame.image;
+    } catch (e) {
+      print('Error decoding image: $e');
+      rethrow;
     }
   }
 }
