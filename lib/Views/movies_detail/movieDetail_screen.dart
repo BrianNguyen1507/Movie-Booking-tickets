@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'package:movie_booking/Views/buyticket_screen/buy_tickets_screen.dart';
 import 'package:movie_booking/Views/home_screen/widgets/AutoScrolling.dart';
 import 'package:movie_booking/Views/index/index.dart';
@@ -10,7 +10,7 @@ import 'package:movie_booking/services/converter.dart';
 class MovieDetailPage extends StatefulWidget {
   final Film film;
 
-  const MovieDetailPage({super.key, required this.film});
+  const MovieDetailPage({Key? key, required this.film}) : super(key: key);
 
   @override
   State<MovieDetailPage> createState() => _MovieDetailPageState();
@@ -19,6 +19,20 @@ class MovieDetailPage extends StatefulWidget {
 class _MovieDetailPageState extends State<MovieDetailPage> {
   Widget renderbanner(BuildContext context) {
     return const AutoScrollingBanner();
+  }
+
+// convert data to popular format
+  DateTime convertToDate(String input) {
+    var format = DateFormat('dd-MM-yyyy');
+    return format.parse(input);
+  }
+
+  bool isFutureRelease = false;
+  @override
+  void initState() {
+    super.initState();
+    DateTime releaseDate = convertToDate(widget.film.dateRelease);
+    isFutureRelease = releaseDate.isAfter(DateTime.now());
   }
 
   Widget renderBody(BuildContext context) {
@@ -180,7 +194,9 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                           color: Colors.grey,
                           thickness: 0.35,
                         ),
-                        ExpandableWidget(content: widget.film.describe),
+                        ExpandableWidget(
+                          content: widget.film.describe,
+                        ),
                       ]),
                 ),
               ),
@@ -230,35 +246,39 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
 
   Widget renderBooking(BuildContext context) {
     return Container(
-        decoration:  BoxDecoration(
-          color: Colors.grey[300],
-         
-        ),
-        height: 100,
-        padding: const EdgeInsets.all(10),
-        alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+      ),
+      height: 100,
+      padding: const EdgeInsets.all(10),
+      alignment: Alignment.center,
+      width: double.infinity,
+      child: SizedBox(
+        height: 50.0,
         width: double.infinity,
-        child: SizedBox(
-          height: 50.0,
-          width: double.infinity,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shadowColor: Colors.black,
-              backgroundColor: const Color.fromARGB(255, 0, 0, 0),
-              elevation: 15.0,
-            ),
-            onPressed: () {
-              _onRegisterPress(context);
-            },
-            child: const Text(
-              'BOOKING',
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-              ),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            shadowColor: Colors.black,
+            backgroundColor: isFutureRelease
+                ? Colors.grey
+                : const Color.fromARGB(255, 0, 0, 0),
+            elevation: 15.0,
+          ),
+          onPressed: isFutureRelease
+              ? null
+              : () {
+                  _onRegisterPress(context);
+                },
+          child: Text(
+            'BOOKING',
+            style: TextStyle(
+              fontSize: 20,
+              color: isFutureRelease ? Colors.white70 : Colors.white,
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   @override
@@ -285,31 +305,33 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
         ),
       ),
       body: Container(
-          constraints: const BoxConstraints.expand(),
-          child: Column(
-            children: [
-              Expanded(
-                child: SizedBox(
-                  width: double.infinity,
-                  height: double.infinity,
-                  child: Column(
-                    children: [
-                      renderBody(context),
-                      renderBooking(context),
-                    ],
-                  ),
+        constraints: const BoxConstraints.expand(),
+        child: Column(
+          children: [
+            Expanded(
+              child: SizedBox(
+                width: double.infinity,
+                height: double.infinity,
+                child: Column(
+                  children: [
+                    renderBody(context),
+                    renderBooking(context),
+                  ],
                 ),
-              )
-            ],
-          )),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
 
 _onRegisterPress(BuildContext context) {
   Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const SeatSelectionScreen(),
-      ));
+    context,
+    MaterialPageRoute(
+      builder: (context) => const SeatSelectionScreen(),
+    ),
+  );
 }
