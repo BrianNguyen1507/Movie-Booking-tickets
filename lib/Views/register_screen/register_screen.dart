@@ -18,11 +18,6 @@ final TextEditingController _NameDkController = TextEditingController();
 final TextEditingController _addressDkController = TextEditingController();
 final TextEditingController _numberphoneDkController = TextEditingController();
 
-enum Gender {
-  Male,
-  Female,
-}
-
 String _gender = "";
 List<String> _genders = ["Male", "Female"];
 Gender? selectedGender;
@@ -44,7 +39,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -59,7 +54,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   size: 30,
                 ),
                 padding: const EdgeInsets.only(top: 25),
-                color: Colors.white,
+                color: Colors.black,
               ),
             ),
             Align(
@@ -72,7 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   const Text(
                     "Register",
                     style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.blue,
                         fontSize: 30,
                         fontWeight: FontWeight.bold),
                   ),
@@ -82,21 +77,19 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: TextField(
                       controller: _usernameDkController,
                       keyboardType: TextInputType.emailAddress,
-                      style: const TextStyle(color: Colors.white70),
-                      obscureText: false,
+                      style: const TextStyle(color: Colors.black),
                       decoration: const InputDecoration(
                         contentPadding: EdgeInsets.only(left: 10, right: 10),
-                        filled: true,
                         focusedBorder: OutlineInputBorder(
                             borderSide:
                                 BorderSide(color: buttonsColor, width: 3.0)),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.white70, width: 1.0),
+                              BorderSide(color: Colors.grey, width: 1.0),
                         ),
                         label: Text(
-                          'Email',
-                          style: TextStyle(color: Colors.white70),
+                          'User name',
+                          style: TextStyle(color: Colors.black),
                         ),
                       ),
                     ),
@@ -106,11 +99,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     width: 350,
                     child: TextField(
                       controller: _passwordDkController,
-                      style: const TextStyle(color: Colors.white70),
+                      style: const TextStyle(color: Colors.black),
                       obscureText: _isObscurePass,
                       decoration: InputDecoration(
                         suffixIcon: IconButton(
-                          color: Colors.white70,
                           icon: Icon(_isObscurePass
                               ? Icons.visibility
                               : Icons.visibility_off),
@@ -122,17 +114,16 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         contentPadding:
                             const EdgeInsets.only(left: 10, right: 10),
-                        filled: true,
                         focusedBorder: const OutlineInputBorder(
                             borderSide:
                                 BorderSide(color: buttonsColor, width: 3.0)),
                         enabledBorder: const OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.white70, width: 1.0),
+                              BorderSide(color: Colors.grey, width: 1.0),
                         ),
                         label: const Text(
                           'Password',
-                          style: TextStyle(color: Colors.white70),
+                          style: TextStyle(color: Colors.black),
                         ),
                       ),
                     ),
@@ -142,11 +133,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     width: 350,
                     child: TextField(
                       controller: _repasswordDkController,
-                      style: const TextStyle(color: Colors.white70),
+                      style: const TextStyle(color: Colors.black),
                       obscureText: _isObscureConf,
                       decoration: InputDecoration(
                         suffixIcon: IconButton(
-                          color: Colors.white70,
+                          color: Colors.black,
                           icon: Icon(_isObscureConf
                               ? Icons.visibility
                               : Icons.visibility_off),
@@ -158,17 +149,16 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         contentPadding:
                             const EdgeInsets.only(left: 10, right: 10),
-                        filled: true,
                         focusedBorder: const OutlineInputBorder(
                             borderSide:
                                 BorderSide(color: buttonsColor, width: 3.0)),
                         enabledBorder: const OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.white70, width: 1.0),
+                              BorderSide(color: Colors.grey, width: 1.0),
                         ),
                         label: const Text(
                           'Confirm Password',
-                          style: TextStyle(color: Colors.white70),
+                          style: TextStyle(color: Colors.black),
                         ),
                       ),
                     ),
@@ -182,22 +172,21 @@ class _RegisterPageState extends State<RegisterPage> {
                         Expanded(
                           child: TextField(
                             controller: _NameDkController,
-                            style: const TextStyle(color: Colors.white70),
+                            style: const TextStyle(color: Colors.black),
                             obscureText: false,
                             decoration: const InputDecoration(
                               contentPadding:
                                   EdgeInsets.only(left: 10, right: 10),
-                              filled: true,
                               focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                       color: buttonsColor, width: 3.0)),
                               enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Colors.white70, width: 1.0),
+                                borderSide:
+                                    BorderSide(color: Colors.grey, width: 1.0),
                               ),
                               label: Text(
                                 'Name',
-                                style: TextStyle(color: Colors.white70),
+                                style: TextStyle(color: Colors.black),
                               ),
                             ),
                           ),
@@ -207,58 +196,24 @@ class _RegisterPageState extends State<RegisterPage> {
                   )),
                   const Gap(10),
                   SizedBox(
-                    width: 350.0,
-                    child: DropdownButtonFormField<Gender>(
-                      value: selectedGender,
-                      onChanged: (Gender? value) {
-                        // Update the selected value when an item is chosen.
-                        setState(() {
-                          selectedGender = value;
-                        });
-                      },
-                      dropdownColor: const Color.fromARGB(255, 70, 70, 70),
-                      decoration: const InputDecoration(
-                        labelText: 'Gender',
-                        labelStyle: TextStyle(color: Colors.white70),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: buttonsColor, width: 3.0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.white70, width: 1.0),
-                        ),
-                      ),
-                      items: _genders.map((String gender) {
-                        return DropdownMenuItem<Gender>(
-                          value: gender == 'Male' ? Gender.Male : Gender.Female,
-                          child: Text(gender),
-                        );
-                      }).toList(),
-                      style: const TextStyle(color: Colors.white70),
-                    ),
-                  ),
-                  const Gap(10),
-                  SizedBox(
                     width: 350,
                     child: TextField(
                       controller: _addressDkController,
                       keyboardType: TextInputType.streetAddress,
-                      style: const TextStyle(color: Colors.white70),
+                      style: const TextStyle(color: Colors.black),
                       obscureText: false,
                       decoration: const InputDecoration(
                         contentPadding: EdgeInsets.only(left: 10, right: 10),
-                        filled: true,
                         focusedBorder: OutlineInputBorder(
                             borderSide:
                                 BorderSide(color: buttonsColor, width: 3.0)),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.white70, width: 1.0),
+                              BorderSide(color: Colors.grey, width: 1.0),
                         ),
                         label: Text(
                           'Address',
-                          style: TextStyle(color: Colors.white70),
+                          style: TextStyle(color: Colors.black),
                         ),
                       ),
                     ),
@@ -269,21 +224,20 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: TextField(
                       controller: _numberphoneDkController,
                       keyboardType: TextInputType.number,
-                      style: const TextStyle(color: Colors.white70),
+                      style: const TextStyle(color: Colors.black),
                       obscureText: false,
                       decoration: const InputDecoration(
                         contentPadding: EdgeInsets.only(left: 10, right: 10),
-                        filled: true,
                         focusedBorder: OutlineInputBorder(
                             borderSide:
                                 BorderSide(color: buttonsColor, width: 3.0)),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.white70, width: 1.0),
+                              BorderSide(color: Colors.grey, width: 1.0),
                         ),
                         label: Text(
                           'Number Phone',
-                          style: TextStyle(color: Colors.white70),
+                          style: TextStyle(color: Colors.black),
                         ),
                       ),
                     ),
@@ -303,8 +257,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               child: Align(
                                 alignment: Alignment.bottomLeft,
                                 child: Checkbox(
-                                  activeColor:
-                                      const Color.fromARGB(255, 2, 255, 32),
+                                  activeColor: Colors.blue,
                                   value: _isChecked,
                                   onChanged: (bool? value) {
                                     setState(() {
@@ -323,7 +276,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   TextSpan(
                                     text: 'the terms',
                                     style: TextStyle(
-                                        color: buttonsColor,
+                                        color: Colors.blue,
                                         decoration: TextDecoration.underline),
                                   )
                                 ],
@@ -337,22 +290,24 @@ class _RegisterPageState extends State<RegisterPage> {
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 backgroundColor:
-                                    const Color.fromARGB(255, 2, 255, 32),
+                                    const Color.fromARGB(255, 2, 95, 255),
                                 elevation: 0.0),
                             onPressed: _isChecked
                                 ? () {
-                                    HandleRegisterState handleRegisterState =
-                                        HandleRegisterState();
-                                    handleRegisterState.validateRegistration(
-                                      context,
-                                      _usernameDkController.text,
-                                      _passwordDkController.text,
-                                      _repasswordDkController.text,
-                                      _NameDkController.text,
-                                      _gender,
-                                      _addressDkController.text,
-                                      _numberphoneDkController.text,
-                                    );
+                                    setState(() {
+                                      HandleRegisterState handleRegisterState =
+                                          HandleRegisterState();
+                                      handleRegisterState.validateRegistration(
+                                        context,
+                                        _usernameDkController.text,
+                                        _passwordDkController.text,
+                                        _repasswordDkController.text,
+                                        _NameDkController.text,
+                                        _gender,
+                                        _addressDkController.text,
+                                        _numberphoneDkController.text,
+                                      );
+                                    });
                                   }
                                 : null,
                             child: const Text(
