@@ -16,7 +16,7 @@ class _ExpandableState extends State<ExpandableWidget> {
       children: [
         Text(
           isExpanded ? content : '${content.substring(0, 90)}...',
-          maxLines: isExpanded ? null : 2,
+          maxLines: isExpanded ? null : 3,
         ),
         InkWell(
           onTap: () {
@@ -27,7 +27,7 @@ class _ExpandableState extends State<ExpandableWidget> {
           child: Row(
             children: [
               Text(
-                isExpanded ? '..Show less' : 'Show more..',
+                isExpanded ? 'Show less' : 'Show more',
                 style: const TextStyle(
                     color: Colors.blue,
                     fontWeight: FontWeight.bold,
