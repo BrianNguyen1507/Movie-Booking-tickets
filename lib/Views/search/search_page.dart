@@ -60,38 +60,44 @@ class _SearchPageState extends State<SearchPage> {
         automaticallyImplyLeading: false,
         actions: [
           Expanded(
-            child: Align(
-              alignment: Alignment.center,
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 10.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  color: Colors.white,
-                  border: Border.all(color: Colors.grey),
-                ),
-                child: TextField(
-                  controller: _searchController,
-                  onChanged: _onSearchTextChanged,
-                  decoration: InputDecoration(
-                    hintText: 'Search...',
-                    prefixIcon: const Icon(Icons.search),
-                    suffixIcon: Container(
-                      margin: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        shape: BoxShape.circle,
-                      ),
-                      child: IconButton(
-                        icon: const Icon(
-                          Icons.close,
-                          size: 20.0,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: Align(
+                alignment: Alignment.center,
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 10.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    color: Colors.white,
+                    border: Border.all(color: Colors.grey),
+                  ),
+                  child: TextField(
+                    controller: _searchController,
+                    onChanged: _onSearchTextChanged,
+                    decoration: InputDecoration(
+                      hintText: 'Search...',
+                      prefixIcon: const Icon(Icons.search),
+                      suffixIcon: Container(
+                        margin: const EdgeInsets.all(5.0),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          shape: BoxShape.circle,
                         ),
-                        onPressed: () {
-                          _searchController.clear();
-                        },
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.close,
+                            size: 15.0,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _searchController.clear();
+                              _filteredFilms.clear();
+                            });
+                          },
+                        ),
                       ),
+                      border: InputBorder.none,
                     ),
-                    border: InputBorder.none,
                   ),
                 ),
               ),
@@ -104,6 +110,10 @@ class _SearchPageState extends State<SearchPage> {
               child: GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
+                  setState(() {
+                    _searchController.clear();
+                    _filteredFilms.clear();
+                  });
                 },
                 child: const Text(
                   'Back',
@@ -121,64 +131,66 @@ class _SearchPageState extends State<SearchPage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: Colors.white,
-              ),
+            padding: const EdgeInsets.only(left: 30, right: 30),
+            child: Divider(
+              color: Colors.grey[400],
+              thickness: 1,
+              height: 20,
             ),
           ),
           Expanded(
             child: ListView.builder(
               itemCount: _filteredFilms.length,
               itemBuilder: (context, index) {
-                return GestureDetector(
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 20),
-                        child: Image.memory(
-                          toUint(_filteredFilms[index].posters),
-                          width: 130,
-                          height: 150,
-                          fit: BoxFit.fitHeight,
+                return Container(
+                  color: Colors.grey[300],
+                  child: GestureDetector(
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10, bottom: 10),
+                          child: Image.memory(
+                            toUint(_filteredFilms[index].posters),
+                            width: 130,
+                            height: 150,
+                            fit: BoxFit.fitHeight,
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              _filteredFilms[index].title,
-                              style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87),
-                            ),
-                            Text(
-                              _filteredFilms[index].dateRelease,
-                              style: const TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.normal,
-                                  color: Colors.black45),
-                            ),
-                          ],
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                _filteredFilms[index].title,
+                                style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87),
+                              ),
+                              Text(
+                                _filteredFilms[index].dateRelease,
+                                style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.black45),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MovieDetailPage(
+                            film: _filteredFilms[index],
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MovieDetailPage(
-                          film: _filteredFilms[index],
-                        ),
-                      ),
-                    );
-                  },
                 );
               },
             ),
