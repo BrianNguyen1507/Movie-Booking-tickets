@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:movie_booking/Views/home_screen/widgets/AutoScrolling.dart';
 import 'package:movie_booking/Views/movies_detail/movieDetail_screen.dart';
-import 'package:movie_booking/services/converter.dart';
+import 'package:movie_booking/Views/search/search_page.dart';
+
 import 'package:flutter/material.dart';
 import 'package:movie_booking/model/film/film.dart';
 import 'package:movie_booking/Views/home_screen/widgets/CustomDrawer.dart';
@@ -18,18 +19,21 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late Future<List<Film>> filmsShowing;
   late Future<List<Film>> filmsFuture;
+  late Future<List<Film>> search;
+
   static Future<Uint8List> bytesToImage(String base64String) async {
     try {
       Uint8List imgBytes = base64Decode(base64String);
       return imgBytes;
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
   @override
   void initState() {
     super.initState();
+
     filmsShowing = ListFeatured.fetchData("1-11-2023", "1-1-2024");
     filmsFuture = ListFeatured.fetchData("1-1-2024", "1-12-2025");
   }
@@ -114,72 +118,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _listHorizon(BuildContext context, int index, List<Film> films) {
-    Film film = films[index];
-
-    return Card(
-      color: Colors.grey.shade100,
-      elevation: 0,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            padding: const EdgeInsets.only(right: 30),
-            child: Column(
-              children: [
-                Image.memory(
-                  toUint(film.posters),
-                  height: 200,
-                  fit: BoxFit.fitHeight,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  film.title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget renderbanner(BuildContext context) {
     return const AutoScrollingBanner();
-  }
-
-  Widget searchbar(BuildContext context) {
-    return Container(
-        height: 50,
-        padding: const EdgeInsets.only(left: 10, right: 10),
-        decoration: BoxDecoration(boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            spreadRadius: 8,
-            blurRadius: 10,
-            offset: const Offset(0, 1),
-          )
-        ], borderRadius: BorderRadius.circular(30)),
-        child: Align(
-          alignment: Alignment.center,
-          child: TextField(
-            decoration: InputDecoration(
-              hintText: 'Search...',
-              prefixIcon: const Icon(Icons.search),
-              filled: true,
-              fillColor: const Color.fromARGB(255, 255, 255, 255),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30.0),
-                borderSide: BorderSide.none,
-              ),
-            ),
-          ),
-        ));
   }
 
   Widget renderNowShowing(BuildContext context) {
@@ -303,14 +243,15 @@ class _HomePageState extends State<HomePage> {
                 } else {
                   List<Film> films = snapshot.data!;
                   return SizedBox(
-                      height: 330,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: films.length,
-                        itemBuilder: (context, index) {
-                          return _buildListItem(context, index, films);
-                        },
-                      ));
+                    height: 330,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: films.length,
+                      itemBuilder: (context, index) {
+                        return _buildListItem(context, index, films);
+                      },
+                    ),
+                  );
                 }
               },
             ),
@@ -331,9 +272,18 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.transparent,
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return const SearchPage();
+                    },
+                  ),
+                );
+              },
               icon: const Icon(
-                Icons.notifications_none,
+                Icons.search,
                 color: Colors.white,
               ))
         ],
@@ -348,7 +298,6 @@ class _HomePageState extends State<HomePage> {
             Stack(
               children: [
                 renderNowShowing(context),
-                searchbar(context),
               ],
             ),
             renderComingSoon(context),
