@@ -16,6 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late Future<List<Film>> filmsShowing;
   late Future<List<Film>> filmsFuture;
   static Future<Uint8List> bytesToImage(String base64String) async {
     try {
@@ -29,7 +30,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    filmsFuture = ListFeatured.fetchData("1-11-2023", "1-1-2024");
+    filmsShowing = ListFeatured.fetchData("1-11-2023", "1-1-2024");
+    filmsFuture = ListFeatured.fetchData("1-1-2024", "1-12-2025");
   }
 
   Widget _buildListItem(BuildContext context, int index, List<Film> films) {
@@ -126,7 +128,6 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.only(right: 30),
             child: Column(
               children: [
-                // Customize this part based on your needs
                 Image.memory(
                   toUint(film.posters),
                   height: 200,
@@ -217,7 +218,7 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.white,
               ),
               child: FutureBuilder<List<Film>>(
-                future: filmsFuture,
+                future: filmsShowing,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
@@ -225,7 +226,8 @@ class _HomePageState extends State<HomePage> {
                     return Text('Error: ${snapshot.error}');
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return const Center(
-                      child: Text('No film available'),
+                      child: Text('No film available',
+                          style: TextStyle(color: Colors.grey)),
                     );
                   } else {
                     List<Film> films = snapshot.data!;
@@ -279,6 +281,40 @@ class _HomePageState extends State<HomePage> {
               width: double.infinity,
             ),
           ),
+          Container(
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+            ),
+            child: FutureBuilder<List<Film>>(
+              future: filmsFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      'No film available',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  );
+                } else {
+                  List<Film> films = snapshot.data!;
+                  return SizedBox(
+                      height: 330,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: films.length,
+                        itemBuilder: (context, index) {
+                          return _buildListItem(context, index, films);
+                        },
+                      ));
+                }
+              },
+            ),
+          ),
         ],
       ),
     );
@@ -303,7 +339,8 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       drawer: const CustomDrawer(),
-      drawerEnableOpenDragGesture: true,extendBody: true,
+      drawerEnableOpenDragGesture: true,
+      extendBody: true,
       body: SingleChildScrollView(
         child: Column(
           children: [
