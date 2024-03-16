@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movie_booking/services/signup.dart';
 import 'package:movie_booking/Views/login_screen/login_screen.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 enum Gender { Nam, Nu }
 
@@ -25,18 +26,16 @@ class HandleRegisterState extends State<HandleRegister> {
     String address,
     String phoneNumber,
   ) async {
-    // Validate input
     if (!isValidEmail(username)) {
-      _showSnackBar(context, "Invalid user name");
+      _showToast( "Invalid user name");
       return;
     }
     if (!isValidPassword(password)) {
-      _showSnackBar(context, "Invalid password");
+      _showToast("Invalid password");
       return;
     }
-    // Check if passwords match
     if (repassword.trim() != password.trim()) {
-      _showSnackBar(context, "Passwords do not match");
+      _showToast( "Passwords do not match");
       return;
     }
 
@@ -51,12 +50,10 @@ class HandleRegisterState extends State<HandleRegister> {
     );
 
     if (isAuthenticated) {
-      // Successful registration
       onRegistrationSuccess(context);
-      _showSnackBar(context, "Registration successful");
+      _showToast( "Registration successful");
     } else {
-      _showSnackBar(context, "Registration failed");
-      // Registration failed
+      _showToast( "User already exists or registration failed");
     }
   }
 
@@ -70,15 +67,15 @@ class HandleRegisterState extends State<HandleRegister> {
     return passwordRegex.hasMatch(password);
   }
 
-  void _showSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        content: Align(
-          alignment: Alignment.topCenter,
-          child: Text(message),
-        ),
-      ),
+  void _showToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.grey,
+      textColor: Colors.white,
+      fontSize: 16.0,
     );
   }
 
@@ -93,7 +90,6 @@ class HandleRegisterState extends State<HandleRegister> {
 
   @override
   Widget build(BuildContext context) {
-    // Your build implementation goes here
     return Container();
   }
 }
