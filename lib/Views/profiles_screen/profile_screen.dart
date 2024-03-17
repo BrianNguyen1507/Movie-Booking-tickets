@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:movie_booking/Views/login_screen/login_screen.dart';
 import 'package:movie_booking/Views/order_tickets/order_tickets_screen.dart';
 import 'package:movie_booking/Views/profiles_screen/Confirmdialog.dart';
+import 'package:movie_booking/model/users/Account.dart';
+import 'package:movie_booking/utils/handle_login/handlelogin.dart';
+import 'package:movie_booking/model/users/User.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -9,8 +13,13 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _Profile_PageState();
 }
 
+User? username = HandleLogin.getLoggedInUser();
+
+// Update _user with the new user information
+
 class _Profile_PageState extends State<ProfilePage> {
   Widget renderBody(BuildContext context) {
+    bool isUserLoggedIn = HandleLogin.getIsLogin();
     return Expanded(
       child: Container(
         color: const Color(0xFFffffff),
@@ -26,18 +35,19 @@ class _Profile_PageState extends State<ProfilePage> {
               width: double.infinity,
               child: Row(children: [
                 SizedBox(
-                    width: 70,
-                    height: 70,
-                    child: Image.asset(
-                      'assets/images/user_1.png',
-                      fit: BoxFit.fill,
-                    )),
+                  width: 70,
+                  height: 70,
+                  child: Image.asset(
+                    'assets/images/user_1.png',
+                    fit: BoxFit.fill,
+                  ),
+                ),
                 Expanded(
                   child: Container(
                     margin: const EdgeInsets.only(left: 16),
                     width: double.infinity,
                     height: double.infinity,
-                    child: const Column(
+                    child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -45,22 +55,37 @@ class _Profile_PageState extends State<ProfilePage> {
                             child: SizedBox(
                               width: double.infinity,
                               child: Row(children: [
-                                Text(
-                                  'John Doe',
-                                  style: TextStyle(
-                                    color: Color(0xFF181725),
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
+                                if (isUserLoggedIn &&
+                                    username?.account.username != null)
+                                  Text(
+                                    username!.account.username,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                else
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const LoginPage(),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text(
+                                      'Login/Register',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
-                                ),
                               ]),
-                            ),
-                          ),
-                          Text(
-                            'abcxyz@gmail.com',
-                            style: TextStyle(
-                              color: Color(0xFF303233),
-                              fontSize: 14,
                             ),
                           ),
                         ]),
@@ -81,7 +106,8 @@ class _Profile_PageState extends State<ProfilePage> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const TicketInfoScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => const TicketInfoScreen()),
                   );
                 },
                 child: Column(
@@ -113,7 +139,8 @@ class _Profile_PageState extends State<ProfilePage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const TicketInfoScreen(),
+                                      builder: (context) =>
+                                          const TicketInfoScreen(),
                                     ),
                                   );
                                 },
@@ -362,8 +389,8 @@ class _Profile_PageState extends State<ProfilePage> {
       height: 60.0,
       child: ElevatedButton(
         onPressed: () {
+          isLogin = false;
           const ConfirmDialogPopUp().showLogoutDialog(context);
-          // Handle logout action
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFFF2F3F2),
@@ -411,7 +438,7 @@ class _Profile_PageState extends State<ProfilePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             renderBody(context),
-            renderFooter(context),
+            isLogin ? renderFooter(context) : Container(),
           ],
         ),
       ),
