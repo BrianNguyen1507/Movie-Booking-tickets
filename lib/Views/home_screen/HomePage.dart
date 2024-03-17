@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:movie_booking/Views/home_screen/widgets/AutoScrolling.dart';
 import 'package:movie_booking/Views/movies_detail/movieDetail_screen.dart';
 import 'package:movie_booking/Views/search/search_page.dart';
-
 import 'package:flutter/material.dart';
 import 'package:movie_booking/model/film/film.dart';
 import 'package:movie_booking/Views/home_screen/widgets/CustomDrawer.dart';
@@ -119,7 +118,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget renderbanner(BuildContext context) {
-    return const AutoScrollingBanner();
+    return const Padding(
+      padding: EdgeInsets.only(top: 40.0),
+      child: AutoScrollingBanner(),
+    );
   }
 
   Widget renderNowShowing(BuildContext context) {
@@ -264,9 +266,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: Colors.black,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
         toolbarHeight: 30,
         elevation: 1,
         backgroundColor: Colors.transparent,
@@ -291,19 +296,30 @@ class _HomePageState extends State<HomePage> {
       drawer: const CustomDrawer(),
       drawerEnableOpenDragGesture: true,
       extendBody: true,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            renderbanner(context),
-            Stack(
-              children: [
-                renderNowShowing(context),
-              ],
-            ),
-            renderComingSoon(context),
-          ],
+      body: RefreshIndicator(
+        backgroundColor: Colors.white70,
+        color: Colors.blue,
+        onRefresh: _onRefresh,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              renderbanner(context),
+              Stack(
+                children: [
+                  renderNowShowing(context),
+                ],
+              ),
+              renderComingSoon(context),
+            ],
+          ),
         ),
       ),
     );
   }
+}
+
+Future<void> _onRefresh() async {
+  return await Future.delayed(
+    const Duration(milliseconds: 100),
+  );
 }
