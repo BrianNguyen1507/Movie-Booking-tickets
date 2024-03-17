@@ -4,7 +4,6 @@ import 'package:movie_booking/Views/home_screen/HomePage.dart';
 import 'package:movie_booking/Views/showtimes_screen/showtime_screen.dart';
 import 'package:movie_booking/Views/store_screen/store_screen.dart';
 import 'package:movie_booking/Views/profiles_screen/profile_screen.dart';
-import 'package:movie_booking/Colors/colorvalues.dart';
 
 class IndexPage extends StatefulWidget {
   const IndexPage({super.key, required String title, int? initialIndex})
@@ -37,10 +36,10 @@ class _IndexPageState extends State<IndexPage> {
     return Scaffold(
       body: pages.elementAt(index),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color.fromRGBO(40, 40, 40, 1),
+        backgroundColor: Colors.black,
         iconSize: 23,
-        selectedItemColor: navColor,
-        unselectedItemColor: Colors.white70,
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.white,
         showSelectedLabels: true,
         showUnselectedLabels: false,
         type: BottomNavigationBarType.fixed,
