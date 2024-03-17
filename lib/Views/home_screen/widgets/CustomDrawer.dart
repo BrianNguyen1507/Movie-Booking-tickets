@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:movie_booking/Colors/colorvalues.dart';
 import 'package:movie_booking/Views/index/index.dart';
 
 class CustomDrawer extends StatefulWidget {
@@ -13,14 +12,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: Colors.transparent,
       child: Container(
-        color: Colors.black,
+        color: Colors.white,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             const DrawerHeader(
               decoration: BoxDecoration(
-                color: buttonsColor,
+                color: Colors.black,
                 image: DecorationImage(
                   image: AssetImage('assets/images/moviebanner2.png'),
                   fit: BoxFit.contain,
@@ -31,12 +31,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
             ListTile(
               leading: const Icon(
                 Icons.home,
-                color: Colors.white54,
+                color: Colors.black,
               ),
               title: const Text(
                 'Home',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontSize: 18,
                 ),
               ),
@@ -52,19 +52,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 );
               },
             ),
-            const Divider(
-              color: Colors.white30,
-              thickness: 1,
-            ),
             ListTile(
               leading: const Icon(
                 Icons.slow_motion_video_sharp,
-                color: Colors.white54,
+                color: Colors.black,
               ),
               title: const Text(
                 'Showtimes',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontSize: 18,
                 ),
               ),
@@ -80,19 +76,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 );
               },
             ),
-            const Divider(
-              color: Colors.white30,
-              thickness: 1,
-            ),
             ListTile(
               leading: const Icon(
                 Icons.storefront_outlined,
-                color: Colors.white54,
+                color: Colors.black,
               ),
               title: const Text(
                 'Store',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontSize: 18,
                 ),
               ),
@@ -108,19 +100,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 );
               },
             ),
-            const Divider(
-              color: Colors.white30,
-              thickness: 1,
-            ),
             ListTile(
               leading: const Icon(
                 Icons.person,
-                color: Colors.white54,
+                color: Colors.black,
               ),
               title: const Text(
                 'Profile',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontSize: 18,
                 ),
               ),
@@ -136,22 +124,18 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 );
               },
             ),
-            const Divider(
-              color: Colors.white30,
-              thickness: 1,
-            ),
             Expanded(
-              child: Container(), //bottom
+              child: Container(),
             ),
             ListTile(
               leading: const Icon(
                 Icons.info,
-                color: Colors.white54,
+                color: Colors.black,
               ),
               title: const Text(
                 'More About Us',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontSize: 18,
                 ),
               ),
