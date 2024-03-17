@@ -5,11 +5,10 @@ class ConfirmDialogPopUp extends StatelessWidget {
   const ConfirmDialogPopUp({Key? key}) : super(key: key);
 
   void _onLogOutPress(BuildContext context) {
-    // Pop all pages until you reach the profile page
     Navigator.popUntil(context, (route) => route.isFirst);
+    (context as Element).markNeedsBuild();
 
-    // Push the login page
-    Navigator.pushReplacement(
+    Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => const LoginPage(),
@@ -29,13 +28,13 @@ class ConfirmDialogPopUp extends StatelessWidget {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop(); 
               },
               child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
-                _onLogOutPress(context); // Close the dialog after processing
+                _onLogOutPress(context); 
               },
               child: const Text('OK'),
             ),
