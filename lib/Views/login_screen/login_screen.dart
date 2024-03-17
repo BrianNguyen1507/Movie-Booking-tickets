@@ -17,6 +17,20 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.blue),
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          onPressed: () {
+            _onbackbutton(context);
+          },
+          icon: const Icon(
+            Icons.close,
+            size: 30,
+          ),
+          color: Colors.black,
+        ),
+      ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
@@ -76,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10)),
-                            labelText: "Email",
+                            labelText: "Username",
                           ),
                         ),
                       ),
@@ -192,4 +206,13 @@ _onRegisterPress(BuildContext context) {
       MaterialPageRoute(
         builder: (context) => const RegisterPage(),
       ));
+}
+
+_onbackbutton(BuildContext context) {
+  Navigator.pop(
+    context,
+    MaterialPageRoute(
+      builder: (context) => const LoginPage(),
+    ),
+  );
 }
