@@ -5,24 +5,33 @@ import 'package:movie_booking/model/users/User.dart';
 import 'package:movie_booking/services/authenticate.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+bool isLogin = false;
+late User loggedInUser;
+
 class HandleLogin extends StatefulWidget {
   const HandleLogin({Key? key}) : super(key: key);
 
   @override
   _HandleLoginState createState() => _HandleLoginState();
+  static bool getIsLogin() {
+    return isLogin;
+  }
 
-  Future<void> handleLogin(
+  static User getLoggedInUser() {
+    return loggedInUser;
+  }
+
+  Future<bool?> handleLogin(
       BuildContext context, String username, String password) async {
     if (username.isEmpty || password.isEmpty) {
       _showToastInvalid();
-      return;
     }
     if (!validateInput(username, password)) {
       _showToastInvalid();
-      return;
     }
 
     final user = User(
+      id: '',
       name: '',
       level: '',
       phoneNumber: '',
@@ -36,10 +45,14 @@ class HandleLogin extends StatefulWidget {
     final isAuthenticated = await AuthenticationService.authenticate(user);
 
     if (isAuthenticated) {
+      isLogin = true;
+      loggedInUser = user;
       _showToastSuccess();
       _onLoginSuccess(context);
+      return isLogin;
     } else {
       _showToastFail();
+      return isLogin;
     }
   }
 
