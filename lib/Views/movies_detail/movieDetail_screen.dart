@@ -245,35 +245,49 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
   }
 
   Widget renderBooking(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey[300],
-      ),
-      height: 100,
-      padding: const EdgeInsets.all(10),
-      alignment: Alignment.center,
-      width: double.infinity,
-      child: SizedBox(
-        height: 50.0,
-        width: double.infinity,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            shadowColor: Colors.black,
-            backgroundColor: isFutureRelease
-                ? Colors.grey
-                : const Color.fromARGB(255, 0, 0, 0),
-            elevation: 15.0,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(20.0),
+            topRight: Radius.circular(20.0),
           ),
-          onPressed: isFutureRelease
-              ? null
-              : () {
-                  _onRegisterPress(context);
-                },
-          child: Text(
-            'BOOKING',
-            style: TextStyle(
-              fontSize: 20,
-              color: isFutureRelease ? Colors.white70 : Colors.white,
+          color: Colors.grey[400],
+        ),
+        height: 100,
+        padding: const EdgeInsets.all(10),
+        alignment: Alignment.center,
+        width: double.infinity,
+        child: Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                blurRadius: 10.0,
+                offset: const Offset(0, 10),
+              ),
+            ],
+          ),
+          height: 50.0,
+          width: double.infinity,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shadowColor: Colors.black,
+              backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+              elevation: 15.0,
+            ),
+            onPressed: isFutureRelease
+                ? null
+                : () {
+                    _onRegisterPress(context);
+                  },
+            child: const Text(
+              'BOOKING',
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+              ),
             ),
           ),
         ),
@@ -284,9 +298,12 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
         toolbarHeight: 30,
         elevation: 1,
         backgroundColor: Colors.transparent,
@@ -315,7 +332,36 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                 child: Column(
                   children: [
                     renderBody(context),
-                    renderBooking(context),
+                    isFutureRelease
+                        ? Container(
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20.0),
+                                topRight: Radius.circular(20.0),
+                              ),
+                              color: Colors.blue,
+                            ),
+                            height: 50,
+                            padding: const EdgeInsets.all(10),
+                            alignment: Alignment.center,
+                            width: double.infinity,
+                            child: Container(
+                              decoration: const BoxDecoration(),
+                              height: 50.0,
+                              width: double.infinity,
+                              child: const Center(
+                                child: Text(
+                                  'COMMING SOON',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        : renderBooking(context),
                   ],
                 ),
               ),
