@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:movie_booking/Views/buyticket_screen/buy_tickets_screen.dart';
-import 'package:movie_booking/Views/home_screen/widgets/AutoScrolling.dart';
+import 'package:movie_booking/Views/selectionTheater/SelectionTheater.dart';
+
 import 'package:movie_booking/Views/index/index.dart';
 import 'package:movie_booking/model/film/film.dart';
 import 'package:movie_booking/Views/movies_detail/widgets/expandableText_widget.dart';
@@ -18,7 +18,12 @@ class MovieDetailPage extends StatefulWidget {
 
 class _MovieDetailPageState extends State<MovieDetailPage> {
   Widget renderbanner(BuildContext context) {
-    return const AutoScrollingBanner();
+    return Image.memory(
+      toUint(widget.film.posters),
+      width: double.infinity,
+      height: 150,
+      fit: BoxFit.cover,
+    );
   }
 
 // convert data to popular format
@@ -245,49 +250,44 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
   }
 
   Widget renderBooking(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20.0),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(20.0),
+          topRight: Radius.circular(20.0),
+        ),
+        color: Colors.grey[400],
+      ),
+      padding: const EdgeInsets.all(10),
+      alignment: Alignment.center,
+      width: double.infinity,
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(20.0),
-            topRight: Radius.circular(20.0),
-          ),
-          color: Colors.grey[400],
-        ),
-        height: 100,
-        padding: const EdgeInsets.all(10),
-        alignment: Alignment.center,
-        width: double.infinity,
-        child: Container(
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.3),
-                blurRadius: 10.0,
-                offset: const Offset(0, 10),
-              ),
-            ],
-          ),
-          height: 50.0,
-          width: double.infinity,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shadowColor: Colors.black,
-              backgroundColor: const Color.fromARGB(255, 0, 0, 0),
-              elevation: 15.0,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              blurRadius: 10.0,
+              offset: const Offset(0, 10),
             ),
-            onPressed: isFutureRelease
-                ? null
-                : () {
-                    _onRegisterPress(context);
-                  },
-            child: const Text(
-              'BOOKING',
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-              ),
+          ],
+        ),
+        width: double.infinity,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            shadowColor: Colors.black,
+            backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+            elevation: 15.0,
+          ),
+          onPressed: isFutureRelease
+              ? null
+              : () {
+                  _onRegisterPress(context);
+                },
+          child: const Text(
+            'BOOKING',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.white,
             ),
           ),
         ),
@@ -371,13 +371,15 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
       ),
     );
   }
-}
 
-_onRegisterPress(BuildContext context) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => const SeatSelectionScreen(),
-    ),
-  );
+  _onRegisterPress(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SeatSelectionScreen(
+          movie: widget.film,
+        ),
+      ),
+    );
+  }
 }
