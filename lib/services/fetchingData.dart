@@ -1,16 +1,16 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-
 import 'package:http/http.dart' as http;
 import 'package:movie_booking/model/film/film.dart';
 import 'package:movie_booking/model/category/category.dart';
 import 'package:movie_booking/services/converter.dart';
+import 'package:movie_booking/services/ipconfig.dart';
 
 class ListFeatured {
   static Future<List<Film>> fetchData(String dateStart, String dateEnd) async {
     try {
-      const apiUrl = "http://192.168.2.3:8083/cinema/listfeatured";
+      const apiUrl = "http://$ip:8083/cinema/listfeatured";
       final response = await http.post(
         Uri.parse(apiUrl),
         headers: {
@@ -24,12 +24,11 @@ class ListFeatured {
 
       return _handleResponse(response);
     } catch (error) {
-      print('Network Request Error: $error');
       return List.empty();
     }
   }
 
-  // Renamed the method to reflect its functionality
+ 
   static Uint8List base64ToUint8(String str) {
     return base64Decode(str);
   }
@@ -58,6 +57,7 @@ class ListFeatured {
             director: filmData["director"],
             describe: byteToStringConvert(filmData["describe"]),
             categories: listCategory,
+            price: filmData["price"],
           );
         }));
       } else {
