@@ -10,6 +10,7 @@ class Film {
   final String director;
   final String describe;
   final List<Category> categories;
+  final double price;
 
   Film({
     required this.id,
@@ -21,13 +22,14 @@ class Film {
     required this.director,
     required this.describe,
     required this.categories,
+    required this.price,
   });
-
   factory Film.fromJson(Map<String, dynamic> json) {
     List<String> postersList = List<String>.from(json['posters'] ?? []);
     List<Category> categoriesList = List<Category>.from(
       (json['categories'] ?? []).map((category) => Category.fromJson(category)),
     );
+
     return Film(
       id: json['id'],
       posters: postersList,
@@ -38,6 +40,7 @@ class Film {
       director: json['director'],
       describe: json['describe'],
       categories: categoriesList,
+      price: json['price'],
     );
   }
 }

@@ -1,7 +1,6 @@
 class Threater {
-  final String title;
-  final String date;
+  final String datetime;
   final List<List<int>> seat;
 
-  Threater({required this.title, required this.date, required this.seat});
+  Threater({required this.datetime, required this.seat});
 }

@@ -1,62 +1,14 @@
-
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter/material.dart';
+
 import 'package:movie_booking/model/threater.dart';
+import 'package:movie_booking/services/ipconfig.dart';
 
-void main() {
-  runApp(const MaterialApp(
-    home: TestSeats(),
-  ));
-}
-
-class TestSeats extends StatefulWidget {
-  const TestSeats({Key? key}) : super(key: key);
-
-  @override
-  State<TestSeats> createState() => _TestingState();
-}
-
-class _TestingState extends State<TestSeats> {
-  bool isLoading = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Testing Page'),
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            ElevatedButton(
-              onPressed: () async {
-                setState(() {
-                  isLoading = true;
-                });
-
-                try {
-                  // Provide the actual values for dateStart and dateEnd
-                  await ListFeatured.fetchDataSeats("1-11-2023 11:30:00", 3);
-                } finally {
-                  setState(() {
-                    isLoading = false;
-                  });
-                }
-              },
-              child: const Text('Fetch Data'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ListFeatured {
-  static Future<void> fetchDataSeats(String date, int threater) async {
+class FetchingThreater {
+  static Future<Threater> fetchDataSeats(String date, int threaterNum) async {
+    Threater threater = Threater(datetime: "", seat: []);
     try {
-      const apiUrl = "http://192.168.1.3:8083/cinema/showMovieThreater";
+      const apiUrl = "http://$ip:8083/cinema/showMovieThreater";
       final response = await http.post(
         Uri.parse(apiUrl),
         headers: {
@@ -64,7 +16,7 @@ class ListFeatured {
         },
         body: json.encode({
           "date": date,
-          "numberThreater": threater,
+          "numberThreater": threaterNum,
         }),
       );
       try {
@@ -81,12 +33,9 @@ class ListFeatured {
             seats.add(seatRow);
           }
 
-          Threater threater = Threater(
-              title: responseData["title"],
-              date: responseData["date"],
-              seat: seats);
-
-          print(threater);
+          Threater threater1 =
+              Threater(datetime: responseData["date"], seat: seats);
+          return threater1;
         } else {
           print('Authentication Error: ${response.statusCode}');
         }
@@ -96,5 +45,6 @@ class ListFeatured {
     } catch (error) {
       print('Network Request Error: $error');
     }
+    return threater;
   }
 }
