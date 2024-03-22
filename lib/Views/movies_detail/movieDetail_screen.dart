@@ -376,7 +376,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SeatSelectionScreen(
+        builder: (context) => SelectionTheater(
           movie: widget.film,
         ),
       ),
