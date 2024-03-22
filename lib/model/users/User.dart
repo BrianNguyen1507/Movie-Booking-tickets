@@ -1,6 +1,7 @@
 import 'Account.dart';
 
 class User {
+  final String id;
   final String name;
   final String phoneNumber;
   final String level;
@@ -8,6 +9,7 @@ class User {
   final Account account;
 
   User({
+    required this.id,
     required this.name,
     required this.phoneNumber,
     required this.level,
@@ -17,6 +19,7 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> userData) {
     return User(
+      id: userData['id'],
       name: userData['name'],
       phoneNumber: userData['phoneNumber'],
       level: userData['level'],
