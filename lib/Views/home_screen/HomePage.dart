@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:movie_booking/Views/home_screen/widgets/AutoScrolling.dart';
 import 'package:movie_booking/Views/movies_detail/movieDetail_screen.dart';
 import 'package:movie_booking/Views/search/search_page.dart';
@@ -37,6 +38,117 @@ class _HomePageState extends State<HomePage> {
     filmsFuture = ListFeatured.fetchData("1-1-2024", "1-12-2025");
   }
 
+  Widget _buildNowShowingItem(
+      BuildContext context, int index, List<Film> films) {
+    Film film = films[index];
+
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MovieDetailPage(
+              film: film,
+            ),
+          ),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: SizedBox(
+          child: Column(
+            children: [
+              Container(
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: FutureBuilder<Uint8List>(
+                  future: bytesToImage(film.posters),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<Uint8List> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      return Image.memory(
+                        snapshot.data!,
+                        fit: BoxFit.cover,
+                      );
+                    }
+                  },
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                film.title,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                film.categories.map((category) => category.name).join(', '),
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black45,
+                ),
+              ),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                        size: 20,
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        '4.0',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black45,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.play_circle_sharp,
+                        color: Colors.black,
+                        size: 20,
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        'Showing',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.green,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildListItem(BuildContext context, int index, List<Film> films) {
     Film film = films[index];
 
@@ -66,48 +178,46 @@ class _HomePageState extends State<HomePage> {
               child: Card(
                 color: Colors.transparent,
                 elevation: 0,
-                child: ClipRRect(
-                  child: Column(
-                    children: [
-                      if (snapshot.data != null)
-                        Padding(
-                          padding: const EdgeInsets.all(1.0),
-                          child: Image.memory(
-                            snapshot.data!,
-                            height: 230,
-                            fit: BoxFit.fitHeight,
-                          ),
-                        ),
+                child: Column(
+                  children: [
+                    if (snapshot.data != null)
                       Padding(
                         padding: const EdgeInsets.all(1.0),
-                        child: Center(
-                          child: Text(
-                            film.title,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
+                        child: Container(
+                          height: 230,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: Image.memory(
+                            snapshot.data!,
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 6),
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            film.categories
-                                .map((category) => category.name)
-                                .join(', '),
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.black54,
-                            ),
+                    Padding(
+                      padding: const EdgeInsets.all(1.0),
+                      child: Center(
+                        child: Text(
+                          film.title,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        film.dateRelease,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -126,7 +236,6 @@ class _HomePageState extends State<HomePage> {
 
   Widget renderNowShowing(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(top: 25),
       decoration: const BoxDecoration(color: Colors.black),
       child: Container(
         decoration: const BoxDecoration(
@@ -141,7 +250,7 @@ class _HomePageState extends State<HomePage> {
             Container(
               decoration: const BoxDecoration(color: Colors.white70),
               width: 200,
-              height: 100,
+              height: 60,
               child: const Align(
                 alignment: Alignment.center,
                 child: Text(
@@ -173,15 +282,20 @@ class _HomePageState extends State<HomePage> {
                     );
                   } else {
                     List<Film> films = snapshot.data!;
-                    return SizedBox(
-                        height: 330,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: films.length,
-                          itemBuilder: (context, index) {
-                            return _buildListItem(context, index, films);
-                          },
-                        ));
+                    return CarouselSlider.builder(
+                      itemCount: films.length,
+                      itemBuilder:
+                          (BuildContext context, int index, int realIndex) {
+                        return _buildNowShowingItem(context, index, films);
+                      },
+                      options: CarouselOptions(
+                        height: 470,
+                        viewportFraction: 0.55,
+                        enlargeCenterPage: true,
+                        enableInfiniteScroll: true,
+                        padEnds: true,
+                      ),
+                    );
                   }
                 },
               ),
@@ -205,6 +319,7 @@ class _HomePageState extends State<HomePage> {
             height: 20,
           ),
           Container(
+            padding: const EdgeInsets.only(top: 35, bottom: 30),
             decoration: const BoxDecoration(color: Colors.white70),
             child: const Align(
               alignment: Alignment.center,
