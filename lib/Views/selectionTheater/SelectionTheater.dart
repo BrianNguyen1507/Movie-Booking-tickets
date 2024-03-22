@@ -4,16 +4,16 @@ import 'package:movie_booking/model/theater.dart';
 
 import 'package:movie_booking/services/fetchThreater.dart';
 
-class SeatSelectionScreen extends StatefulWidget {
+class SelectionTheater extends StatefulWidget {
   final Film movie;
 
-  const SeatSelectionScreen({Key? key, required this.movie}) : super(key: key);
+  const SelectionTheater({Key? key, required this.movie}) : super(key: key);
 
   @override
-  _SeatSelectionScreenState createState() => _SeatSelectionScreenState();
+  _SelectionTheaterState createState() => _SelectionTheaterState();
 }
 
-class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
+class _SelectionTheaterState extends State<SelectionTheater> {
   late List<Theater> theaters = [];
   String? selectedDate;
   int? selectedTheaterNumber;
