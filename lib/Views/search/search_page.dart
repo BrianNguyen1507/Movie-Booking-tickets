@@ -61,13 +61,13 @@ class _SearchPageState extends State<SearchPage> {
         actions: [
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(top: 10.0),
+              padding: const EdgeInsets.only(top: 5, bottom: 5),
               child: Align(
                 alignment: Alignment.center,
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 10.0),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(20),
                     color: Colors.white,
                     border: Border.all(color: Colors.grey),
                   ),
@@ -103,24 +103,27 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.center,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                  setState(() {
-                    _searchController.clear();
-                    _filteredFilms.clear();
-                  });
-                },
-                child: const Text(
-                  'Back',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
-                    fontSize: 16,
+          Padding(
+            padding: const EdgeInsets.all(5),
+            child: Align(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                    setState(() {
+                      _searchController.clear();
+                      _filteredFilms.clear();
+                    });
+                  },
+                  child: const Text(
+                    'Back',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
               ),
@@ -128,74 +131,80 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 30, right: 30),
-            child: Divider(
-              color: Colors.grey[400],
-              thickness: 1,
-              height: 20,
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _filteredFilms.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  color: Colors.grey[300],
-                  child: GestureDetector(
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10, bottom: 10),
-                          child: Image.memory(
-                            toUint(_filteredFilms[index].posters),
-                            width: 130,
-                            height: 150,
-                            fit: BoxFit.fitHeight,
+      body: Container(
+        color: Colors.white,
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemCount: _filteredFilms.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    color: Colors.grey[400],
+                    child: GestureDetector(
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10, bottom: 10),
+                            child: Image.memory(
+                              toUint(_filteredFilms[index].posters),
+                              width: 130,
+                              height: 150,
+                              fit: BoxFit.fitHeight,
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _filteredFilms[index].title,
-                                style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87),
-                              ),
-                              Text(
-                                _filteredFilms[index].dateRelease,
-                                style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.normal,
-                                    color: Colors.black45),
-                              ),
-                            ],
+                          Padding(
+                            padding: const EdgeInsets.only(left: 5),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _filteredFilms[index].title,
+                                  style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87),
+                                ),
+                                Text(
+                                  _filteredFilms[index]
+                                      .categories
+                                      .map((category) => category.name)
+                                      .join(', '),
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Text(
+                                  _filteredFilms[index].dateRelease,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MovieDetailPage(
+                              film: _filteredFilms[index],
+                            ),
+                          ),
+                        );
+                        _searchController.clear();
+                      },
                     ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MovieDetailPage(
-                            film: _filteredFilms[index],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
