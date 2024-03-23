@@ -26,7 +26,6 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
     );
   }
 
-// convert data to popular format
   DateTime convertToDate(String input) {
     var format = DateFormat('dd-MM-yyyy');
     return format.parse(input);
@@ -262,6 +261,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
       alignment: Alignment.center,
       width: double.infinity,
       child: Container(
+        padding: const EdgeInsets.all(10.0),
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(

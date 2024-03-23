@@ -1,12 +1,11 @@
 import 'package:http/http.dart' as http;
+import 'package:movie_booking/model/seats/seats.dart';
 import 'dart:convert';
 
-import 'package:movie_booking/model/threater.dart';
 import 'package:movie_booking/services/ipconfig.dart';
 
-class FetchingThreater {
-  static Future<Threater> fetchDataSeats(String date, int threaterNum) async {
-    Threater threater = Threater(datetime: "", seat: []);
+class FetchSeats {
+  static Future<Seat?> fetchDataSeats(String date, int threater) async {
     try {
       const apiUrl = "http://$ip:8083/cinema/showMovieThreater";
       final response = await http.post(
@@ -16,7 +15,7 @@ class FetchingThreater {
         },
         body: json.encode({
           "date": date,
-          "numberThreater": threaterNum,
+          "numberThreater": threater,
         }),
       );
       try {
@@ -25,17 +24,16 @@ class FetchingThreater {
           List<dynamic> seatsData = responseData["seat"];
           List<List<int>> seats = [];
 
-          for (int i = 0; i < 6; i++) {
-            List<int> seatRow = [];
-            for (int j = 0; j < 6; j++) {
-              seatRow.add(seatsData[i][j]);
+          for (var row in seatsData) {
+            List<int> parsedRow = [];
+            for (var seat in row) {
+              parsedRow.add(seat);
             }
-            seats.add(seatRow);
+            seats.add(parsedRow);
           }
 
-          Threater threater1 =
-              Threater(datetime: responseData["date"], seat: seats);
-          return threater1;
+          String datetime = responseData["date"];
+          return Seat(seats, datetime: datetime);
         } else {
           print('Authentication Error: ${response.statusCode}');
         }
@@ -45,6 +43,6 @@ class FetchingThreater {
     } catch (error) {
       print('Network Request Error: $error');
     }
-    return threater;
+    return null;
   }
 }

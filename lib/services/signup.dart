@@ -1,6 +1,8 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:movie_booking/services/ipconfig.dart';
+
 class SignUpService {
   static Future<bool> registration(
     String name,
@@ -12,7 +14,7 @@ class SignUpService {
     String password,
   ) async {
     try {
-      const apiUrl = "http://192.168.1.3:8083/cinema/register";
+      const apiUrl = "http://${ip}:8083/cinema/register";
       final response = await http.post(
         Uri.parse(apiUrl),
         headers: {
@@ -30,7 +32,6 @@ class SignUpService {
 
       if (response.statusCode == 200) {
         final dynamic responseData = json.decode(response.body);
-        print('JSON Response: $responseData');
         final dynamic existUser = responseData['user_name'];
         final bool isExisted = existUser == null;
 

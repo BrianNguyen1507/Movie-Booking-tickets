@@ -261,12 +261,10 @@ class _RegisterPageState extends State<RegisterPage> {
             right: 0,
             bottom: 0,
             child: Container(
-              // Your bottom container
               color: const Color.fromARGB(130, 91, 91, 91),
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: Column(
                 children: [
-                  // Add your bottom container content here
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

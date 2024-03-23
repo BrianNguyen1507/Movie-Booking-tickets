@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:movie_booking/Views/login_screen/login_screen.dart';
 import 'package:movie_booking/Views/order_tickets/order_tickets_screen.dart';
 import 'package:movie_booking/Views/profiles_screen/Confirmdialog.dart';
-import 'package:movie_booking/model/users/Account.dart';
 import 'package:movie_booking/utils/handle_login/handlelogin.dart';
 import 'package:movie_booking/model/users/User.dart';
 
