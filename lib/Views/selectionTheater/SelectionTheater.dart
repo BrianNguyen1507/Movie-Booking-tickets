@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:movie_booking/Views/selectionSeats/selectionSeats.dart';
 import 'package:movie_booking/model/film/film.dart';
 import 'package:movie_booking/model/theater.dart';
-
 import 'package:movie_booking/services/fetchThreater.dart';
 
 class SelectionTheater extends StatefulWidget {
@@ -66,9 +66,13 @@ class _SelectionTheaterState extends State<SelectionTheater> {
                   selectedTheaterTime = null;
                 } else {
                   selectedTheaterTime = theater.time;
-                  print(selectedTheaterNumber);
-                  print(selectedDate);
-                  print(selectedTheaterTime);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => SelectionSeats(film: widget.movie,
+                        theater: theater,
+                      ),
+                    ),
+                  );
                 }
               });
             },
@@ -104,12 +108,7 @@ class _SelectionTheaterState extends State<SelectionTheater> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back),
-        ),
+      
         title: Text(
           widget.movie.title,
           style: const TextStyle(fontWeight: FontWeight.bold),
