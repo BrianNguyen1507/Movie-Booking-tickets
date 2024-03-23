@@ -1,13 +1,22 @@
 class Seat {
-  final String id;
-  bool isReserved;
-  bool isSelected;
-  String day;
-  String time;
+  final List<List<int>> seats;
+  final String datetime;
+  Seat(
+    this.seats, {
+    required this.datetime,
+  });
 
-  Seat(this.id,
-      {this.isReserved = false,
-      this.isSelected = false,
-      required this.day,
-      required this.time});
+  factory Seat.fromJson(Map<String, dynamic> jsonData) {
+    String datetime = jsonData['time'];
+    List<List<int>> parsedSeats = [];
+    List<dynamic> seatRows = jsonData['seat'];
+    for (var row in seatRows) {
+      List<int> parsedRow = [];
+      for (var seat in row) {
+        parsedRow.add(seat);
+      }
+      parsedSeats.add(parsedRow);
+    }
+    return Seat(parsedSeats, datetime: datetime);
+  }
 }
