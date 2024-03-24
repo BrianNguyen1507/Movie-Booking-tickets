@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_booking/Views/Finish_payment/finish_payment_screen.dart';
 import 'package:movie_booking/model/film/film.dart';
 import 'package:movie_booking/model/seats/seats.dart';
 import 'package:movie_booking/model/theater.dart';
@@ -20,7 +21,7 @@ class _SelectionSeatsState extends State<SelectionSeats> {
   late List<List<int>> contain = [];
   List<String> selectedSeats = [];
   late TransformationController _transformationController;
-
+  late double sumTotal;
   @override
   void initState() {
     super.initState();
@@ -33,9 +34,9 @@ class _SelectionSeatsState extends State<SelectionSeats> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text(
-          widget.film.title,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+        title: const Text(
+          'Selection Seats',
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -116,9 +117,10 @@ class _SelectionSeatsState extends State<SelectionSeats> {
   }
 
   Widget renderConfirmPayment(BuildContext context) {
-    int totalSelectedSeats = selectedSeats.length;
-    double numseat = widget.film.price;
-    double total = numseat * totalSelectedSeats;
+    int numberSeats = selectedSeats.length;
+    double price = widget.film.price;
+    double total = price * numberSeats;
+    sumTotal = total;
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -143,35 +145,47 @@ class _SelectionSeatsState extends State<SelectionSeats> {
                           style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
-                              fontSize: 17),
+                              fontSize: 20),
                         ),
                         Text(
                           ' | ${widget.theater.time}',
                           style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
-                              fontSize: 17),
+                              fontSize: 20),
                         ),
                       ],
                     ),
                     Text(
-                      'Seats: $totalSelectedSeats',
+                      'Seats: ${selectedSeats.length}',
                       style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 17),
+                          fontSize: 20),
                     ),
                   ],
                 ),
                 Container(
                   alignment: Alignment.topRight,
                   padding: const EdgeInsets.only(bottom: 5, top: 10),
-                  child: Text(
-                    '$total',
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      const Text(
+                        'Total',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontSize: 20),
+                      ),
+                      Text(
+                        '$total',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontSize: 20),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -194,7 +208,20 @@ class _SelectionSeatsState extends State<SelectionSeats> {
                   backgroundColor: const Color.fromARGB(255, 0, 0, 0),
                   elevation: 15.0,
                 ),
-                onPressed: () {}, //navigator totoher page
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return SummaryPaymentPage(
+                          total: sumTotal,
+                          film: widget.film,
+                          theater: widget.theater,
+                          selectedSeats: selectedSeats,
+                        );
+                      },
+                    ),
+                  );
+                },
                 child: const Text(
                   'FINISH PAYMENT',
                   style: TextStyle(
@@ -341,12 +368,22 @@ class _SelectionSeatsState extends State<SelectionSeats> {
       if (contain.isNotEmpty && contain[rowIndex][colIndex] == 1) {
         return;
       }
-
       if (selectedSeats.contains(seatId)) {
         selectedSeats.remove(seatId);
       } else {
         selectedSeats.add(seatId);
       }
+      selectedSeats.sort((a, b) {
+        String rowA = a.substring(0, 1);
+        String rowB = b.substring(0, 1);
+        int colA = a.runes.elementAt(1);
+        int colB = b.runes.elementAt(1);
+        if (colA == colB) {
+          return rowA.compareTo(rowB);
+        } else {
+          return colA.compareTo(colB);
+        }
+      });
     });
   }
 }
