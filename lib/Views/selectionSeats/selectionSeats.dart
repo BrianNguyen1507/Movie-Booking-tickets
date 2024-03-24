@@ -30,6 +30,16 @@ class _SelectionSeatsState extends State<SelectionSeats> {
   }
 
   @override
+  void dispose() {
+    _transformationController.dispose();
+    super.dispose();
+  }
+
+  void _resetTransformation() {
+    _transformationController.value = Matrix4.identity();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -65,6 +75,9 @@ class _SelectionSeatsState extends State<SelectionSeats> {
                           constrained: true,
                           transformationController: _transformationController,
                           child: renderSeats(),
+                          onInteractionEnd: (_) {
+                            _resetTransformation();
+                          },
                         ),
                       ),
                       Padding(
@@ -86,12 +99,6 @@ class _SelectionSeatsState extends State<SelectionSeats> {
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _transformationController.dispose();
-    super.dispose();
   }
 
   Future<void> fetchDataSeats() async {
