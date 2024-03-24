@@ -68,7 +68,8 @@ class _SelectionTheaterState extends State<SelectionTheater> {
                   selectedTheaterTime = theater.time;
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => SelectionSeats(film: widget.movie,
+                      builder: (context) => SelectionSeats(
+                        film: widget.movie,
                         theater: theater,
                       ),
                     ),
@@ -108,7 +109,6 @@ class _SelectionTheaterState extends State<SelectionTheater> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-      
         title: Text(
           widget.movie.title,
           style: const TextStyle(fontWeight: FontWeight.bold),
@@ -205,7 +205,6 @@ class _SelectionTheaterState extends State<SelectionTheater> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: timeWidgets,
       );
-
       ExpansionTile theaterWidget = ExpansionTile(
         iconColor: Colors.black,
         dense: true,
@@ -233,7 +232,6 @@ class _SelectionTheaterState extends State<SelectionTheater> {
       );
       theaterWidgets.add(theaterWidget);
     }
-
     return theaterWidgets;
   }
 }
