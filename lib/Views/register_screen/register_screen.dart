@@ -1,32 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-
 import 'package:movie_booking/Views/login_screen/login_screen.dart';
 import 'package:movie_booking/utils/handle_register/handleregister.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+  const RegisterPage({Key? key}) : super(key: key);
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
-final TextEditingController _usernameDkController = TextEditingController();
-final TextEditingController _passwordDkController = TextEditingController();
-final TextEditingController _repasswordDkController = TextEditingController();
-final TextEditingController _NameDkController = TextEditingController();
-final TextEditingController _addressDkController = TextEditingController();
-final TextEditingController _numberphoneDkController = TextEditingController();
-
-String _gender = "";
-List<String> _genders = ["Male", "Female"];
-Gender? selectedGender;
-
-bool _isObscurePass = true;
-bool _isObscureConf = true;
-bool _isChecked = false;
-
 class _RegisterPageState extends State<RegisterPage> {
+  final TextEditingController _usernameDkController = TextEditingController();
+  final TextEditingController _passwordDkController = TextEditingController();
+  final TextEditingController _repasswordDkController = TextEditingController();
+  final TextEditingController _NameDkController = TextEditingController();
+  final TextEditingController _addressDkController = TextEditingController();
+  final TextEditingController _numberphoneDkController =
+      TextEditingController();
+
+  String _gender = "";
+  List<String> _genders = ["Male", "Female"];
+  Gender? selectedGender;
+
+  bool _isObscurePass = true;
+  bool _isObscureConf = true;
+  bool _isChecked = false;
+
   void _resetText() {
     _usernameDkController.text = "";
     _passwordDkController.text = "";
@@ -53,302 +53,159 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
       backgroundColor: Colors.white,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Column(
-                      children: <Widget>[
-                        const SizedBox(
-                          height: 50,
-                        ),
-                        const Text(
-                          "Register",
-                          style: TextStyle(
-                              color: Colors.blue,
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        const Gap(10),
-                        SizedBox(
-                          width: 350,
-                          child: TextField(
-                            controller: _usernameDkController,
-                            keyboardType: TextInputType.emailAddress,
-                            style: const TextStyle(color: Colors.black),
-                            decoration: const InputDecoration(
-                              contentPadding:
-                                  EdgeInsets.only(left: 10, right: 10),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.green, width: 3.0)),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.grey, width: 1.0),
-                              ),
-                              label: Text(
-                                'User name',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Gap(10),
-                        SizedBox(
-                          width: 350,
-                          child: TextField(
-                            controller: _passwordDkController,
-                            style: const TextStyle(color: Colors.black),
-                            obscureText: _isObscurePass,
-                            decoration: InputDecoration(
-                              suffixIcon: IconButton(
-                                icon: Icon(_isObscurePass
-                                    ? Icons.visibility
-                                    : Icons.visibility_off),
-                                onPressed: () {
-                                  setState(() {
-                                    _isObscurePass = !_isObscurePass;
-                                  });
-                                },
-                              ),
-                              contentPadding:
-                                  const EdgeInsets.only(left: 10, right: 10),
-                              focusedBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.green, width: 3.0)),
-                              enabledBorder: const OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.grey, width: 1.0),
-                              ),
-                              label: const Text(
-                                'Password',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Gap(10),
-                        SizedBox(
-                          width: 350,
-                          child: TextField(
-                            controller: _repasswordDkController,
-                            style: const TextStyle(color: Colors.black),
-                            obscureText: _isObscureConf,
-                            decoration: InputDecoration(
-                              suffixIcon: IconButton(
-                                color: Colors.black,
-                                icon: Icon(_isObscureConf
-                                    ? Icons.visibility
-                                    : Icons.visibility_off),
-                                onPressed: () {
-                                  setState(() {
-                                    _isObscureConf = !_isObscureConf;
-                                  });
-                                },
-                              ),
-                              contentPadding:
-                                  const EdgeInsets.only(left: 10, right: 10),
-                              focusedBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.green, width: 3.0)),
-                              enabledBorder: const OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.grey, width: 1.0),
-                              ),
-                              label: const Text(
-                                'Confirm Password',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Gap(10),
-                        Center(
-                            child: SizedBox(
-                          width: 350.0,
-                          child: Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: TextField(
-                                  controller: _NameDkController,
-                                  style: const TextStyle(color: Colors.black),
-                                  obscureText: false,
-                                  decoration: const InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.only(left: 10, right: 10),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.green, width: 3.0)),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.grey, width: 1.0),
-                                    ),
-                                    label: Text(
-                                      'Name',
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )),
-                        const Gap(10),
-                        SizedBox(
-                          width: 350,
-                          child: TextField(
-                            controller: _addressDkController,
-                            keyboardType: TextInputType.streetAddress,
-                            style: const TextStyle(color: Colors.black),
-                            obscureText: false,
-                            decoration: const InputDecoration(
-                              contentPadding:
-                                  EdgeInsets.only(left: 10, right: 10),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.green, width: 3.0)),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.grey, width: 1.0),
-                              ),
-                              label: Text(
-                                'Address',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Gap(10),
-                        SizedBox(
-                          width: 350,
-                          child: TextField(
-                            controller: _numberphoneDkController,
-                            keyboardType: TextInputType.number,
-                            style: const TextStyle(color: Colors.black),
-                            obscureText: false,
-                            decoration: const InputDecoration(
-                              contentPadding:
-                                  EdgeInsets.only(left: 10, right: 10),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.green, width: 3.0)),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.grey, width: 1.0),
-                              ),
-                              label: Text(
-                                'Number Phone',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Gap(30),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Container(
-              color: const Color.fromARGB(130, 91, 91, 91),
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        child: Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Checkbox(
-                            activeColor: Colors.blue,
-                            value: _isChecked,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                _isChecked = value!;
-                              });
-                            },
-                            checkColor: Colors.white,
-                          ),
-                        ),
-                      ),
-                      RichText(
-                        text: const TextSpan(
-                          text: 'I have read, I understand, and I agree to ',
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: 'the terms',
-                              style: TextStyle(
-                                color: Colors.blue,
-                                decoration: TextDecoration.underline,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Form(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  "Register",
+                  style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold),
+                ),
+                const Gap(10),
+                TextFormField(
+                  controller: _usernameDkController,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(
+                    labelText: 'User name',
                   ),
-                  SizedBox(
-                    height: 50.0,
-                    width: 350.0,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 2, 95, 255),
-                        elevation: 0.0,
-                      ),
-                      onPressed: _isChecked
-                          ? () {
-                              setState(() {
-                                HandleRegisterState handleRegisterState =
-                                    HandleRegisterState();
-                                handleRegisterState.validateRegistration(
-                                  context,
-                                  _usernameDkController.text,
-                                  _passwordDkController.text,
-                                  _repasswordDkController.text,
-                                  _NameDkController.text,
-                                  _gender,
-                                  _addressDkController.text,
-                                  _numberphoneDkController.text,
-                                );
-                              });
-                            }
-                          : null,
-                      child: const Text(
-                        'Submit',
+                ),
+                const Gap(10),
+                TextFormField(
+                  controller: _passwordDkController,
+                  obscureText: _isObscurePass,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    suffixIcon: IconButton(
+                      icon: Icon(_isObscurePass
+                          ? Icons.visibility
+                          : Icons.visibility_off),
+                      onPressed: () {
+                        setState(() {
+                          _isObscurePass = !_isObscurePass;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                const Gap(10),
+                TextFormField(
+                  controller: _repasswordDkController,
+                  obscureText: _isObscureConf,
+                  decoration: InputDecoration(
+                    labelText: 'Confirm Password',
+                    suffixIcon: IconButton(
+                      icon: Icon(_isObscureConf
+                          ? Icons.visibility
+                          : Icons.visibility_off),
+                      onPressed: () {
+                        setState(() {
+                          _isObscureConf = !_isObscureConf;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                const Gap(10),
+                TextFormField(
+                  controller: _NameDkController,
+                  decoration: const InputDecoration(
+                    labelText: 'Name',
+                  ),
+                ),
+                const Gap(10),
+                TextFormField(
+                  controller: _addressDkController,
+                  keyboardType: TextInputType.streetAddress,
+                  decoration: const InputDecoration(
+                    labelText: 'Address',
+                  ),
+                ),
+                const Gap(10),
+                TextFormField(
+                  controller: _numberphoneDkController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Number Phone',
+                  ),
+                ),
+                const Gap(30),
+                Row(
+                  children: [
+                    Checkbox(
+                      activeColor: Colors.blue,
+                      value: _isChecked,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _isChecked = value!;
+                        });
+                      },
+                    ),
+                    RichText(
+                      text: const TextSpan(
+                        text: 'I have read and I agree to ',
                         style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
+                          color: Colors.black,
                         ),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'the terms',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              decoration: TextDecoration.underline,
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                  )
-                ],
-              ),
+                  ],
+                ),
+                const Gap(10),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _isChecked
+                        ? () {
+                            HandleRegisterState handleRegisterState =
+                                HandleRegisterState();
+                            handleRegisterState.validateRegistration(
+                              context,
+                              _usernameDkController.text,
+                              _passwordDkController.text,
+                              _repasswordDkController.text,
+                              _NameDkController.text,
+                              _gender,
+                              _addressDkController.text,
+                              _numberphoneDkController.text,
+                            );
+                          }
+                        : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                    ),
+                    child: const Text(
+                      'Submit',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
-}
 
-_onbackbutton(BuildContext context) {
-  Navigator.pop(
-    context,
-    MaterialPageRoute(
-      builder: (context) => const LoginPage(),
-    ),
-  );
+  void _onbackbutton(BuildContext context) {
+    Navigator.pop(context);
+  }
 }
