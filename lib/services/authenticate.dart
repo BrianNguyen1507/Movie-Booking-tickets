@@ -22,22 +22,33 @@ class AuthenticationService {
       );
 
       if (response.statusCode == 200) {
-        final dynamic responseData = json.decode(response.body);
-        final dynamic id = responseData['id'];
-        final dynamic token = responseData['token'];
-        print('token: ${responseData['token']}');
-        final bool isAuthenticated = id != null;
-        if (isAuthenticated) {
-          await storage.write(key: 'authToken', value: token);
-
-          return true;
+        if (response.body.isNotEmpty) {
+          try {
+            final dynamic responseData = json.decode(response.body);
+            final dynamic id = responseData['id'];
+            // final dynamic token = responseData['token'];
+            // print('token: ${responseData['token']}');
+            final bool isAuthenticated = id != null;
+            if (isAuthenticated) {
+              // await storage.write(key: 'authToken', value: token);
+              return true;
+            } else {
+              return false;
+            }
+          } catch (e) {
+            print('Error decoding JSON response: $e');
+            return false;
+          }
         } else {
+          print('Empty or null response body');
           return false;
         }
       } else {
+        print('HTTP Error: ${response.statusCode}');
         return false;
       }
     } catch (error) {
+      print('Error in authentication request: $error');
       return false;
     }
   }
