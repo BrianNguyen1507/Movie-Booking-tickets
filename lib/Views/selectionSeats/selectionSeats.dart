@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movie_booking/Views/Finish_payment/finish_payment_screen.dart';
+import 'package:movie_booking/Views/Finish_payment/detail_selection.dart';
 import 'package:movie_booking/model/film/film.dart';
 import 'package:movie_booking/model/seats/seats.dart';
 import 'package:movie_booking/model/theater.dart';
@@ -68,7 +68,6 @@ class _SelectionSeatsState extends State<SelectionSeats> {
                       Center(
                         child: InteractiveViewer(
                           panEnabled: true,
-                          alignPanAxis: true,
                           boundaryMargin: const EdgeInsets.all(100),
                           minScale: 0.1,
                           maxScale: 5.0,
