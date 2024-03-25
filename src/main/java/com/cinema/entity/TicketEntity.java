@@ -72,12 +72,6 @@ public class TicketEntity {
 		this.date = date;
 	}
 	
-	public FilmEntity getFilms() {
-		return film;
-	}
-	public void setFilms(FilmEntity films) {
-		this.film = films;
-	}
 	public MovieThreaterEntity getMovieThreater() {
 		return movieThreater;
 	}
