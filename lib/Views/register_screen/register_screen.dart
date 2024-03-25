@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:movie_booking/Views/login_screen/login_screen.dart';
 import 'package:movie_booking/utils/handle_register/handleregister.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -20,7 +19,7 @@ class _RegisterPageState extends State<RegisterPage> {
       TextEditingController();
 
   String _gender = "";
-  List<String> _genders = ["Male", "Female"];
+
   Gender? selectedGender;
 
   bool _isObscurePass = true;
