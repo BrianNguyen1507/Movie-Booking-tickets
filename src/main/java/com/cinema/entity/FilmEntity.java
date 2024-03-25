@@ -49,19 +49,10 @@ public class FilmEntity {
       inverseJoinColumns = @JoinColumn(name = "category_id")
     )
 	private List<CategoryEntity> categories = new ArrayList<>();
-
-	@OneToMany(mappedBy = "film", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private List<TicketEntity> tickets = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "film", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	private List<MovieThreaterEntity> movieThreaters = new ArrayList<>();
-	
-	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinTable(name = "film_movie_schedule",
-      joinColumns = @JoinColumn(name = "film_id"),
-      inverseJoinColumns = @JoinColumn(name = "movie_schedule_id")
-    )
-	private List<MovieScheduleEntity> movieSchedules = new ArrayList<>();
+
 	
 	public FilmEntity() {
 		
@@ -162,14 +153,6 @@ public class FilmEntity {
 		this.categories = categories;
 	}
 
-	public List<TicketEntity> getTickets() {
-		return tickets;
-	}
-
-	public void setTickets(List<TicketEntity> tickets) {
-		this.tickets = tickets;
-	}
-
 	public List<MovieThreaterEntity> getMovieThreaters() {
 		return movieThreaters;
 	}
@@ -178,13 +161,6 @@ public class FilmEntity {
 		this.movieThreaters = movieThreaters;
 	}
 
-	public List<MovieScheduleEntity> getMovieSchedules() {
-		return movieSchedules;
-	}
-
-	public void setMovieSchedules(List<MovieScheduleEntity> movieSchedules) {
-		this.movieSchedules = movieSchedules;
-	}
 
 	
 }

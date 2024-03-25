@@ -31,14 +31,6 @@ public class TicketEntity {
 	private int seat;
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "film_id", nullable = false)
-	private FilmEntity film;
-	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "movie_schedule_id", nullable = true)
-    private MovieScheduleEntity movieSchedule;
-	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "movie_threater_id", nullable = true)
     private MovieThreaterEntity movieThreater;
 	
@@ -86,12 +78,6 @@ public class TicketEntity {
 	public void setFilms(FilmEntity films) {
 		this.film = films;
 	}
-	public MovieScheduleEntity getMovieSchedule() {
-		return movieSchedule;
-	}
-	public void setMovieSchedule(MovieScheduleEntity movieSchedule) {
-		this.movieSchedule = movieSchedule;
-	}
 	public MovieThreaterEntity getMovieThreater() {
 		return movieThreater;
 	}
@@ -109,12 +95,6 @@ public class TicketEntity {
 	}
 	public void setVouchers(List<VoucherEntity> vouchers) {
 		this.vouchers = vouchers;
-	}
-	public FilmEntity getFilm() {
-		return film;
-	}
-	public void setFilm(FilmEntity film) {
-		this.film = film;
 	}
 	public int getSeat() {
 		return seat;

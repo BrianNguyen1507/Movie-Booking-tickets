@@ -8,11 +8,21 @@ public abstract class DateFormatter {
 
 	private static SimpleDateFormat sdfyMd = new SimpleDateFormat("yyyy-MM-dd");
 	private static SimpleDateFormat sdfdMy = new SimpleDateFormat("dd-MM-yyyy");
-//	private static SimpleDateFormat sdfyMdTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+	private static SimpleDateFormat sdfyMdTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 	private static SimpleDateFormat sdfdMyTime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss"); 
 	
 	public static Date parse(String date) throws ParseException {
 		return sdfyMd.parse(sdfyMd.format(sdfdMy.parse(date)));
+	}
+	public static Date parseYMDTime(String date) {
+		try {
+			Date d = sdfdMyTime.parse(date);
+			return sdfyMdTime.parse(sdfyMdTime.format(d));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 	public static Date parseTime(String date) {
 		try {

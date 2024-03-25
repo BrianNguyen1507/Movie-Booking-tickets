@@ -2,6 +2,7 @@ package com.cinema.services.impl;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,15 +54,14 @@ public class OrderService implements IOrderService {
         CustomerEntity customerEntity = accountRepository.findById(model.getAccountId()).orElse(null).getCustomer();
         OrderEntity orderEntity = orderConverter.PaymentDTOtoEntity(model);
         orderEntity.setCustomer(customerEntity);
-        orderEntity = orderRepository.save(orderEntity);
         List<TicketEntity> tickets = new ArrayList<>();
         for (int i = 0; i < model.getQuantityTicket(); i++) {
             TicketEntity ticketEntity = new TicketEntity();
             ticketEntity.setDate(model.getDatetime());
+            Date date = DateFormatter.parseYMDTime(model.getDateMovieThreater());
             ticketEntity.setMovieThreater(
-                    movieThreaterRepository.findOneByTimeAndNumberThreater(DateFormatter.parseTime(model.getDateMovieThreater()), model.getNumberThreater()));
+                    movieThreaterRepository.findOneByTimeAndNumberThreater(date, model.getNumberThreater()));
             MovieThreaterEntity movieThreaterEntity = ticketEntity.getMovieThreater();
-            ticketEntity.setFilm(filmRepository.findById(movieThreaterEntity.getFilm().getId()).orElse(null));
             if (movieThreaterEntity.setSeatOrder(model.getSeat()[i])) {
                 ticketEntity.setSeat(model.getSeat()[i]);
                 ticketEntity.setOrder(orderEntity);
@@ -72,14 +72,13 @@ public class OrderService implements IOrderService {
                         + Calendar.getInstance().get(Calendar.MINUTE) + ""
                         + Calendar.getInstance().get(Calendar.SECOND) + i);
                 tickets.add(ticketEntity);
-                ticketRepository.save(ticketEntity);
             } else {
                 return null;
             }
-
         }
-
-        return orderConverter.EntitytoPaymentDTO(orderEntity);
+        orderEntity.setTicket(tickets);
+        orderEntity = orderRepository.save(orderEntity);
+        return model;
     }
 
     @Override
@@ -101,3 +100,4 @@ public class OrderService implements IOrderService {
     }
 
 }
+
