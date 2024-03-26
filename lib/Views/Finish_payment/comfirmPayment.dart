@@ -7,7 +7,7 @@ import 'package:movie_booking/model/methodPayment/method.dart';
 import 'package:movie_booking/model/theater/theater.dart';
 import 'package:movie_booking/services/Payments/Client/clientId.dart';
 import 'package:movie_booking/services/Payments/Payment.dart';
-import 'package:movie_booking/utils/handle_login/handlelogin.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 enum PaymentMethod { paypal, none }
 
@@ -30,15 +30,23 @@ class ConfirmPayment extends StatefulWidget {
 }
 
 class _ConfirmPaymentState extends State<ConfirmPayment> {
-  dynamic userId = HandleLogin.getIdUser();
   late String method;
+  final storage = const FlutterSecureStorage();
+  String? username;
+  String? userId;
   PaymentMethod _selectedMethod = PaymentMethod.paypal;
   List<String> convertedPositions = [];
   @override
   void initState() {
     super.initState();
-
+    getUserInfo();
     convertedPositions = convertSeatPositions(widget.seats);
+  }
+
+  Future<void> getUserInfo() async {
+    username = await storage.read(key: 'username');
+    userId = await storage.read(key: 'userId');
+    setState(() {}); // Update the UI after getting user info
   }
 
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

@@ -29,7 +29,11 @@ class AuthenticationService {
 
             final bool isAuthenticated = id != null;
             if (isAuthenticated) {
-              // Return the authentication result along with the user ID
+              //FlutterSecureStorage
+              await storage.write(
+                  key: 'username', value: user.account.username);
+              await storage.write(key: 'userId', value: id.toString());
+
               return {'authenticated': true, 'userId': id};
             } else {
               return {'authenticated': false, 'userId': null};

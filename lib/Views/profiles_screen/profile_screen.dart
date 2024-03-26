@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:movie_booking/Views/login_screen/login_screen.dart';
 import 'package:movie_booking/Views/order_tickets/order_tickets_screen.dart';
 import 'package:movie_booking/Views/profiles_screen/Confirmdialog.dart';
 import 'package:movie_booking/utils/handle_login/handlelogin.dart';
-import 'package:movie_booking/model/users/User.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -12,10 +12,23 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _Profile_PageState();
 }
 
-User? username = HandleLogin.getLoggedInUser();
-dynamic userId = HandleLogin.getIdUser();
-
 class _Profile_PageState extends State<ProfilePage> {
+  final storage = const FlutterSecureStorage();
+  String? username;
+  String? userId;
+
+  @override
+  void initState() {
+    super.initState();
+    getUserInfo();
+  }
+
+  Future<void> getUserInfo() async {
+    username = await storage.read(key: 'username');
+    userId = await storage.read(key: 'userId');
+    setState(() {});
+  }
+
   Widget renderBody(BuildContext context) {
     bool isUserLoggedIn = HandleLogin.getIsLogin();
     return Expanded(
@@ -55,10 +68,9 @@ class _Profile_PageState extends State<ProfilePage> {
                                 width: double.infinity,
                                 child: Row(
                                   children: [
-                                    if (isUserLoggedIn &&
-                                        username?.account.username != null)
+                                    if (isUserLoggedIn && username != null)
                                       Text(
-                                        username!.account.username,
+                                        username!,
                                         style: const TextStyle(
                                           color: Colors.black,
                                           fontSize: 20,
