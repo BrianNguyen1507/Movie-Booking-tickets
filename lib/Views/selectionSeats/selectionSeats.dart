@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movie_booking/Views/Finish_payment/detail_selection.dart';
 import 'package:movie_booking/model/film/film.dart';
 import 'package:movie_booking/model/seats/seats.dart';
-import 'package:movie_booking/model/theater.dart';
+import 'package:movie_booking/model/theater/theater.dart';
 import 'package:movie_booking/services/fetchSeater.dart';
 
 class SelectionSeats extends StatefulWidget {
@@ -22,6 +22,7 @@ class _SelectionSeatsState extends State<SelectionSeats> {
   List<String> selectedSeats = [];
   late TransformationController _transformationController;
   late double sumTotal;
+
   @override
   void initState() {
     super.initState();
@@ -215,18 +216,37 @@ class _SelectionSeatsState extends State<SelectionSeats> {
                   elevation: 15.0,
                 ),
                 onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return SummaryPaymentPage(
-                          total: sumTotal,
-                          film: widget.film,
-                          theater: widget.theater,
-                          selectedSeats: selectedSeats,
+                  if (selectedSeats.isNotEmpty && total > 0.0) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return SummaryPaymentPage(
+                            total: sumTotal,
+                            film: widget.film,
+                            theater: widget.theater,
+                            selectedSeats: selectedSeats,
+                          );
+                        },
+                      ),
+                    );
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Alert'),
+                          content:
+                              const Text('Please choose at least one seat.'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, 'Cancel'),
+                              child: const Text('Cancel'),
+                            ),
+                          ],
                         );
                       },
-                    ),
-                  );
+                    );
+                  }
                 },
                 child: const Text(
                   'FINISH PAYMENT',

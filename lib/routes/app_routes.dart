@@ -17,7 +17,7 @@ class AppRoutes {
   static const String indexPage = '/IndexView';
   static const String profilePage = '/Profile_screen';
   static const String storePage = '/store_screen';
-  static Map<String, WidgetBuilder> routes = {
+    static Map<String, WidgetBuilder> routes = {
     indexPage: (context) => const IndexPage(
           title: 'Movie_tickets',
         ),

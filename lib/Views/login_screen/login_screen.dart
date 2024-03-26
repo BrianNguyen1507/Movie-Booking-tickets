@@ -131,10 +131,10 @@ class _LoginPageState extends State<LoginPage> {
                       height: 50.0,
                       child: ElevatedButton(
                         style: const ButtonStyle(
-                          backgroundColor: MaterialStatePropertyAll(
+                          backgroundColor: WidgetStatePropertyAll(
                             Colors.blue,
                           ),
-                          shape: MaterialStatePropertyAll(
+                          shape: WidgetStatePropertyAll(
                             RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(5)),

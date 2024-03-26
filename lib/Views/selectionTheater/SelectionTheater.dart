@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movie_booking/Views/selectionSeats/selectionSeats.dart';
 import 'package:movie_booking/model/film/film.dart';
-import 'package:movie_booking/model/theater.dart';
+import 'package:movie_booking/model/theater/theater.dart';
 import 'package:movie_booking/services/fetchThreater.dart';
 
 class SelectionTheater extends StatefulWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movie_booking/Views/Finish_payment/comfirmPayment.dart';
 import 'package:movie_booking/model/film/film.dart';
-import 'package:movie_booking/model/theater.dart';
+import 'package:movie_booking/model/theater/theater.dart';
 import 'package:movie_booking/services/converter.dart';
 
 class SummaryPaymentPage extends StatefulWidget {
@@ -249,7 +249,7 @@ class _SummaryPaymentPageState extends State<SummaryPaymentPage> {
                       ),
                     ),
                     Text(
-                      '$price',
+                      '\$$price',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,

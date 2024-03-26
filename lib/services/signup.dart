@@ -14,7 +14,7 @@ class SignUpService {
     String password,
   ) async {
     try {
-      const apiUrl = "http://${ip}:8083/cinema/register";
+      const apiUrl = "http://$ip:8083/cinema/register";
       final response = await http.post(
         Uri.parse(apiUrl),
         headers: {

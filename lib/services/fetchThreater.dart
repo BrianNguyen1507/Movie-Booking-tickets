@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:movie_booking/model/theater.dart';
+import 'package:movie_booking/model/theater/theater.dart';
 import 'package:movie_booking/services/ipconfig.dart';
 
 class FetchTheater {
