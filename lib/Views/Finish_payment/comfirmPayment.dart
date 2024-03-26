@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_paypal_checkout/flutter_paypal_checkout.dart';
 import 'package:movie_booking/Views/splash_screen/Splash_success.dart';
-
+import 'package:intl/intl.dart';
 import 'package:movie_booking/model/film/film.dart';
 import 'package:movie_booking/model/methodPayment/method.dart';
 import 'package:movie_booking/model/theater/theater.dart';
 import 'package:movie_booking/services/Payments/Client/clientId.dart';
+import 'package:movie_booking/services/Payments/Payment.dart';
+import 'package:movie_booking/utils/handle_login/handlelogin.dart';
+
+enum PaymentMethod { paypal, none }
 
 class ConfirmPayment extends StatefulWidget {
   final Film movie;
@@ -26,7 +30,17 @@ class ConfirmPayment extends StatefulWidget {
 }
 
 class _ConfirmPaymentState extends State<ConfirmPayment> {
-  int _selectedIndex = -1;
+  dynamic userId = HandleLogin.getIdUser();
+  late String method;
+  PaymentMethod _selectedMethod = PaymentMethod.paypal;
+  List<String> convertedPositions = [];
+  @override
+  void initState() {
+    super.initState();
+
+    convertedPositions = convertSeatPositions(widget.seats);
+  }
+
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   @override
   Widget build(BuildContext context) {
@@ -63,30 +77,20 @@ class _ConfirmPaymentState extends State<ConfirmPayment> {
                       PaymentMethodCard(
                         icon: Icons.paypal,
                         label: 'PayPal',
-                        isSelected: _selectedIndex == 0,
+                        isSelected: _selectedMethod == PaymentMethod.paypal,
                         onTap: () {
                           setState(() {
-                            _selectedIndex = 0;
+                            _selectedMethod = PaymentMethod.paypal;
                           });
                         },
                       ),
                       PaymentMethodCard(
                         icon: Icons.account_balance_wallet,
                         label: 'None',
-                        isSelected: _selectedIndex == 1,
+                        isSelected: _selectedMethod == PaymentMethod.none,
                         onTap: () {
                           setState(() {
-                            _selectedIndex = 1;
-                          });
-                        },
-                      ),
-                      PaymentMethodCard(
-                        icon: Icons.account_balance_wallet,
-                        label: 'None',
-                        isSelected: _selectedIndex == 2,
-                        onTap: () {
-                          setState(() {
-                            _selectedIndex = 2;
+                            _selectedMethod = PaymentMethod.none;
                           });
                         },
                       ),
@@ -113,64 +117,87 @@ class _ConfirmPaymentState extends State<ConfirmPayment> {
                       elevation: 15.0,
                     ),
                     onPressed: () {
-                      if (_selectedIndex != -1) {
-                        if (_selectedIndex == 0) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) => PaypalCheckout(
-                                  sandboxMode: true,
-                                  clientId: clientid,
-                                  secretKey: secretKey,
-                                  returnURL: "success.sample.com",
-                                  cancelURL:
-                                      "https://dh52005810.000webhostapp.com/cancel.html",
-                                  transactions: [
-                                    {
-                                      "amount": {
-                                        "total": '${widget.total}',
-                                        "currency": "USD",
-                                        "details": {
-                                          "subtotal": '${widget.total}',
-                                        }
+                      if (_selectedMethod == PaymentMethod.paypal) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => PaypalCheckout(
+                              sandboxMode: true,
+                              clientId: clientid,
+                              secretKey: secretKey,
+                              returnURL: "success.sample.com",
+                              cancelURL:
+                                  "https://dh52005810.000webhostapp.com/cancel.html",
+                              transactions: [
+                                {
+                                  "amount": {
+                                    "total": '${widget.total}',
+                                    "currency": "USD",
+                                    "details": {
+                                      "subtotal": '${widget.total}',
+                                    }
+                                  },
+                                  "description": "${widget.seats}",
+                                  "item_list": {
+                                    "items": [
+                                      {
+                                        "name": widget.movie.title,
+                                        "quantity": widget.seats.length,
+                                        "price": '${widget.movie.price}',
+                                        "currency": "USD"
                                       },
-                                      "description":
-                                          "Theater: ${widget.theater.number} - Date: ${widget.theater.date}  - Time: ${widget.theater.time} - Seats position: ${widget.seats}",
-                                      "item_list": {
-                                        "items": [
-                                          {
-                                            "name": widget.movie.title,
-                                            "quantity": widget.seats.length,
-                                            "price": '${widget.movie.price}',
-                                            "currency": "USD"
-                                          },
-                                        ],
-                                      }
-                                    }
-                                  ],
-                                  note: 'THANK YOU FOR YOUR PAYMENT',
-                                  onSuccess: (Map params) async {
-                                    print('Success params: $params');
-                                    bool success = params['error'] == false &&
-                                        params['message'] == 'Success';
-                                    if (success) {
-                                      successPayment();
-                                    }
-                                  },
-                                  onError: (error) {
-                                    print("onError: $error");
-                                  },
-                                  onCancel: (params) {
-                                    print('cancelled: $params');
-                                  }),
+                                    ],
+                                  }
+                                }
+                              ],
+                              note: 'THANK YOU FOR YOUR PAYMENT',
+                              onSuccess: (Map params) async {
+                                print('Success params: $params');
+                                //convert data to fetching addpayment
+                                String subtotal = params['data']['transactions']
+                                    [0]['amount']['details']['subtotal'];
+                                int quantity = params['data']['transactions'][0]
+                                    ['item_list']['items'][0]['quantity'];
+                                double subtotalConvert = double.parse(subtotal);
+                                String date = widget.theater.date;
+                                String time = widget.theater.time;
+                                String datetime = '$date $time';
+                                _selectedMethod == PaymentMethod.paypal
+                                    ? method = 'PayPal'
+                                    : 'None';
+                                DateTime currentDate = DateTime.now();
+                                String formattedDate =
+                                    DateFormat('dd-MM-yyyy HH:mm:ss')
+                                        .format(currentDate);
+                                String transactionDate =
+                                    formattedDate.toString();
+                                bool success = params['error'] == false &&
+                                    params['message'] == 'Success';
+                                if (success) {
+                                  successPayment();
+                                  PaymentAdding.addingPay(
+                                    accountId: userId.toString(),
+                                    dateTime: datetime,
+                                    seatNumbers: convertedPositions,
+                                    total: subtotalConvert,
+                                    paymentMethod: method,
+                                    quantity: quantity,
+                                    numberTheater:
+                                        widget.theater.number.toString(),
+                                    transactionTime: transactionDate,
+                                  );
+                                }
+                              },
+                              onError: (error) {
+                                print("onError: $error");
+                              },
+                              onCancel: (params) {
+                                print('cancelled: $params');
+                              },
                             ),
-                          );
-                        } else if (_selectedIndex == 1) {
-                          return;
-                        } else {
-                          return;
-                        }
-                      } else {}
+                          ),
+                        );
+                      } else if (_selectedMethod == PaymentMethod.none) {}
                     },
                     child: const Text(
                       'FINISH PAYMENT',
@@ -194,7 +221,33 @@ class _ConfirmPaymentState extends State<ConfirmPayment> {
       MaterialPageRoute(
         builder: (context) => const PaymentSuccessScreen(),
       ),
-      ModalRoute.withName('/'),
+      ModalRoute.withName('/home'),
     );
   }
+}
+
+//format seats possition
+int columnIndexFromLetter(String letter) {
+  int codeUnitA = 'A'.codeUnitAt(0);
+  int letterIndex = letter.toUpperCase().codeUnitAt(0) - codeUnitA;
+  return letterIndex;
+}
+
+List<String> convertSeatPositions(List<String> seatPositions) {
+  List<String> convertedPositions = [];
+  for (String seatPosition in seatPositions) {
+    List<String> parts = seatPosition.split(' ');
+    if (parts.length != 2) {
+      continue;
+    }
+    String rowLetter = parts[0];
+    int colIndex = int.tryParse(parts[1]) ?? 0;
+    int rowIndex = columnIndexFromLetter(rowLetter);
+    if (rowIndex >= 0 && colIndex >= 0) {
+      String converted =
+          (rowIndex == 0 ? '0' : rowIndex.toString()) + colIndex.toString();
+      convertedPositions.add(converted);
+    }
+  }
+  return convertedPositions;
 }
