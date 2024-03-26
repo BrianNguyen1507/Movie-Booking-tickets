@@ -1,45 +1,73 @@
 import 'package:flutter/material.dart';
+import 'package:movie_booking/model/order/Order.dart';
+import 'package:movie_booking/services/fetchOrdered.dart';
 
-class TicketInfoScreen extends StatefulWidget {
-  const TicketInfoScreen({super.key});
+class OrderedMovie extends StatefulWidget {
+  final dynamic user;
+
+  const OrderedMovie({Key? key, required this.user}) : super(key: key);
 
   @override
-  _TicketInfoScreenState createState() => _TicketInfoScreenState();
+  State<OrderedMovie> createState() => _OrderedMovieState();
 }
 
-class _TicketInfoScreenState extends State<TicketInfoScreen> {
-  // Dummy data for ticket information
-  final List<TicketInfo> ticketInfos = [
-    TicketInfo(1, 'Inception', DateTime.now(), 2, 20.0),
-    TicketInfo(2, 'The Dark Knight', DateTime.now(), 3, 30.0),
-    TicketInfo(3, 'Interstellar', DateTime.now(), 4, 40.0),
-    TicketInfo(4, 'Interstellar', DateTime.now(), 4, 40.0),
-    TicketInfo(5, 'Interstellar', DateTime.now(), 4, 40.0),
-    TicketInfo(6, 'Interstellar', DateTime.now(), 4, 40.0),
-    TicketInfo(7, 'Interstellar', DateTime.now(), 4, 40.0),
-  ];
+class _OrderedMovieState extends State<OrderedMovie> {
+  List<Order>? orderList;
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchOrderData();
+  }
+
+  Future<void> fetchOrderData() async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      List<Order> fetchedOrders =
+          await FetchOrder().fetchOrdered(widget.user.toString());
+      setState(() {
+        orderList = fetchedOrders;
+        isLoading = false;
+      });
+    } catch (error) {
+      setState(() {
+        isLoading = false;
+      });
+      print('Error fetching orders: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: const Text('Order tickets Information'),
+        title: Text(isLoading ? 'Loading...' : 'Order tickets Information'),
       ),
-      body: ListView.builder(
-        itemCount: ticketInfos.length,
-        itemBuilder: (context, index) {
-          return TicketCard(ticketInfo: ticketInfos[index]);
-        },
-      ),
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : orderList == null || orderList!.isEmpty
+              ? const Center(
+                  child: Text('No tickets available'),
+                )
+              : ListView.builder(
+                  itemCount: orderList!.length,
+                  itemBuilder: (context, index) {
+                    return TicketCard(order: orderList![index]);
+                  },
+                ),
     );
   }
 }
 
 class TicketCard extends StatelessWidget {
-  final TicketInfo ticketInfo;
+  final Order order;
 
-  const TicketCard({super.key, required this.ticketInfo});
+  const TicketCard({Key? key, required this.order}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,38 +81,22 @@ class TicketCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Order ID: ${ticketInfo.id}'),
+            Text('Order ID: ${order.id}'),
             const SizedBox(height: 8.0),
             const Divider(
               color: Color.fromARGB(255, 172, 169, 169),
               thickness: 1,
             ),
-            Text('Film: ${ticketInfo.filmName}'),
+            Text('Date and Time: ${order.date}'),
             const SizedBox(height: 8.0),
-            Text('Date and Time: ${ticketInfo.dateTime}'),
+            Text('Payment Method: ${order.paymentMethod}'),
             const SizedBox(height: 8.0),
-            Text('Number of Seats: ${ticketInfo.numberOfSeats}'),
+            Text('Ticket Quantity: ${order.quantityTicket}'),
             const SizedBox(height: 8.0),
-            Text('Total Price: \$${ticketInfo.totalPrice.toStringAsFixed(2)}'),
+            Text('Total Price: \$${order.sumTotal}'),
           ],
         ),
       ),
     );
   }
-}
-
-class TicketInfo {
-  final int id;
-  final String filmName;
-  final DateTime dateTime;
-  final int numberOfSeats;
-  final double totalPrice;
-
-  TicketInfo(
-    this.id,
-    this.filmName,
-    this.dateTime,
-    this.numberOfSeats,
-    this.totalPrice,
-  );
 }
