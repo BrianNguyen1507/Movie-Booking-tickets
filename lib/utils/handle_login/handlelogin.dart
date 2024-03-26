@@ -6,13 +6,24 @@ import 'package:movie_booking/services/authenticate.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 bool isLogin = false;
-late User loggedInUser;
 
 class HandleLogin extends StatefulWidget {
   const HandleLogin({Key? key}) : super(key: key);
 
+  static late User loggedInUser = User(
+    id: '',
+    name: '',
+    level: '',
+    phoneNumber: '',
+    address: '',
+    account: Account(username: '', password: ''),
+  );
+
+  static late dynamic userId = '';
+
   @override
   _HandleLoginState createState() => _HandleLoginState();
+
   static bool getIsLogin() {
     return isLogin;
   }
@@ -21,38 +32,57 @@ class HandleLogin extends StatefulWidget {
     return loggedInUser;
   }
 
+  static dynamic getIdUser() {
+    return userId;
+  }
+
   Future<bool?> handleLogin(
       BuildContext context, String username, String password) async {
-    if (username.isEmpty || password.isEmpty) {
-      _showToastInvalid();
-    }
-    if (!validateInput(username, password)) {
-      _showToastInvalid();
-    }
+    try {
+      if (username.isEmpty || password.isEmpty) {
+        _showToastInvalid();
+        return false;
+      }
+      if (!validateInput(username, password)) {
+        _showToastInvalid();
+        return false;
+      }
 
-    final user = User(
-      id: '',
-      name: '',
-      level: '',
-      phoneNumber: '',
-      address: '',
-      account: Account(
-        username: username,
-        password: password,
-      ),
-    );
+      final user = User(
+        id: '',
+        name: '',
+        level: '',
+        phoneNumber: '',
+        address: '',
+        account: Account(
+          username: username,
+          password: password,
+        ),
+      );
 
-    final isAuthenticated = await AuthenticationService.authenticate(user);
+      final Map<String, dynamic> response =
+          await AuthenticationService.authenticate(user);
 
-    if (isAuthenticated) {
-      isLogin = true;
-      loggedInUser = user;
-      _showToastSuccess();
-      _onLoginSuccess(context);
-      return isLogin;
-    } else {
-      _showToastFail();
-      return isLogin;
+      final bool isAuthenticated = response['authenticated'];
+
+      if (isAuthenticated) {
+        isLogin = true;
+        loggedInUser = user;
+        userId = response['userId'];
+        _showToastSuccess();
+        _onLoginSuccess(context);
+        // Print userId after it's set
+        print('User ID: $userId');
+        // Retrieve userId using getIdUser() method
+        print('Retrieved User ID: ${HandleLogin.getIdUser()}');
+        return isLogin;
+      } else {
+        _showToastFail();
+        return isLogin;
+      }
+    } catch (error) {
+      print('Error during login: $error');
+      return false;
     }
   }
 
