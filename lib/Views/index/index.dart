@@ -6,29 +6,34 @@ import 'package:movie_booking/Views/store_screen/store_screen.dart';
 import 'package:movie_booking/Views/profiles_screen/profile_screen.dart';
 
 class IndexPage extends StatefulWidget {
-  const IndexPage({super.key, required String title, int? initialIndex})
-      : initialIndex = initialIndex ?? 0;
+  const IndexPage({
+    Key? key,
+    required this.title,
+    int? initialIndex,
+  })  : initialIndex = initialIndex ?? 0,
+        super(key: key);
 
+  final String title;
   final int initialIndex;
 
   @override
   State<IndexPage> createState() => _IndexPageState();
 }
 
-int index = 0;
-
 class _IndexPageState extends State<IndexPage> {
-  static List<Widget> pages = const [
-    HomePage(),
-    ShowTimePage(),
-    Store(),
-    ProfilePage(),
-  ];
+  late int index;
+  late List<Widget> pages;
 
   @override
   void initState() {
     super.initState();
     index = widget.initialIndex;
+    pages = [
+      const HomePage(),
+      const ShowTimePage(),
+      const Store(),
+      const ProfilePage(),
+    ];
   }
 
   @override
