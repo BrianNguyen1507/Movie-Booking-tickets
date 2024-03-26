@@ -4,7 +4,7 @@ import 'package:movie_booking/Views/splash_screen/Splash_success.dart';
 
 import 'package:movie_booking/model/film/film.dart';
 import 'package:movie_booking/model/methodPayment/method.dart';
-import 'package:movie_booking/model/theater.dart';
+import 'package:movie_booking/model/theater/theater.dart';
 import 'package:movie_booking/services/Payments/Client/clientId.dart';
 
 class ConfirmPayment extends StatefulWidget {
@@ -27,10 +27,11 @@ class ConfirmPayment extends StatefulWidget {
 
 class _ConfirmPaymentState extends State<ConfirmPayment> {
   int _selectedIndex = -1;
-
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
@@ -121,8 +122,9 @@ class _ConfirmPaymentState extends State<ConfirmPayment> {
                                   sandboxMode: true,
                                   clientId: clientid,
                                   secretKey: secretKey,
-                                  returnURL: "success.example.com",
-                                  cancelURL: "cancel.example.com",
+                                  returnURL: "success.sample.com",
+                                  cancelURL:
+                                      "https://dh52005810.000webhostapp.com/cancel.html",
                                   transactions: [
                                     {
                                       "amount": {
@@ -148,7 +150,12 @@ class _ConfirmPaymentState extends State<ConfirmPayment> {
                                   ],
                                   note: 'THANK YOU FOR YOUR PAYMENT',
                                   onSuccess: (Map params) async {
-                                    print(params);
+                                    print('Success params: $params');
+                                    bool success = params['error'] == false &&
+                                        params['message'] == 'Success';
+                                    if (success) {
+                                      successPayment();
+                                    }
                                   },
                                   onError: (error) {
                                     print("onError: $error");
@@ -182,11 +189,12 @@ class _ConfirmPaymentState extends State<ConfirmPayment> {
     );
   }
 
-  void push() {
-    Navigator.of(context).pushReplacement(
+  void successPayment() {
+    navigatorKey.currentState?.pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (context) => const PaymentSuccessScreen(),
       ),
+      ModalRoute.withName('/'),
     );
   }
 }

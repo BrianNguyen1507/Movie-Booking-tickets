@@ -1,6 +1,5 @@
-import 'dart:async'; // Import for Timer
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:movie_booking/Views/index/index.dart';
 
 class PaymentSuccessScreen extends StatelessWidget {
@@ -8,9 +7,7 @@ class PaymentSuccessScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: SystemUiOverlay.values);
-    Timer(const Duration(seconds: 1), () {
+    Timer(const Duration(seconds: 3), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (_) => const IndexPage(
@@ -23,7 +20,9 @@ class PaymentSuccessScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Payment Success'),
+        automaticallyImplyLeading: false,
+        title: const Text('THANK YOU FOR PAYMENT'),
+        centerTitle: true,
       ),
       body: const Center(
         child: Column(
