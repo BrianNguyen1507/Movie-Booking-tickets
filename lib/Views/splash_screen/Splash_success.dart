@@ -1,26 +1,61 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:movie_booking/Views/home_screen/HomePage.dart';
 import 'package:movie_booking/Views/index/index.dart';
+import 'package:movie_booking/Views/order_tickets/order_tickets_screen.dart';
 
-class PaymentSuccessScreen extends StatelessWidget {
+class PaymentSuccessScreen extends StatefulWidget {
   const PaymentSuccessScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    Timer(const Duration(seconds: 3), () {
-      Navigator.of(context).pushReplacement(
+  State<PaymentSuccessScreen> createState() => _PaymentSuccessScreenState();
+}
+
+class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
+  final storage = const FlutterSecureStorage();
+  String? username;
+  String? userId;
+
+  Future<void> getUserInfo() async {
+    username = await storage.read(key: 'username');
+    userId = await storage.read(key: 'userId');
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserInfo();
+    Timer(const Duration(seconds: 2), () {
+      Navigator.pushAndRemoveUntil(
+        context,
         MaterialPageRoute(
-          builder: (_) => const IndexPage(
-            title: '',
-            initialIndex: 0,
-          ),
+          builder: (_) => OrderedMovie(user: userId),
         ),
+        (routes) => routes.isFirst,
       );
     });
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const IndexPage(
+                        initialIndex: 0,
+                        title: 'Home',
+                      ),
+                    ));
+              },
+              icon: const Icon(Icons.home))
+        ],
         title: const Text('THANK YOU FOR PAYMENT'),
         centerTitle: true,
       ),
