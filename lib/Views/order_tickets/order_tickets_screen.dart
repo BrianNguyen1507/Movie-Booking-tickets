@@ -44,6 +44,8 @@ class _OrderedMovieState extends State<OrderedMovie> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: true,
+        centerTitle: true,
         title: Text(isLoading ? 'Loading...' : 'Order tickets Information'),
       ),
       body: isLoading
