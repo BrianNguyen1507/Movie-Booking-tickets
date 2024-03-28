@@ -110,4 +110,9 @@ public class FilmService implements IFilmService{
 			return false;
 		}
 	}
+	@Override
+	public List<FilmDTO> getAllFilm() {
+		List<FilmEntity> films = filmRepository.findAll();
+		return filmConverter.toListDTO(films);
+	}
 }

@@ -1,7 +1,10 @@
 package com.cinema.converter;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.cinema.dto.FilmDTO;
@@ -11,6 +14,9 @@ import com.cinema.util.DateFormatter;
 
 @Component
 public class FilmConverter {
+	
+	@Autowired
+	private CategoryConverter categoryConverter;
 	
 	public String byteToString(byte[] bdata){
 		String str = new String(bdata);
@@ -28,6 +34,7 @@ public class FilmConverter {
 		entity.setDescribe(filmDTO.getDescribe());
 		entity.setPosters(filmDTO.getPosters());
 		entity.setPrice(filmDTO.getPrice());
+		entity.setCategories(categoryConverter.tolistEntities(filmDTO.getCategories()));
 		return entity;
 	}
 	public FilmDTO toDTO(FilmEntity filmEntity){
@@ -41,6 +48,15 @@ public class FilmConverter {
 		filmDTO.setDescribe(filmEntity.getDescribe());
 		filmDTO.setPosters(filmEntity.getPosters());
 		filmDTO.setPrice(filmEntity.getPrice());
+		filmDTO.setCategories(categoryConverter.tolistDTO(filmEntity.getCategories()));
 		return filmDTO;
+	}
+	public List<FilmDTO> toListDTO(List<FilmEntity> entities){
+		List<FilmDTO> dtos = new ArrayList<FilmDTO>();
+		for(FilmEntity entity : entities) {
+			FilmDTO dto = toDTO(entity);
+			dtos.add(dto);
+		}
+		return dtos;
 	}
 }

@@ -45,4 +45,9 @@ public class FilmAPI {
 	public boolean deleteFilm(@RequestParam("id") long id) {
 		return filmService.deleteFilm(id);
 	}
+	
+	@GetMapping(value="cinema/showAllFilm")
+	public List<FilmDTO> showAllFilm(){
+		return filmService.getAllFilm();
+	}
 }

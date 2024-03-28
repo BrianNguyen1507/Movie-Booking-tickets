@@ -13,4 +13,5 @@ public interface IFilmService {
 	FilmDTO addFilm(FilmDTO dto);
 	FilmDTO updateFilm(FilmDTO dto);
 	boolean deleteFilm(long id);
+	List<FilmDTO> getAllFilm();
 }
