@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cinema.dto.OrderDTO;
-import com.cinema.dto.PaymentDTO;
+import com.cinema.dto.request.OrderDTO;
+import com.cinema.dto.request.PaymentDTO;
 import com.cinema.services.impl.OrderService;
 
 @RestController

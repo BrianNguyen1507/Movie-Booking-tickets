@@ -3,40 +3,50 @@ package com.cinema.services.impl;
 
 
 
-import java.util.Arrays;
 import java.util.List;
 
-import org.apache.tomcat.util.codec.binary.Base64;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.cinema.dto.reponse.AccountResponse;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.cinema.converter.AccountConverter;
-import com.cinema.dto.AccountDTO;
+import com.cinema.dto.request.AccountDTO;
 import com.cinema.entity.AccountEntity;
 import com.cinema.repository.AccountRepository;
 import com.cinema.services.IAccountService;
 import com.cinema.util.EncrpytPassword;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AccountService implements IAccountService {
-	
-	@Autowired
+
+	@NonFinal
+	@Value("${jwt.signerKey}")
+	protected String SIGNER_KEY;
+
+
 	AccountRepository accountRepository;
-	
-	@Autowired
+
 	AccountConverter accountConverter;
 
+
 	@Override
-	public AccountDTO checkAccount(AccountDTO accountDTO) {
+	public AccountEntity checkAccount(AccountDTO accountDTO) {
+		AccountResponse accountResponse = new AccountResponse();
 		try {
 			AccountEntity entity = accountRepository.findOneByUserName(accountDTO.getUser_name());
 			String password = EncrpytPassword.encryptPassword(accountDTO.getPassword());
 			if(entity.getPassword().equals(password)) {
-				accountDTO.setId(entity.getId());
-				
-				return accountDTO;
+				return entity;
 			}
-				
+
 		}catch(NullPointerException ex) {
 			return null;
 		}

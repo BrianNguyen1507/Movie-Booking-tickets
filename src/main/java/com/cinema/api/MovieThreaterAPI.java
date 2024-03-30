@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cinema.dto.DateOrder;
-import com.cinema.dto.MTShowDTO;
-import com.cinema.dto.MovieThreaterDTO;
+import com.cinema.dto.request.DateOrder;
+import com.cinema.dto.request.MTShowDTO;
+import com.cinema.dto.request.MovieThreaterDTO;
 import com.cinema.services.impl.MovieThreaterService;
 
 @RestController

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cinema.dto.CustomerDTO;
+import com.cinema.dto.request.CustomerDTO;
 import com.cinema.services.impl.CustomerService;
 
 @RestController

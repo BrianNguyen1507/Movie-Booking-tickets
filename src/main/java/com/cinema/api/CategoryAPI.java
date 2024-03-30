@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cinema.dto.CategoryDTO;
+import com.cinema.dto.request.CategoryDTO;
 import com.cinema.services.impl.CategoryService;
 
 @RestController

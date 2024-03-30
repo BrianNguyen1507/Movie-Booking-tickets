@@ -1,8 +1,9 @@
 package com.cinema.converter;
 
+import com.cinema.dto.reponse.AccountResponse;
 import org.springframework.stereotype.Component;
 
-import com.cinema.dto.AccountDTO;
+import com.cinema.dto.request.AccountDTO;
 import com.cinema.entity.AccountEntity;
 
 @Component

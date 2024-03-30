@@ -2,9 +2,9 @@ package com.cinema.services;
 
 import java.util.List;
 
-import com.cinema.dto.DateOrder;
-import com.cinema.dto.MTShowDTO;
-import com.cinema.dto.MovieThreaterDTO;
+import com.cinema.dto.request.DateOrder;
+import com.cinema.dto.request.MTShowDTO;
+import com.cinema.dto.request.MovieThreaterDTO;
 
 public interface IMovieThreaterService {
 	MovieThreaterDTO save(MovieThreaterDTO dto);

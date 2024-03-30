@@ -3,7 +3,7 @@ package com.cinema.converter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.cinema.dto.CustomerDTO;
+import com.cinema.dto.request.CustomerDTO;
 import com.cinema.entity.CustomerEntity;
 
 @Component

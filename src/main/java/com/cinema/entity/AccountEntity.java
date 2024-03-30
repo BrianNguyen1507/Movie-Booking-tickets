@@ -30,19 +30,13 @@ public class AccountEntity {
 	@Column(name = "password")
 	private String password;
 	@Column(name = "role")
-	private int role;
+	private String role;
 	
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private CustomerEntity customer;
-	
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "account_role",
-    joinColumns = @JoinColumn(name="account_id"),
-    inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<RolesEntity> roles = new ArrayList<RolesEntity>();
     
-	public AccountEntity(long id, String userName, String password,int role) {
+	public AccountEntity(long id, String userName, String password,String role) {
 		super();
 		this.id = id;
 		this.userName = userName;
@@ -76,17 +70,11 @@ public class AccountEntity {
 	public AccountEntity() {
 		super();
 	}
-	public int getRole() {
+	public String getRole() {
 		return role;
 	}
-	public void setRole(int role) {
+	public void setRole(String role) {
 		this.role = role;
-	}
-	public List<RolesEntity> getRoles() {
-		return roles;
-	}
-	public void setRoles(List<RolesEntity> roles) {
-		this.roles = roles;
 	}
 	
 }

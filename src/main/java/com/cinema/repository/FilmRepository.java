@@ -6,8 +6,6 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.cinema.dto.FilmDTO;
-import com.cinema.entity.CategoryEntity;
 import com.cinema.entity.FilmEntity;
 
 public interface FilmRepository extends JpaRepository<FilmEntity, Long> {

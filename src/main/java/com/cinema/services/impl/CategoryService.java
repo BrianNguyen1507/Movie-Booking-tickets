@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cinema.converter.CategoryConverter;
-import com.cinema.dto.CategoryDTO;
+import com.cinema.dto.request.CategoryDTO;
 import com.cinema.entity.CategoryEntity;
 import com.cinema.repository.CategoryRepository;
 import com.cinema.services.ICategory;

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.cinema.converter.AccountConverter;
 import com.cinema.converter.CustomerConverter;
-import com.cinema.dto.CustomerDTO;
+import com.cinema.dto.request.CustomerDTO;
 import com.cinema.entity.AccountEntity;
 import com.cinema.entity.CustomerEntity;
 import com.cinema.repository.AccountRepository;
@@ -27,8 +27,7 @@ public class CustomerService implements ICustomerService {
 	
 	@Autowired 
 	CustomerConverter customerConverter;
-	
-	@Autowired
+
 	AccountService accountService;
 	
 

@@ -3,7 +3,7 @@ package com.cinema.api.output;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.cinema.dto.FilmDTO;
+import com.cinema.dto.request.FilmDTO;
 
 public class FilmOutput {
 	private int page;

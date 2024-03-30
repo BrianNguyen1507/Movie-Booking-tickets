@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.cinema.converter.CategoryConverter;
 import com.cinema.converter.FilmConverter;
-import com.cinema.dto.CategoryDTO;
-import com.cinema.dto.FilmDTO;
-import com.cinema.dto.ReleaseDateFilm;
+import com.cinema.dto.request.CategoryDTO;
+import com.cinema.dto.request.FilmDTO;
+import com.cinema.dto.request.ReleaseDateFilm;
 import com.cinema.entity.CategoryEntity;
 import com.cinema.entity.FilmEntity;
 import com.cinema.repository.CategoryRepository;

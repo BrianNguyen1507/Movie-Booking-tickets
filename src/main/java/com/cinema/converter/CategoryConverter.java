@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.cinema.dto.CategoryDTO;
+import com.cinema.dto.request.CategoryDTO;
 import com.cinema.entity.CategoryEntity;
 
 @Component

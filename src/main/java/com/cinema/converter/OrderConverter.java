@@ -2,8 +2,8 @@ package com.cinema.converter;
 
 import org.springframework.stereotype.Component;
 
-import com.cinema.dto.OrderDTO;
-import com.cinema.dto.PaymentDTO;
+import com.cinema.dto.request.OrderDTO;
+import com.cinema.dto.request.PaymentDTO;
 import com.cinema.entity.OrderEntity;
 import com.cinema.util.DateFormatter;
 

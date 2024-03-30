@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cinema.converter.MovieThreaterConverter;
-import com.cinema.dto.DateOrder;
-import com.cinema.dto.MTShowDTO;
-import com.cinema.dto.MovieThreaterDTO;
+import com.cinema.dto.request.DateOrder;
+import com.cinema.dto.request.MTShowDTO;
+import com.cinema.dto.request.MovieThreaterDTO;
 import com.cinema.entity.FilmEntity;
 import com.cinema.entity.MovieThreaterEntity;
 import com.cinema.repository.FilmRepository;

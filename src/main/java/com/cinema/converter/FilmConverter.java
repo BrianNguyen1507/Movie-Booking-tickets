@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.cinema.dto.FilmDTO;
+import com.cinema.dto.request.FilmDTO;
 import com.cinema.entity.FilmEntity;
 import com.cinema.util.DateFormatter;
 

@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cinema.converter.OrderConverter;
-import com.cinema.dto.OrderDTO;
-import com.cinema.dto.PaymentDTO;
+import com.cinema.dto.request.OrderDTO;
+import com.cinema.dto.request.PaymentDTO;
 import com.cinema.entity.AccountEntity;
 import com.cinema.entity.CustomerEntity;
 import com.cinema.entity.MovieThreaterEntity;

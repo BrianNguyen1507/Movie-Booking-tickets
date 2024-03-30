@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cinema.dto.FilmDTO;
-import com.cinema.dto.ReleaseDateFilm;
+import com.cinema.dto.request.FilmDTO;
+import com.cinema.dto.request.ReleaseDateFilm;
 import com.cinema.services.impl.FilmService;
 
 

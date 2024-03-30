@@ -2,7 +2,7 @@ package com.cinema.converter;
 
 import org.springframework.stereotype.Component;
 
-import com.cinema.dto.MovieThreaterDTO;
+import com.cinema.dto.request.MovieThreaterDTO;
 import com.cinema.entity.MovieThreaterEntity;
 import com.cinema.util.DateFormatter;
 
