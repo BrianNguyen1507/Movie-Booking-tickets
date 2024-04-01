@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:movie_booking/Views/home_screen/HomePage.dart';
 import 'package:movie_booking/Views/index/index.dart';
 import 'package:movie_booking/Views/order_tickets/order_tickets_screen.dart';
 
