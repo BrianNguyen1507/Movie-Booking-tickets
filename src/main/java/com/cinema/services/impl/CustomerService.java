@@ -36,8 +36,8 @@ public class CustomerService implements ICustomerService {
 	@Override
 	public CustomerResponse save(CustomerDTO customerDTO) {
 		if(!accountService.checkDuplicate(customerDTO.getAccount().getUser_name())) {
-			CustomerEntity customerEntity = new CustomerEntity();
-			AccountEntity accountEntity = new AccountEntity();
+			CustomerEntity customerEntity;
+			AccountEntity accountEntity;
 			customerDTO.getAccount().setPassword(EncrpytPassword.encryptPassword(customerDTO.getAccount().getPassword()));
 			accountEntity = accountConverter.toEntity(customerDTO.getAccount());
 			accountEntity.setCustomer(customerConverter.toEntity(customerDTO));
