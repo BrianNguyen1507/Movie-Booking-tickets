@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cinema.converter.AccountConverter;
@@ -14,7 +13,6 @@ import com.cinema.dto.request.CustomerDTO;
 import com.cinema.entity.AccountEntity;
 import com.cinema.entity.CustomerEntity;
 import com.cinema.repository.AccountRepository;
-import com.cinema.repository.CustomerRepository;
 import com.cinema.services.ICustomerService;
 import com.cinema.util.EncrpytPassword;
 
@@ -23,10 +21,6 @@ import com.cinema.util.EncrpytPassword;
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CustomerService implements ICustomerService {
-	
-
-	CustomerRepository customerRepository;
-	
 
 	AccountRepository accountRepository;
 	

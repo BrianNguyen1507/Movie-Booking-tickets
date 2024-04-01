@@ -1,6 +1,5 @@
 package com.cinema.dto.reponse;
 
-import com.cinema.dto.request.AccountDTO;
 import lombok.Data;
 
 @Data
