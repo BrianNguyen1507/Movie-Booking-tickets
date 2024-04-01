@@ -1,5 +1,10 @@
 package com.cinema.services.impl;
 
+import com.cinema.dto.reponse.CustomerResponse;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,26 +19,29 @@ import com.cinema.services.ICustomerService;
 import com.cinema.util.EncrpytPassword;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CustomerService implements ICustomerService {
 	
-	@Autowired
+
 	CustomerRepository customerRepository;
 	
-	@Autowired
+
 	AccountRepository accountRepository;
 	
-	@Autowired 
+
 	AccountConverter accountConverter;
 	
-	@Autowired 
+
 	CustomerConverter customerConverter;
 
 	AccountService accountService;
 	
 
 	@Override
-	public CustomerDTO save(CustomerDTO customerDTO) {
-		if(accountService.checkDuplicate(customerDTO.getAccount().getUser_name())==false) {
+	public CustomerResponse save(CustomerDTO customerDTO) {
+		if(!accountService.checkDuplicate(customerDTO.getAccount().getUser_name())) {
 			CustomerEntity customerEntity = new CustomerEntity();
 			AccountEntity accountEntity = new AccountEntity();
 			customerDTO.getAccount().setPassword(EncrpytPassword.encryptPassword(customerDTO.getAccount().getPassword()));
@@ -41,6 +49,7 @@ public class CustomerService implements ICustomerService {
 			accountEntity.setCustomer(customerConverter.toEntity(customerDTO));
 			accountEntity = accountRepository.save(accountEntity);
 			customerEntity = customerConverter.toEntity(customerDTO);
+			accountEntity.setPassword("");
 			customerEntity.setAccount(accountEntity);
 			return customerConverter.toDTO(customerEntity);
 		}

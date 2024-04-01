@@ -1,5 +1,6 @@
 package com.cinema.converter;
 
+import com.cinema.dto.reponse.CustomerResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,15 +13,15 @@ public class CustomerConverter {
 	@Autowired
 	AccountConverter accountConverter;
 	
-	public CustomerDTO toDTO(CustomerEntity entity) {
-		CustomerDTO dto = new CustomerDTO();
+	public CustomerResponse toDTO(CustomerEntity entity) {
+		CustomerResponse dto = new CustomerResponse();
 		
 		dto.setName(entity.getName());
 		dto.setLevel(entity.getLevel());
 		dto.setPhoneNumber(entity.getPhoneNumber());
 		dto.setGender(entity.getGender());
 		dto.setAddress(entity.getAddress());
-		dto.setAccount(accountConverter.toDTO(entity.getAccount()));
+		dto.setUserName(entity.getAccount().getUserName());
 		return dto;
 	}
 	

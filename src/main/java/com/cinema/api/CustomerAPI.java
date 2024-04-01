@@ -1,5 +1,6 @@
 package com.cinema.api;
 
+import com.cinema.dto.reponse.CustomerResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +18,7 @@ public class CustomerAPI {
 	CustomerService customerService;
 	
 	@PostMapping(value = "/register")
-	public CustomerDTO createCustomer(@RequestBody CustomerDTO model) {
+	public CustomerResponse createCustomer(@RequestBody CustomerDTO model) {
 		return customerService.save(model);
 	}
 	
