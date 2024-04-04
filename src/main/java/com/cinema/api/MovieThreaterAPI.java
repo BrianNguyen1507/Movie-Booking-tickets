@@ -2,12 +2,12 @@ package com.cinema.api;
 
 import java.util.List;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.cinema.dto.request.DateOrder;
 import com.cinema.dto.request.MTShowDTO;
@@ -15,22 +15,25 @@ import com.cinema.dto.request.MovieThreaterDTO;
 import com.cinema.services.impl.MovieThreaterService;
 
 @RestController
+@RequestMapping("/cinema")
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 public class MovieThreaterAPI {
 
-	@Autowired
 	MovieThreaterService movieThreaterService;
 	
-	@PostMapping(value ="/cinema/addMovieThreate")
+	@PostMapping(value ="/addMovieThreate")
 	public MovieThreaterDTO createMT(@RequestBody MovieThreaterDTO model) {
 		return movieThreaterService.save(model);
 	}
 	
-	@PostMapping(value = "/cinema/showMovieThreater")
+	@PostMapping(value = "/showMovieThreaters")
 	public MTShowDTO showMovieThreater(@RequestBody DateOrder model) {
 		return movieThreaterService.showMovieThreater(model);
 	}
 	
-	@GetMapping(value = "/cinema/showMovieThreater")
+	@GetMapping(value = "/showMovieThreater")
 	public List<MovieThreaterDTO> MovieThreaterSelection(@RequestParam("id") long id ) {
 		return movieThreaterService.listMovieThreater(id);
 	}

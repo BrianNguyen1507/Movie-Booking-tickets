@@ -2,7 +2,12 @@ package com.cinema.api;
 
 import java.util.List;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,9 +22,11 @@ import com.cinema.services.impl.FilmService;
 
 @RestController
 @RequestMapping("/cinema")
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 public class FilmAPI {
-	
-	@Autowired
+
 	private FilmService filmService;
 	
 	@PostMapping(value = "/listfeatured")

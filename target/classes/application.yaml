@@ -7,7 +7,7 @@ spring:
   datasource:
     url: "jdbc:mysql://localhost:3306/cinema"
     username: root
-    password:
+    password: root
   jpa:
     hibernate:
       ddl-auto: update
