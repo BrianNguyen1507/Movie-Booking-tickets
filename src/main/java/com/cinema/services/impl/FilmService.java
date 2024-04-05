@@ -86,7 +86,7 @@ public class FilmService implements IFilmService{
 	public FilmDTO updateFilm(FilmDTO filmDTO) {
 		FilmEntity entity = filmRepository.getReferenceById(filmDTO.getId());
 		entity.setActor(filmDTO.getActor());
-		entity.setDescribe(filmDTO.getDescribe());
+		entity.setDescribe(filmDTO.getDescribe().getBytes());
 		entity.setLength(filmDTO.getLength());
 		entity.setPosters(filmDTO.getPosters());
 		entity.setPrice(filmDTO.getPrice());

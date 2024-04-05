@@ -2,6 +2,7 @@ package com.cinema.converter;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,11 @@ public class FilmConverter {
 	@Autowired
 	private CategoryConverter categoryConverter;
 	
-	public String byteToString(byte[] bdata){
-		String str = new String(bdata);
-		return str;
+	public String byteToString(byte[] bytes){
+		Base64.Decoder decoder = Base64.getDecoder();
+		String encodedString = new String(bytes);
+		byte[] decodedBytes = decoder.decode(encodedString);
+		return	new String(decodedBytes) ;
 	}
 	
 	public FilmEntity toEntity(FilmDTO filmDTO) throws ParseException {
@@ -31,7 +34,7 @@ public class FilmConverter {
 		entity.setReleaseDate(DateFormatter.parse(filmDTO.getReleaseDate()));
 		entity.setActor(filmDTO.getActor());
 		entity.setDirector(filmDTO.getDirector());
-		entity.setDescribe(filmDTO.getDescribe());
+		entity.setDescribe(filmDTO.getDescribe().getBytes());
 		entity.setPosters(filmDTO.getPosters());
 		entity.setPrice(filmDTO.getPrice());
 		entity.setCategories(categoryConverter.tolistEntities(filmDTO.getCategories()));
@@ -45,7 +48,7 @@ public class FilmConverter {
 		filmDTO.setReleaseDate(DateFormatter.toSStringDate(filmEntity.getReleaseDate()));
 		filmDTO.setActor(filmEntity.getActor());
 		filmDTO.setDirector(filmEntity.getDirector());
-		filmDTO.setDescribe(filmEntity.getDescribe());
+		filmDTO.setDescribe(byteToString(filmEntity.getDescribe()));
 		filmDTO.setPosters(filmEntity.getPosters());
 		filmDTO.setPrice(filmEntity.getPrice());
 		filmDTO.setCategories(categoryConverter.tolistDTO(filmEntity.getCategories()));

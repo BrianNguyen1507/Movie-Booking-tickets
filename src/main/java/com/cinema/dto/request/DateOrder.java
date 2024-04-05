@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class DateOrder {
-
 	private String date;
 	private int numberThreater;
 	

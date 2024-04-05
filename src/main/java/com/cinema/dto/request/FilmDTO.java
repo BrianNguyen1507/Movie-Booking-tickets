@@ -13,7 +13,7 @@ public class FilmDTO {
 	private String releaseDate;
 	private String actor;
 	private String director;
-	private byte[] describe;
+	private String describe;
 	private byte[] posters;
 	private double price;
 	private List<CategoryDTO> categories;
