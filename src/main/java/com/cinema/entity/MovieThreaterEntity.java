@@ -92,7 +92,10 @@ public class MovieThreaterEntity {
 		}
 	}
 	public boolean setSeatOrder(int seatOrder) {
-		int row = seatOrder/10;
+		int row=0;
+		if(seatOrder>10){
+			 row = seatOrder/10;
+		}
 		int column = seatOrder%10;
 		if(seat[row][column]==0) {
 			seat[row][column]=1;

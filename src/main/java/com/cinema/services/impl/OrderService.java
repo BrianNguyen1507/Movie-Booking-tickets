@@ -50,8 +50,9 @@ public class OrderService implements IOrderService {
     TicketRepository ticketRepository;
 
     @Override
-    public PaymentDTO createPayment(PaymentDTO model) {
-        CustomerEntity customerEntity = accountRepository.findById(model.getAccountId()).orElse(null).getCustomer();
+    public PaymentDTO createPayment(PaymentDTO model, String userName) {
+        AccountEntity accountEntity = accountRepository.findOneByUserName(userName);
+        CustomerEntity customerEntity = accountRepository.findById(accountEntity.getId()).orElse(null).getCustomer();
         OrderEntity orderEntity = orderConverter.PaymentDTOtoEntity(model);
         orderEntity.setCustomer(customerEntity);
         List<TicketEntity> tickets = new ArrayList<>();
@@ -82,9 +83,9 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public List<OrderDTO> getlistOrderDTO(long accountId) {
+    public List<OrderDTO> getlistOrderDTO(String userName) {
         List<OrderDTO> listOrderDTO = new ArrayList<>();
-        AccountEntity accountEntity = accountRepository.findById(accountId).orElse(null);
+        AccountEntity accountEntity = accountRepository.findOneByUserName(userName);
         if (accountEntity == null) {
             return null;
         }
