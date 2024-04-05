@@ -1,13 +1,13 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:movie_booking/model/users/User.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:movie_booking/model/users/User.dart';
 import 'package:movie_booking/services/ipconfig.dart';
 
 const storage = FlutterSecureStorage();
 
 class AuthenticationService {
-  static Future<Map<String, dynamic>> authenticate(User user) async {
+  static Future<String?> authenticate(User user) async {
     try {
       const loginApi = "http://$ip:8083/cinema/login";
       final response = await http.post(
@@ -25,34 +25,29 @@ class AuthenticationService {
         if (response.body.isNotEmpty) {
           try {
             final dynamic responseData = json.decode(response.body);
-            final dynamic id = responseData['id'];
+            final dynamic token = responseData['token'];
+            final bool isAuthenticated = responseData['authenticated'];
 
-            final bool isAuthenticated = id != null;
-            if (isAuthenticated) {
+            if (isAuthenticated && token != null) {
               //FlutterSecureStorage
               await storage.write(
                   key: 'username', value: user.account.username);
-              await storage.write(key: 'userId', value: id.toString());
-
-              return {'authenticated': true, 'userId': id};
-            } else {
-              return {'authenticated': false, 'userId': null};
+              await storage.write(key: 'token', value: token);
+              // Return the token
+              return token;
             }
           } catch (e) {
             print('Error decoding JSON response: $e');
-            return {'authenticated': false, 'userId': null};
           }
         } else {
           print('Empty or null response body');
-          return {'authenticated': false, 'userId': null};
         }
       } else {
         print('HTTP Error: ${response.statusCode}');
-        return {'authenticated': false, 'userId': null};
       }
     } catch (error) {
       print('Error in authentication request: $error');
-      return {'authenticated': false, 'userId': null};
     }
+    return null;
   }
 }
