@@ -26,7 +26,7 @@ public class SecurityConfig {
 			"/cinema/detailFilm"
 			,"/cinema/showAllFilm"
 			,"/cinema/listfeatured"
-			,"/cinema/showMovieThreaters"
+			,"/cinema/showSeat"
 			,"/cinema/showMovieThreater"
 			,"/cinema/categories"
 	};
@@ -34,7 +34,7 @@ public class SecurityConfig {
 			"/cinema/addFilm"
 			,"/cinema/updateFilm"
 			,"/cinema/deleteFilm"
-			,"/cinema/addMovieThreate"
+			,"/cinema/addMovieThreater"
 	};
 	private final String[] PRIVATE_ENPOINT_USER ={
 			"/cinema/addPayment"

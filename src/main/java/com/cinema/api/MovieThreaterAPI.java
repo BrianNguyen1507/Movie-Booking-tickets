@@ -23,12 +23,12 @@ public class MovieThreaterAPI {
 
 	MovieThreaterService movieThreaterService;
 	
-	@PostMapping(value ="/addMovieThreate")
+	@PostMapping(value ="/addMovieThreater")
 	public MovieThreaterDTO createMT(@RequestBody MovieThreaterDTO model) {
 		return movieThreaterService.save(model);
 	}
 	
-	@PostMapping(value = "/showMovieThreaters")
+	@PostMapping(value = "/showSeat")
 	public MTShowDTO showMovieThreater(@RequestBody DateOrder model) {
 		return movieThreaterService.showMovieThreater(model);
 	}
