@@ -2,6 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:movie_booking/model/users/User.dart';
+import 'package:movie_booking/services/AuthToken.dart';
 import 'package:movie_booking/services/ipconfig.dart';
 
 const storage = FlutterSecureStorage();
@@ -29,11 +30,10 @@ class AuthenticationService {
             final bool isAuthenticated = responseData['authenticated'];
 
             if (isAuthenticated && token != null) {
-              //FlutterSecureStorage
+              //save token
               await storage.write(
                   key: 'username', value: user.account.username);
-              await storage.write(key: 'token', value: token);
-              // Return the token
+              await TokenAuthenticated.saveToken(token);
               return token;
             }
           } catch (e) {
