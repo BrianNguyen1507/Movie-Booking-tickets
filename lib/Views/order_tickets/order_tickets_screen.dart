@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:movie_booking/model/order/Order.dart';
-import 'package:movie_booking/services/fetchOrdered.dart';
+import 'package:movie_booking/services/fetching/fetchOrdered.dart';
 
 class OrderedMovie extends StatefulWidget {
-  final dynamic user;
-
-  const OrderedMovie({Key? key, required this.user}) : super(key: key);
+  const OrderedMovie({Key? key}) : super(key: key);
 
   @override
   State<OrderedMovie> createState() => _OrderedMovieState();
@@ -26,8 +24,7 @@ class _OrderedMovieState extends State<OrderedMovie> {
       isLoading = true;
     });
     try {
-      List<Order> fetchedOrders =
-          await FetchOrder().fetchOrdered(widget.user.toString());
+      List<Order> fetchedOrders = await FetchOrder().fetchOrdered();
       setState(() {
         orderList = fetchedOrders;
         isLoading = false;

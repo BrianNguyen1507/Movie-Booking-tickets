@@ -1,9 +1,12 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:movie_booking/Views/Finish_payment/detail_selection.dart';
+import 'package:movie_booking/Views/selectionSeats/minutesRemainingConfig.dart';
+import 'package:movie_booking/Views/selectionTheater/Alert.dart';
 import 'package:movie_booking/model/film/film.dart';
 import 'package:movie_booking/model/seats/seats.dart';
 import 'package:movie_booking/model/theater/theater.dart';
-import 'package:movie_booking/services/fetchSeater.dart';
+import 'package:movie_booking/services/fetching/fetchSeater.dart';
 
 class SelectionSeats extends StatefulWidget {
   final Theater theater;
@@ -21,18 +24,23 @@ class _SelectionSeatsState extends State<SelectionSeats> {
   late List<List<int>> contain = [];
   List<String> selectedSeats = [];
   late TransformationController _transformationController;
+
   late double sumTotal;
+  late Timer _timer;
+  int _secondsRemaining = setMinutes * 60;
 
   @override
   void initState() {
     super.initState();
     fetchDataSeats();
+    _startTimer();
     _transformationController = TransformationController();
   }
 
   @override
   void dispose() {
     _transformationController.dispose();
+    _timer.cancel();
     super.dispose();
   }
 
@@ -42,14 +50,27 @@ class _SelectionSeatsState extends State<SelectionSeats> {
 
   @override
   Widget build(BuildContext context) {
+    int minutes = _secondsRemaining ~/ 60;
+    int seconds = _secondsRemaining % 60;
+
+    String minutesStr = (minutes < 10 ? '0' : '') + minutes.toString();
+    String secondsStr = (seconds < 10 ? '0' : '') + seconds.toString();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: const Text(
-          'Selection Seats',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'Selection Seats',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            Text(
+              '$minutesStr:$secondsStr',
+              style: const TextStyle(fontSize: 20),
+            ),
+          ],
         ),
-        centerTitle: true,
       ),
       body: Stack(
         children: [
@@ -230,22 +251,7 @@ class _SelectionSeatsState extends State<SelectionSeats> {
                       ),
                     );
                   } else {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text('Alert'),
-                          content:
-                              const Text('Please choose at least one seat.'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, 'Cancel'),
-                              child: const Text('Cancel'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
+                    ShowAlert.showAlertDialog(context);
                   }
                 },
                 child: const Text(
@@ -408,6 +414,20 @@ class _SelectionSeatsState extends State<SelectionSeats> {
           return rowA.compareTo(rowB);
         } else {
           return colA.compareTo(colB);
+        }
+      });
+    });
+  }
+
+  void _startTimer() {
+    const oneSecond = Duration(seconds: 1);
+    _timer = Timer.periodic(oneSecond, (Timer timer) {
+      setState(() {
+        if (_secondsRemaining == 0) {
+          timer.cancel();
+          ShowAlert.showAlertDialog(context);
+        } else {
+          _secondsRemaining--;
         }
       });
     });
