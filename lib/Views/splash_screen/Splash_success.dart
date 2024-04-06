@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:movie_booking/Views/index/index.dart';
-import 'package:movie_booking/Views/order_tickets/order_tickets_screen.dart';
 
 class PaymentSuccessScreen extends StatefulWidget {
   const PaymentSuccessScreen({Key? key}) : super(key: key);
@@ -18,7 +17,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
 
   Future<void> getUserInfo() async {
     username = await storage.read(key: 'username');
-    userId = await storage.read(key: 'userId');
+
     setState(() {});
   }
 
@@ -30,8 +29,10 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (_) => OrderedMovie(user: userId),
-        ),
+            builder: (_) => const IndexPage(
+                  initialIndex: 0,
+                  title: 'Home',
+                )),
         (routes) => routes.isFirst,
       );
     });

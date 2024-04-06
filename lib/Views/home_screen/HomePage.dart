@@ -7,7 +7,7 @@ import 'package:movie_booking/Views/search/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_booking/model/film/film.dart';
 import 'package:movie_booking/Views/home_screen/widgets/CustomDrawer.dart';
-import 'package:movie_booking/services/fetchingData.dart';
+import 'package:movie_booking/services/fetching/fetchingData.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

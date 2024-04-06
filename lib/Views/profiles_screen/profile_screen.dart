@@ -3,10 +3,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:movie_booking/Views/login_screen/login_screen.dart';
 import 'package:movie_booking/Views/order_tickets/order_tickets_screen.dart';
 import 'package:movie_booking/Views/profiles_screen/Confirmdialog.dart';
-import 'package:movie_booking/utils/handle_login/handlelogin.dart';
+import 'package:movie_booking/services/AuthToken.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  const ProfilePage({Key? key}) : super(key: key);
 
   @override
   State<ProfilePage> createState() => _Profile_PageState();
@@ -15,22 +15,30 @@ class ProfilePage extends StatefulWidget {
 class _Profile_PageState extends State<ProfilePage> {
   final storage = const FlutterSecureStorage();
   String? username;
-  String? userId;
+  bool _isLoggedIn = false;
 
   @override
   void initState() {
     super.initState();
-    getUserInfo();
+    _getUserInfo();
   }
 
-  Future<void> getUserInfo() async {
+  Future<void> _getUserInfo() async {
     username = await storage.read(key: 'username');
-    userId = await storage.read(key: 'userId');
-    setState(() {});
+    _updateLoginStatus(await TokenAuthenticated.isLoggedIn());
   }
 
-  Widget renderBody(BuildContext context) {
-    bool isUserLoggedIn = HandleLogin.getIsLogin();
+  Future<void> _updateLoginStatus(bool loggedIn) async {
+    setState(() {
+      _isLoggedIn = loggedIn;
+    });
+  }
+
+  void _logout() async {
+    _updateLoginStatus(false);
+  }
+
+  Widget _renderBody(BuildContext context) {
     return Expanded(
       child: Container(
         color: const Color(0xFFffffff),
@@ -68,7 +76,7 @@ class _Profile_PageState extends State<ProfilePage> {
                                 width: double.infinity,
                                 child: Row(
                                   children: [
-                                    if (isUserLoggedIn && username != null)
+                                    if (_isLoggedIn && username != null)
                                       Text(
                                         username!,
                                         style: const TextStyle(
@@ -114,21 +122,17 @@ class _Profile_PageState extends State<ProfilePage> {
                 width: double.infinity,
                 child: const SizedBox(),
               ),
-              isUserLoggedIn
+              _isLoggedIn
                   ? buildListItem(
                       context,
                       text: 'Orders',
                       onPressed: () {
-                        {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => OrderedMovie(
-                                user: userId,
-                              ),
-                            ),
-                          );
-                        }
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const OrderedMovie(),
+                          ),
+                        );
                       },
                     )
                   : Container(),
@@ -191,8 +195,16 @@ class _Profile_PageState extends State<ProfilePage> {
       height: 60.0,
       child: ElevatedButton(
         onPressed: () {
-          isLogin = false;
-          const ConfirmDialogPopUp().showLogoutDialog(context);
+          void handleLogout() {
+            _logout();
+            TokenAuthenticated.removeToken();
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const LoginPage()));
+          }
+
+          ConfirmDialogPopUp(
+            onLogoutConfirmed: handleLogout,
+          ).showLogoutDialog(context);
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFFF2F3F2),
@@ -236,8 +248,8 @@ class _Profile_PageState extends State<ProfilePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            renderBody(context),
-            isLogin ? renderFooter(context) : Container(),
+            _renderBody(context),
+            _isLoggedIn ? renderFooter(context) : Container(),
           ],
         ),
       ),

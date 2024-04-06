@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movie_booking/Views/movies_detail/movieDetail_screen.dart';
 import 'package:movie_booking/model/film/film.dart';
 import 'package:movie_booking/services/converter.dart';
-import 'package:movie_booking/services/fetchingData.dart';
+import 'package:movie_booking/services/fetching/fetchingData.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);

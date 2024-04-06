@@ -1,20 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:movie_booking/Views/login_screen/login_screen.dart';
 
 class ConfirmDialogPopUp extends StatelessWidget {
-  const ConfirmDialogPopUp({Key? key}) : super(key: key);
+  final VoidCallback onLogoutConfirmed;
 
-  void _onLogOutPress(BuildContext context) {
-    Navigator.popUntil(context, (route) => route.isFirst);
-    (context as Element).markNeedsBuild();
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const LoginPage(),
-      ),
-    );
-  }
+  const ConfirmDialogPopUp({Key? key, required this.onLogoutConfirmed})
+      : super(key: key);
 
   Future<void> _showDialog(BuildContext context) async {
     return showDialog(
@@ -28,13 +18,13 @@ class ConfirmDialogPopUp extends StatelessWidget {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); 
+                Navigator.of(context).pop();
               },
               child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
-                _onLogOutPress(context); 
+                onLogoutConfirmed();
               },
               child: const Text('OK'),
             ),

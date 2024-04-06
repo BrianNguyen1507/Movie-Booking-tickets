@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:movie_booking/Views/login_screen/login_screen.dart';
 import 'package:movie_booking/Views/selectionSeats/selectionSeats.dart';
 import 'package:movie_booking/model/film/film.dart';
 import 'package:movie_booking/model/theater/theater.dart';
-import 'package:movie_booking/services/fetchThreater.dart';
+import 'package:movie_booking/services/AuthToken.dart';
+import 'package:movie_booking/services/Storage/storageData.dart';
+import 'package:movie_booking/services/fetching/fetchThreater.dart';
 
 class SelectionTheater extends StatefulWidget {
   final Film movie;
@@ -60,12 +63,13 @@ class _SelectionTheaterState extends State<SelectionTheater> {
         Card(
           color: isSelected ? Colors.grey : null,
           child: InkWell(
-            onTap: () {
-              setState(() {
-                if (isSelected) {
-                  selectedTheaterTime = null;
-                } else {
-                  selectedTheaterTime = theater.time;
+            onTap: () async {
+              if (isSelected) {
+                selectedTheaterTime = null;
+              } else {
+                selectedTheaterTime = theater.time;
+                bool isLoggedIn = await TokenAuthenticated.isLoggedIn();
+                if (isLoggedIn) {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => SelectionSeats(
@@ -74,8 +78,39 @@ class _SelectionTheaterState extends State<SelectionTheater> {
                       ),
                     ),
                   );
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Login Required'),
+                        content: const Text('Please login to continue.'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              selectedTheaterTime = theater.time;
+                              _saveSelections(
+                                  theater.date, theater.number, theater.time);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const LoginPage()),
+                              );
+                            },
+                            child: const Text('Continue'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 }
-              });
+              }
             },
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -234,4 +269,10 @@ class _SelectionTheaterState extends State<SelectionTheater> {
     }
     return theaterWidgets;
   }
+}
+
+// save selections
+Future<void> _saveSelections(String date, int number, String time) async {
+  UserPreferences userPreferences = UserPreferences();
+  await userPreferences.savingSelectionUsers(date, number, time);
 }

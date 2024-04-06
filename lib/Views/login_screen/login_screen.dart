@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:movie_booking/Views/index/index.dart';
+import 'package:movie_booking/services/AuthToken.dart';
 import 'package:movie_booking/utils/handle_login/handlelogin.dart';
 import 'package:movie_booking/Views/register_screen/register_screen.dart';
 
@@ -10,26 +12,36 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final HandleLogin _handleLogin = const HandleLogin();
+  final HandleLogin _handleLogin = HandleLogin();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    checkLoginStatus();
+  }
+
+  Future<void> checkLoginStatus() async {
+    bool isLoggedIn = await TokenAuthenticated.isLoggedIn();
+    if (isLoggedIn) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const IndexPage(
+            title: 'Home page',
+            initialIndex: 0,
+          ),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.blue),
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          onPressed: () {
-            _onbackbutton(context);
-          },
-          icon: const Icon(
-            Icons.close,
-            size: 30,
-          ),
-          color: Colors.black,
-        ),
+        automaticallyImplyLeading: true,
       ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -130,26 +142,32 @@ class _LoginPageState extends State<LoginPage> {
                       width: 350.0,
                       height: 50.0,
                       child: ElevatedButton(
-                        style: const ButtonStyle(
-                          backgroundColor: WidgetStatePropertyAll(
-                            Colors.blue,
-                          ),
-                          shape: WidgetStatePropertyAll(
-                            RoundedRectangleBorder(
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.all(Colors.blue),
+                          shape: WidgetStateProperty.all(
+                            const RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(5)),
                               side: BorderSide(color: Colors.white70),
                             ),
                           ),
                         ),
-                        onPressed: () {
-                          setState(() {
-                            _handleLogin.handleLogin(
-                              context,
-                              _usernameController.text,
-                              _passwordController.text,
-                            );
-                          });
+                        onPressed: () async {
+                          bool? loggedIn = await _handleLogin.handleLogin(
+                            context,
+                            _usernameController.text,
+                            _passwordController.text,
+                          );
+
+                          if (loggedIn!) {
+                            setState(() {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const LoginPage()),
+                              );
+                            });
+                          }
                         },
                         child: const Text(
                           'Next',
@@ -169,10 +187,10 @@ class _LoginPageState extends State<LoginPage> {
                       height: 50.0,
                       child: ElevatedButton(
                         style: const ButtonStyle(
-                          backgroundColor: MaterialStatePropertyAll(
+                          backgroundColor: WidgetStatePropertyAll(
                             Colors.grey,
                           ),
-                          shape: MaterialStatePropertyAll(
+                          shape: WidgetStatePropertyAll(
                             RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(5)),
@@ -206,13 +224,4 @@ _onRegisterPress(BuildContext context) {
       MaterialPageRoute(
         builder: (context) => const RegisterPage(),
       ));
-}
-
-_onbackbutton(BuildContext context) {
-  Navigator.pop(
-    context,
-    MaterialPageRoute(
-      builder: (context) => const LoginPage(),
-    ),
-  );
 }
