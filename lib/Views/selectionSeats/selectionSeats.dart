@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:movie_booking/Views/Finish_payment/detail_selection.dart';
-import 'package:movie_booking/Views/selectionSeats/minutesRemainingConfig.dart';
 import 'package:movie_booking/Views/selectionTheater/Alert.dart';
 import 'package:movie_booking/model/film/film.dart';
 import 'package:movie_booking/model/seats/seats.dart';
 import 'package:movie_booking/model/theater/theater.dart';
 import 'package:movie_booking/services/fetching/fetchSeater.dart';
+import 'package:movie_booking/utils/Timer/remainingTime.dart';
 
 class SelectionSeats extends StatefulWidget {
   final Theater theater;
@@ -24,23 +24,30 @@ class _SelectionSeatsState extends State<SelectionSeats> {
   late List<List<int>> contain = [];
   List<String> selectedSeats = [];
   late TransformationController _transformationController;
-
+  bool isButtonEnabled = false;
   late double sumTotal;
-  late Timer _timer;
-  int _secondsRemaining = setMinutes * 60;
 
+  late RemainingTimeManager _remainingTimeManager;
+
+  @override
   @override
   void initState() {
     super.initState();
-    fetchDataSeats();
-    _startTimer();
     _transformationController = TransformationController();
+    _remainingTimeManager = RemainingTimeManager(
+      context: context,
+      setMinutes: 10,
+      setSeconds: 0,
+      onTimerEnd: () {
+        ShowAlert.showAlertDialog(context);
+      },
+    );
   }
 
   @override
   void dispose() {
     _transformationController.dispose();
-    _timer.cancel();
+    _remainingTimeManager.stopTimer();
     super.dispose();
   }
 
@@ -50,27 +57,29 @@ class _SelectionSeatsState extends State<SelectionSeats> {
 
   @override
   Widget build(BuildContext context) {
-    int minutes = _secondsRemaining ~/ 60;
-    int seconds = _secondsRemaining % 60;
-
-    String minutesStr = (minutes < 10 ? '0' : '') + minutes.toString();
-    String secondsStr = (seconds < 10 ? '0' : '') + seconds.toString();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'Selection Seats',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Text(
-              '$minutesStr:$secondsStr',
-              style: const TextStyle(fontSize: 20),
-            ),
-          ],
+        centerTitle: true,
+        title: const Text(
+          'Selection Seats',
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
+        actions: [
+          StreamBuilder<int>(
+            stream: _remainingTimeManager.remainingTimeStream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return RemainingTimeManager.displayTimer(snapshot)!;
+              } else {
+                return const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Text('...'),
+                );
+              }
+            },
+          ),
+        ],
       ),
       body: Stack(
         children: [
@@ -220,15 +229,6 @@ class _SelectionSeatsState extends State<SelectionSeats> {
             ),
             Container(
               padding: const EdgeInsets.all(10.0),
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    blurRadius: 10.0,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
-              ),
               width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -236,24 +236,25 @@ class _SelectionSeatsState extends State<SelectionSeats> {
                   backgroundColor: const Color.fromARGB(255, 0, 0, 0),
                   elevation: 15.0,
                 ),
-                onPressed: () {
-                  if (selectedSeats.isNotEmpty && total > 0.0) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return SummaryPaymentPage(
-                            total: sumTotal,
-                            film: widget.film,
-                            theater: widget.theater,
-                            selectedSeats: selectedSeats,
-                          );
-                        },
-                      ),
-                    );
-                  } else {
-                    ShowAlert.showAlertDialog(context);
-                  }
-                },
+                onPressed: selectedSeats.isNotEmpty && total > 0.0
+                    ? () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              int remainingTimeInSeconds =
+                                  _remainingTimeManager.remainingTimeInSeconds;
+                              return SummaryPaymentPage(
+                                remainingTimeInSeconds: remainingTimeInSeconds,
+                                total: sumTotal,
+                                film: widget.film,
+                                theater: widget.theater,
+                                selectedSeats: selectedSeats,
+                              );
+                            },
+                          ),
+                        );
+                      }
+                    : null,
                 child: const Text(
                   'FINISH PAYMENT',
                   style: TextStyle(
@@ -414,20 +415,6 @@ class _SelectionSeatsState extends State<SelectionSeats> {
           return rowA.compareTo(rowB);
         } else {
           return colA.compareTo(colB);
-        }
-      });
-    });
-  }
-
-  void _startTimer() {
-    const oneSecond = Duration(seconds: 1);
-    _timer = Timer.periodic(oneSecond, (Timer timer) {
-      setState(() {
-        if (_secondsRemaining == 0) {
-          timer.cancel();
-          ShowAlert.showAlertDialog(context);
-        } else {
-          _secondsRemaining--;
         }
       });
     });

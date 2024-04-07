@@ -25,6 +25,7 @@ class _OrderedMovieState extends State<OrderedMovie> {
     });
     try {
       List<Order> fetchedOrders = await FetchOrder().fetchOrdered();
+      fetchedOrders.sort((a, b) => b.id.compareTo(a.id));
       setState(() {
         orderList = fetchedOrders;
         isLoading = false;
@@ -54,6 +55,7 @@ class _OrderedMovieState extends State<OrderedMovie> {
                   child: Text('No tickets available'),
                 )
               : ListView.builder(
+                  physics: const BouncingScrollPhysics(),
                   itemCount: orderList!.length,
                   itemBuilder: (context, index) {
                     return TicketCard(order: orderList![index]);
@@ -86,7 +88,7 @@ class TicketCard extends StatelessWidget {
               color: Color.fromARGB(255, 172, 169, 169),
               thickness: 1,
             ),
-            Text('Date and Time: ${order.date}'),
+            Text('Date Time Order: ${order.date}'),
             const SizedBox(height: 8.0),
             Text('Payment Method: ${order.paymentMethod}'),
             const SizedBox(height: 8.0),

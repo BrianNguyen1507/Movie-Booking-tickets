@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:movie_booking/Views/Finish_payment/comfirmPayment.dart';
+import 'package:movie_booking/Views/selectionTheater/Alert.dart';
 import 'package:movie_booking/model/film/film.dart';
 import 'package:movie_booking/model/theater/theater.dart';
 import 'package:movie_booking/services/converter.dart';
+import 'package:movie_booking/utils/Timer/remainingTime.dart';
 
 class SummaryPaymentPage extends StatefulWidget {
-  const SummaryPaymentPage(
-      {Key? key,
-      required this.film,
-      required this.theater,
-      required this.selectedSeats,
-      required this.total})
-      : super(key: key);
+  const SummaryPaymentPage({
+    Key? key,
+    required this.film,
+    required this.theater,
+    required this.selectedSeats,
+    required this.total,
+    required this.remainingTimeInSeconds,
+  }) : super(key: key);
+  final int remainingTimeInSeconds;
   final Film film;
   final Theater theater;
   final List<String> selectedSeats;
@@ -280,10 +284,13 @@ class _SummaryPaymentPageState extends State<SummaryPaymentPage> {
                 elevation: 15.0,
               ),
               onPressed: () {
+                int remainingTimeInSeconds =
+                    _remainingTimeManager.remainingTimeInSeconds;
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => ConfirmPayment(
+                        remainingTimeInSeconds: remainingTimeInSeconds,
                         movie: widget.film,
                         theater: widget.theater,
                         seats: widget.selectedSeats,
@@ -323,14 +330,47 @@ class _SummaryPaymentPageState extends State<SummaryPaymentPage> {
     );
   }
 
+  late RemainingTimeManager _remainingTimeManager;
   @override
+  void initState() {
+    super.initState();
+
+    _remainingTimeManager = RemainingTimeManager(
+      context: context,
+      setMinutes: widget.remainingTimeInSeconds ~/ 60,
+      setSeconds: widget.remainingTimeInSeconds % 60,
+      onTimerEnd: () {
+        ShowAlert.showAlertDialog(context);
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _remainingTimeManager.stopTimer();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         title: const Text('Payment information'),
+        actions: [
+          StreamBuilder<int>(
+            stream: _remainingTimeManager.remainingTimeStream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return RemainingTimeManager.displayTimer(snapshot)!;
+              } else {
+                return const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Text('...'),
+                );
+              }
+            },
+          ),
+        ],
         centerTitle: true,
       ),
       body: Column(

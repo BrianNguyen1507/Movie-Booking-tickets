@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_paypal_checkout/flutter_paypal_checkout.dart';
+import 'package:movie_booking/Views/selectionTheater/Alert.dart';
 import 'package:movie_booking/Views/splash_screen/Splash_success.dart';
 import 'package:intl/intl.dart';
 import 'package:movie_booking/model/film/film.dart';
@@ -7,6 +8,7 @@ import 'package:movie_booking/model/methodPayment/method.dart';
 import 'package:movie_booking/model/theater/theater.dart';
 import 'package:movie_booking/services/Payments/Paypal/Client/clientId.dart';
 import 'package:movie_booking/services/Payments/Paypal/Payment.dart';
+import 'package:movie_booking/utils/Timer/remainingTime.dart';
 
 enum PaymentMethod { paypal, none }
 
@@ -15,13 +17,14 @@ class ConfirmPayment extends StatefulWidget {
   final Theater theater;
   final List<String> seats;
   final double total;
-
+  final int remainingTimeInSeconds;
   const ConfirmPayment({
     Key? key,
     required this.movie,
     required this.seats,
     required this.theater,
     required this.total,
+    required this.remainingTimeInSeconds,
   }) : super(key: key);
 
   @override
@@ -33,10 +36,19 @@ class _ConfirmPaymentState extends State<ConfirmPayment> {
 
   PaymentMethod _selectedMethod = PaymentMethod.paypal;
   List<String> convertedPositions = [];
+  late RemainingTimeManager _remainingTimeManager;
   @override
   void initState() {
     super.initState();
     convertedPositions = convertSeatPositions(widget.seats);
+    _remainingTimeManager = RemainingTimeManager(
+      context: context,
+      setMinutes: widget.remainingTimeInSeconds ~/ 60,
+      setSeconds: widget.remainingTimeInSeconds % 60,
+      onTimerEnd: () {
+        ShowAlert.showAlertDialog(context);
+      },
+    );
   }
 
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -47,6 +59,21 @@ class _ConfirmPaymentState extends State<ConfirmPayment> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
+            actions: [
+              StreamBuilder<int>(
+                stream: _remainingTimeManager.remainingTimeStream,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return RemainingTimeManager.displayTimer(snapshot)!;
+                  } else {
+                    return const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Text('...'),
+                    );
+                  }
+                },
+              ),
+            ],
             leading: IconButton(
                 onPressed: () {
                   Navigator.pop(context);
@@ -173,6 +200,7 @@ class _ConfirmPaymentState extends State<ConfirmPayment> {
                                     params['message'] == 'Success';
                                 if (success) {
                                   successPayment();
+
                                   PaymentAdding.addingPay(
                                     dateTime: datetime,
                                     seatNumbers: convertedPositions,
