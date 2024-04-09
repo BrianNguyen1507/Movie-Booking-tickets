@@ -340,7 +340,9 @@ class _SummaryPaymentPageState extends State<SummaryPaymentPage> {
       setMinutes: widget.remainingTimeInSeconds ~/ 60,
       setSeconds: widget.remainingTimeInSeconds % 60,
       onTimerEnd: () {
-        ShowAlert.showAlertDialog(context);
+        if (mounted) {
+          ShowAlert.showAlertDialog(context);
+        }
       },
     );
   }

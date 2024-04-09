@@ -6,6 +6,7 @@ import 'package:movie_booking/model/film/film.dart';
 import 'package:movie_booking/model/seats/seats.dart';
 import 'package:movie_booking/model/theater/theater.dart';
 import 'package:movie_booking/services/fetching/fetchSeater.dart';
+import 'package:movie_booking/utils/Timer/minutesRemainingConfig.dart';
 import 'package:movie_booking/utils/Timer/remainingTime.dart';
 
 class SelectionSeats extends StatefulWidget {
@@ -32,12 +33,13 @@ class _SelectionSeatsState extends State<SelectionSeats> {
   @override
   @override
   void initState() {
+    fetchDataSeats();
     super.initState();
     _transformationController = TransformationController();
     _remainingTimeManager = RemainingTimeManager(
       context: context,
-      setMinutes: 10,
-      setSeconds: 0,
+      setMinutes: minutes,
+      setSeconds: secounds,
       onTimerEnd: () {
         ShowAlert.showAlertDialog(context);
       },

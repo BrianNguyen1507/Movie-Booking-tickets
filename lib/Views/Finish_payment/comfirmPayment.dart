@@ -46,7 +46,9 @@ class _ConfirmPaymentState extends State<ConfirmPayment> {
       setMinutes: widget.remainingTimeInSeconds ~/ 60,
       setSeconds: widget.remainingTimeInSeconds % 60,
       onTimerEnd: () {
-        ShowAlert.showAlertDialog(context);
+        if (mounted) {
+          ShowAlert.showAlertDialog(context);
+        }
       },
     );
   }
@@ -177,6 +179,7 @@ class _ConfirmPaymentState extends State<ConfirmPayment> {
                               ],
                               note: 'THANK YOU FOR YOUR PAYMENT',
                               onSuccess: (Map params) async {
+                                _remainingTimeManager.stopTimer;
                                 print('Success params: $params');
                                 //convert data to fetching addpayment
                                 String subtotal = params['data']['transactions']
@@ -200,7 +203,6 @@ class _ConfirmPaymentState extends State<ConfirmPayment> {
                                     params['message'] == 'Success';
                                 if (success) {
                                   successPayment();
-
                                   PaymentAdding.addingPay(
                                     dateTime: datetime,
                                     seatNumbers: convertedPositions,

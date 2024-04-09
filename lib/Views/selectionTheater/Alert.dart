@@ -13,33 +13,38 @@ class ShowAlert {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Ticket booking period has ended'),
-            content: const Text('Please try again.'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  resetAlertStatus();
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const IndexPage(
-                        title: '',
-                        initialIndex: 0,
+          return WillPopScope(
+            onWillPop: () async => false,
+            child: AlertDialog(
+              title: const Text('Ticket booking period has ended'),
+              content: const Text('Please try again.'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    resetAlertStatus();
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const IndexPage(
+                          title: '',
+                          initialIndex: 0,
+                        ),
                       ),
-                    ),
-                  );
-                },
-                child: const Text('Ok'),
-              ),
-            ],
+                      ModalRoute.withName('/'),
+                    );
+                  },
+                  child: const Text('Ok'),
+                ),
+              ],
+            ),
           );
         },
       );
 
       Future.delayed(const Duration(seconds: 3), () {
         if (_isAlertShown) {
-          Navigator.pushReplacement(
+          resetAlertStatus();
+          Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
               builder: (context) => const IndexPage(
@@ -47,8 +52,8 @@ class ShowAlert {
                 initialIndex: 0,
               ),
             ),
+            ModalRoute.withName('/'),
           );
-          resetAlertStatus();
         }
       });
     }
