@@ -20,9 +20,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
           children: <Widget>[
             const DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.black,
+                color: Colors.transparent,
                 image: DecorationImage(
-                  image: AssetImage('assets/images/moviebanner2.png'),
+                  image: AssetImage('assets/images/icon.png'),
                   fit: BoxFit.contain,
                 ),
               ),
