@@ -21,7 +21,6 @@ import java.text.ParseException;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class AuthenticationAPI {
-
     AuthenticationService authenticationService;
 
     @PostMapping("/introspect")

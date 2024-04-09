@@ -56,11 +56,13 @@ public class AuthenticationService {
             return AuthenticationResponse.builder()
                     .token(token)
                     .authenticated(true)
+                    .role(account.getRole())
                     .build();
         }
         return AuthenticationResponse.builder()
                 .token("")
                 .authenticated(false)
+                .role("")
                 .build();
     }
 

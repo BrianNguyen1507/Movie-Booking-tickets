@@ -24,7 +24,7 @@ public class SecurityConfig {
 			"/cinema/login",
             "/cinema/register",
 			"/cinema/detailFilm"
-			,"/cinema/showAllFilm"
+
 			,"/cinema/listfeatured"
 			,"/cinema/showSeat"
 			,"/cinema/showMovieThreater"
@@ -34,6 +34,7 @@ public class SecurityConfig {
 			"/cinema/addFilm"
 			,"/cinema/updateFilm"
 			,"/cinema/deleteFilm"
+			,"/cinema/showAllFilm"
 			,"/cinema/addMovieThreater"
 	};
 	private final String[] PRIVATE_ENPOINT_USER ={
@@ -48,6 +49,7 @@ public class SecurityConfig {
 			.permitAll()
 			.requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()
 				.requestMatchers(HttpMethod.POST,PRIVATE_ENPOINT_ADMIN).hasAuthority("SCOPE_ADMIN")
+				.requestMatchers(HttpMethod.GET,PRIVATE_ENPOINT_ADMIN).hasAuthority("SCOPE_ADMIN")
 				.requestMatchers(HttpMethod.POST,PRIVATE_ENPOINT_USER).hasAuthority("SCOPE_USER")
 				.requestMatchers(HttpMethod.GET,PRIVATE_ENPOINT_USER).hasAuthority("SCOPE_USER")
 			.anyRequest()
