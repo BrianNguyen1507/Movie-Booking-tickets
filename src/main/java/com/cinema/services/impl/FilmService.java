@@ -2,8 +2,12 @@ package com.cinema.services.impl;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.cinema.dto.reponse.FilmNameResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -114,5 +118,21 @@ public class FilmService implements IFilmService{
 	public List<FilmDTO> getAllFilm() {
 		List<FilmEntity> films = filmRepository.findAll();
 		return filmConverter.toListDTO(films);
+	}
+
+	@Override
+	public List<FilmNameResponse> getAllFilmName(int step) {
+//		Calendar calendar = Calendar.getInstance();
+//		calendar.set(Calendar.DAY_OF_YEAR,calendar.get(Calendar.DAY_OF_YEAR)-step);
+//		Date dateStart =calendar.getTime();
+//		calendar = Calendar.getInstance();
+//		calendar.set(Calendar.DAY_OF_YEAR,calendar.get(Calendar.DAY_OF_YEAR)+step);
+//		Date dateEnd =calendar.getTime();
+		List<FilmEntity> entities = filmRepository.findAll();
+		List<FilmNameResponse> filmNameResponseList = entities.stream()
+				.map(filmEntity -> new FilmNameResponse(filmEntity.getId(), filmEntity.getTitle()))
+				.collect(Collectors.toList());
+
+		return filmNameResponseList;
 	}
 }

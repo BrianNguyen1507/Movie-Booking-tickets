@@ -24,17 +24,18 @@ public class SecurityConfig {
 			"/cinema/login",
             "/cinema/register",
 			"/cinema/detailFilm"
-
+			,"/cinema/showAllFilm"
 			,"/cinema/listfeatured"
 			,"/cinema/showSeat"
 			,"/cinema/showMovieThreater"
 			,"/cinema/categories"
+			,"/cinema/getAllFilmName"
 	};
 	private final String[] PRIVATE_ENPOINT_ADMIN ={
 			"/cinema/addFilm"
 			,"/cinema/updateFilm"
 			,"/cinema/deleteFilm"
-			,"/cinema/showAllFilm"
+
 			,"/cinema/addMovieThreater"
 	};
 	private final String[] PRIVATE_ENPOINT_USER ={

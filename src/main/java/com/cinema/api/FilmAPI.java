@@ -2,12 +2,11 @@ package com.cinema.api;
 
 import java.util.List;
 
+import com.cinema.dto.reponse.FilmNameResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,7 +33,13 @@ public class FilmAPI {
 	{
 		return filmService.findAllDTOByReleaseDate(model);
 	}
-	
+
+	@GetMapping(value = "/getAllFilmName")
+	public List<FilmNameResponse> getAllFilmName(@RequestParam("step") int step)
+	{
+		return filmService.getAllFilmName(step);
+	}
+
 	@GetMapping(value = "/detailFilm")
 	public FilmDTO detailFilm(@RequestParam("id") long id ) {
 		return filmService.detailFilm(id);
@@ -44,7 +49,7 @@ public class FilmAPI {
 	public FilmDTO saveFilm(@RequestBody FilmDTO filmDTO) {
 		return filmService.addFilm(filmDTO);
 	}
-	
+
 	@PostMapping(value = "/updateFilm")
 	public FilmDTO updateFilm(@RequestBody FilmDTO filmDTO) {
 		return filmService.updateFilm(filmDTO);
