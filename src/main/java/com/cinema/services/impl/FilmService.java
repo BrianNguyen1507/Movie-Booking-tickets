@@ -2,13 +2,16 @@ package com.cinema.services.impl;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.cinema.dto.reponse.FilmNameResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.cinema.entity.MovieThreaterEntity;
+import com.cinema.repository.MovieThreaterRepository;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import com.cinema.converter.CategoryConverter;
@@ -24,29 +27,31 @@ import com.cinema.services.IFilmService;
 import com.cinema.util.DateFormatter;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class FilmService implements IFilmService{
 	
-	@Autowired
+
 	private FilmRepository filmRepository;
-	
-	@Autowired
+
 	private FilmConverter filmConverter;
-	
-	@Autowired
+
 	private CategoryConverter categoryConverter;
-	
-	@Autowired
+
 	private CategoryRepository categoryRepository;
 
+	private MovieThreaterRepository movieThreaterRepository;
+
 	@Override
-	public List<FilmDTO> findAllDTOByReleaseDate( ReleaseDateFilm model) {
+	public List<FilmDTO> findAllDTOByReleaseDate( ReleaseDateFilm model) throws ParseException {
 		List<FilmDTO> resuls = new ArrayList<>();
 		List<FilmEntity> entities;
-		try {
+
 			entities = filmRepository.findAllByReleasDate(DateFormatter.parse(model.getDateStart()),DateFormatter.parse(model.getDateEnd()));
 			for(FilmEntity entity : entities) {
 				List<CategoryEntity> categories = categoryRepository.findAllByFilmEntityId(entity.getId());
-				List<CategoryDTO> categoriesDTO = new ArrayList<CategoryDTO>();
+				List<CategoryDTO> categoriesDTO = new ArrayList<>();
 				for(CategoryEntity categoryEntity : categories) {
 					categoriesDTO.add(categoryConverter.toDTO(categoryEntity));
 				}
@@ -54,10 +59,7 @@ public class FilmService implements IFilmService{
 				filmDto.setCategories(categoriesDTO);
 				resuls.add(filmDto);
 			}
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 		
 		return resuls;
 	}
@@ -69,25 +71,22 @@ public class FilmService implements IFilmService{
 	public FilmDTO detailFilm(long id) {
 		FilmEntity entity = filmRepository.findById(id).orElse(null);
 		List<CategoryEntity> categoryEntities = categoryRepository.findAllByFilmEntityId(id);
-		FilmDTO dto = filmConverter.toDTO(entity);
+        assert entity != null : "FilmEntity is null";
+        FilmDTO dto = filmConverter.toDTO(entity);
 		dto.setCategories(categoryConverter.tolistDTO(categoryEntities));
 		return dto;
 	}
 	@Override
-	public FilmDTO addFilm(FilmDTO filmDTO) {
-		FilmEntity entity = new FilmEntity();
-		try {
-			entity = filmConverter.toEntity(filmDTO);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+	public FilmDTO addFilm(FilmDTO filmDTO) throws ParseException {
+		FilmEntity entity = filmConverter.toEntity(filmDTO);
+
 		entity.setCategories(categoryConverter.tolistEntities(filmDTO.getCategories()));
 		FilmDTO dto = filmConverter.toDTO(filmRepository.save(entity));
 		dto.setCategories(filmDTO.getCategories());
 		return dto;
 	}
 	@Override
-	public FilmDTO updateFilm(FilmDTO filmDTO) {
+	public FilmDTO updateFilm(FilmDTO filmDTO) throws ParseException {
 		FilmEntity entity = filmRepository.getReferenceById(filmDTO.getId());
 		entity.setActor(filmDTO.getActor());
 		entity.setDescribe(filmDTO.getDescribe().getBytes());
@@ -96,23 +95,21 @@ public class FilmService implements IFilmService{
 		entity.setPrice(filmDTO.getPrice());
 		entity.setDirector(filmDTO.getDirector());
 		entity.setCategories(categoryConverter.tolistEntities(filmDTO.getCategories()));
-		try {
+
 			entity.setReleaseDate(DateFormatter.parse(filmDTO.getReleaseDate()));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+
 		entity.setTitle(filmDTO.getTitle());
 		return filmConverter.toDTO(filmRepository.save(entity));
 	}
 	@Override
 	public boolean deleteFilm(long id) {
 		FilmEntity entity = filmRepository.findById(id).orElse(null);
-		try {
-			filmRepository.delete(entity);
+		List<MovieThreaterEntity> movieThreaterEntities = movieThreaterRepository.findAllByFilmId(id);
+		movieThreaterEntities.forEach(movieThreaterEntity -> movieThreaterEntity.setFilm(null));
+            assert entity != null:"FilmEntity is null";
+            filmRepository.delete(entity);
 			return true;
-		} catch (Exception e) {
-			return false;
-		}
+
 	}
 	@Override
 	public List<FilmDTO> getAllFilm() {
@@ -122,17 +119,18 @@ public class FilmService implements IFilmService{
 
 	@Override
 	public List<FilmNameResponse> getAllFilmName(int step) {
+		//Find by step
 //		Calendar calendar = Calendar.getInstance();
 //		calendar.set(Calendar.DAY_OF_YEAR,calendar.get(Calendar.DAY_OF_YEAR)-step);
 //		Date dateStart =calendar.getTime();
 //		calendar = Calendar.getInstance();
 //		calendar.set(Calendar.DAY_OF_YEAR,calendar.get(Calendar.DAY_OF_YEAR)+step);
 //		Date dateEnd =calendar.getTime();
+
 		List<FilmEntity> entities = filmRepository.findAll();
-		List<FilmNameResponse> filmNameResponseList = entities.stream()
+
+        return entities.stream()
 				.map(filmEntity -> new FilmNameResponse(filmEntity.getId(), filmEntity.getTitle()))
 				.collect(Collectors.toList());
-
-		return filmNameResponseList;
 	}
 }

@@ -3,6 +3,11 @@ package com.cinema.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cinema.dto.reponse.MovieThreaterResponse;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,15 +23,16 @@ import com.cinema.services.IMovieThreaterService;
 import com.cinema.util.DateFormatter;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class MovieThreaterService implements IMovieThreaterService {
 
-    @Autowired
+
     FilmRepository filmRepository;
 
-    @Autowired
     MovieThreaterRepository movieThreaterRepository;
 
-    @Autowired
     MovieThreaterConverter movieThreaterConverter;
 
     @Override
@@ -66,5 +72,34 @@ public class MovieThreaterService implements IMovieThreaterService {
 		}
 		return listMT;
 	}
+
+    @Override
+    public MovieThreaterDTO update(MovieThreaterDTO dto) {
+        MovieThreaterEntity entity = movieThreaterRepository.getReferenceById(dto.getId());
+
+//        entity.setSeat(dto.getRow(), dto.getColumn());
+//        entity.setNumberThreater(dto.getNumberThreater());
+//        entity.setTime(DateFormatter.parseYMDTime(dto.getTime()));
+        entity = movieThreaterConverter.toEntity(dto);
+        FilmEntity filmEntity = filmRepository.findById(dto.getFilm()).orElse(null);
+        entity.setFilm(filmEntity);
+        movieThreaterRepository.save(entity);
+        return dto;
+    }
+
+    @Override
+    public boolean delete(long id) {
+        MovieThreaterEntity entity = movieThreaterRepository.findById(id).orElse(null);
+        assert entity != null :"MovieThreaterEntity is null";
+        movieThreaterRepository.delete(entity);
+        return true;
+    }
+
+    @Override
+    public List<MovieThreaterResponse> getAllMovieThreater() {
+        List<MovieThreaterEntity> entities = movieThreaterRepository.findAll();
+
+        return movieThreaterConverter.toListResponse(entities);
+    }
 
 }

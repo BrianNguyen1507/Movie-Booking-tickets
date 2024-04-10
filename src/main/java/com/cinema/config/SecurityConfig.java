@@ -35,8 +35,10 @@ public class SecurityConfig {
 			"/cinema/addFilm"
 			,"/cinema/updateFilm"
 			,"/cinema/deleteFilm"
-
 			,"/cinema/addMovieThreater"
+			,"/cinemae/updateMovieThreater"
+			,"/cinema/deleteMovieThreater"
+			,"/cinema/getAllMovieThreater"
 	};
 	private final String[] PRIVATE_ENPOINT_USER ={
 			"/cinema/addPayment"

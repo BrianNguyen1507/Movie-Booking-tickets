@@ -1,5 +1,6 @@
 package com.cinema.api;
 
+import java.text.ParseException;
 import java.util.List;
 
 import com.cinema.dto.reponse.FilmNameResponse;
@@ -29,8 +30,7 @@ public class FilmAPI {
 	private FilmService filmService;
 	
 	@PostMapping(value = "/listfeatured")
-	public List<FilmDTO> showEmployees(@RequestBody ReleaseDateFilm model)
-	{
+	public List<FilmDTO> showEmployees(@RequestBody ReleaseDateFilm model) throws ParseException {
 		return filmService.findAllDTOByReleaseDate(model);
 	}
 
@@ -46,12 +46,12 @@ public class FilmAPI {
 	}
 	
 	@PostMapping(value = "/addFilm")
-	public FilmDTO saveFilm(@RequestBody FilmDTO filmDTO) {
+	public FilmDTO saveFilm(@RequestBody FilmDTO filmDTO) throws ParseException {
 		return filmService.addFilm(filmDTO);
 	}
 
 	@PostMapping(value = "/updateFilm")
-	public FilmDTO updateFilm(@RequestBody FilmDTO filmDTO) {
+	public FilmDTO updateFilm(@RequestBody FilmDTO filmDTO) throws ParseException {
 		return filmService.updateFilm(filmDTO);
 	}
 	

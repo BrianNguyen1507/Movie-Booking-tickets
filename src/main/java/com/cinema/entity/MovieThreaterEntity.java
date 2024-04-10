@@ -31,7 +31,7 @@ public class MovieThreaterEntity {
 	private int numberThreater;
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "film_id", nullable = false)
+    @JoinColumn(name = "film_id", nullable = true)
     private FilmEntity film;
 	
 	@OneToMany(mappedBy = "movieThreater", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
@@ -84,7 +84,7 @@ public class MovieThreaterEntity {
 		this.tickets = tickets;
 	}
 	private void setSeatDefault(int row, int column) {
-		seat = new int[row][row];
+		seat = new int[row][column];
 		for(int i=0;i<row;i++) {
 			for(int j=0;j<column;j++) {
 				seat[i][j]=0;
