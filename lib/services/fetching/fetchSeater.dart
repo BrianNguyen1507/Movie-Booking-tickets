@@ -1,17 +1,20 @@
 import 'package:http/http.dart' as http;
 import 'package:movie_booking/model/seats/seats.dart';
+import 'package:movie_booking/services/AuthToken.dart';
 import 'dart:convert';
 
 import 'package:movie_booking/services/ipconfig.dart';
 
 class FetchSeats {
   static Future<Seat?> fetchDataSeats(String date, int threater) async {
+    dynamic token = await TokenAuthenticated.getToken();
     try {
       const apiUrl = "http://$ip:8083/cinema/showSeat";
       final response = await http.post(
         Uri.parse(apiUrl),
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
         },
         body: json.encode({
           "date": date,

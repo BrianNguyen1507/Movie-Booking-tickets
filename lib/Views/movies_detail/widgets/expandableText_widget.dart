@@ -15,7 +15,7 @@ class _ExpandableState extends State<ExpandableWidget> {
     return Column(
       children: [
         Text(
-          isExpanded ? content : '${content.substring(0, 90)}...',
+          isExpanded ? content : '${content.substring(0, 40)}...',
           maxLines: isExpanded ? null : 3,
         ),
         InkWell(
