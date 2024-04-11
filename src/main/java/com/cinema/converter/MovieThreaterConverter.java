@@ -42,6 +42,7 @@ public class MovieThreaterConverter {
 	}
 	public MovieThreaterResponse toResponse(MovieThreaterEntity entity){
 		MovieThreaterResponse response = new MovieThreaterResponse();
+		response.setId(entity.getId());
 		response.setSeat(entity.getSeat());
 		response.setFilm(new FilmNameResponse(entity.getFilm().getId(),entity.getFilm().getTitle()));
 		response.setNumberThreater(entity.getNumberThreater());

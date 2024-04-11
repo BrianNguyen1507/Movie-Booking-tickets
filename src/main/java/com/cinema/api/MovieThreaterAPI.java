@@ -53,4 +53,9 @@ public class MovieThreaterAPI {
 	public List<MovieThreaterResponse> getAllMovieThreater() {
 		return movieThreaterService.getAllMovieThreater();
 	}
+
+	@GetMapping(value = "/detailMoviethreater")
+	public MovieThreaterResponse detailMovieThreater(@RequestParam("id") long id) {
+		return movieThreaterService.detail(id);
+	}
 }

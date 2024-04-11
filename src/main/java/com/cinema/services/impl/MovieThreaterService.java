@@ -55,6 +55,7 @@ public class MovieThreaterService implements IMovieThreaterService {
         MovieThreaterEntity movieThreaterEntity = movieThreaterRepository
                 .findOneByTimeAndNumberThreater(DateFormatter.parseTime(model.getDate()), model.getNumberThreater());
         FilmEntity filmEntity = movieThreaterEntity.getFilm();
+
         dto.setSeat(movieThreaterEntity.getSeat());
         dto.setDate(DateFormatter.toStringDateTime(movieThreaterEntity.getTime()));
         dto.setTitle(filmEntity.getTitle());
@@ -100,6 +101,15 @@ public class MovieThreaterService implements IMovieThreaterService {
         List<MovieThreaterEntity> entities = movieThreaterRepository.findAll();
 
         return movieThreaterConverter.toListResponse(entities);
+    }
+
+    @Override
+    public MovieThreaterResponse detail(long id) {
+        MovieThreaterEntity entity = movieThreaterRepository.findById(id).orElse(null);
+        if(entity!=null){
+            return movieThreaterConverter.toResponse(entity);
+        }
+        return null;
     }
 
 }

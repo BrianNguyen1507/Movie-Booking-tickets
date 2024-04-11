@@ -15,4 +15,6 @@ public interface IMovieThreaterService {
 	boolean delete(long id);
 
 	List<MovieThreaterResponse> getAllMovieThreater();
+
+	MovieThreaterResponse detail(long id);
 }

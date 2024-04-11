@@ -30,6 +30,7 @@ public class SecurityConfig {
 			,"/cinema/showMovieThreater"
 			,"/cinema/categories"
 			,"/cinema/getAllFilmName"
+			,"/cinema/detailMoviethreater"
 	};
 	private final String[] PRIVATE_ENPOINT_ADMIN ={
 			"/cinema/addFilm"

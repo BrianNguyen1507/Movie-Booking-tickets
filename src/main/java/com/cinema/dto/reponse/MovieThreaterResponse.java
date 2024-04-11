@@ -10,8 +10,9 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class MovieThreaterResponse {
-    private int[][] seat;
-    private String time;
-    private int numberThreater;
-    private FilmNameResponse film;
+    long id;
+    int[][] seat;
+    String time;
+    int numberThreater;
+    FilmNameResponse film;
 }
