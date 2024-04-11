@@ -2,6 +2,7 @@ package com.cinema.services.impl;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -89,7 +90,8 @@ public class FilmService implements IFilmService{
 	public FilmDTO updateFilm(FilmDTO filmDTO) throws ParseException {
 		FilmEntity entity = filmRepository.getReferenceById(filmDTO.getId());
 		entity.setActor(filmDTO.getActor());
-		entity.setDescribe(filmDTO.getDescribe().getBytes());
+		String encodeStr = Base64.getUrlEncoder().encodeToString(filmDTO.getDescribe().getBytes());
+		entity.setDescribe(encodeStr.getBytes());
 		entity.setLength(filmDTO.getLength());
 		entity.setPosters(filmDTO.getPosters());
 		entity.setPrice(filmDTO.getPrice());
