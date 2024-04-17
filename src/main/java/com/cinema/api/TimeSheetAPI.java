@@ -21,7 +21,8 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class TimeSheetAPI {
-
+    static final String STATUS_PENDING = "pending";
+    static final String STATUS_APPROVED = "approved";
     TimeSheetService timeSheetService;
 
     @GetMapping(value = "/checkin")
@@ -45,9 +46,15 @@ public class TimeSheetAPI {
     }
 
     @PostMapping(value = "/getAllTimeSheetByStatusAndDate")
-    List<TimeSheetsResponse> getAllTimeSheetByStatusAndDate(@RequestBody DateResponse dateString) throws ParseException {
-        Date date = DateFormatter.parse(dateString.getDate());
-        return timeSheetService.getAllTimeSheetByStatusAndDate(date, dateString.getStatus());
+    List<TimeSheetsResponse> getAllTimeSheetByStatusAndDate(@RequestBody DateResponse dateResponse) throws ParseException {
+        Date date = DateFormatter.parse(dateResponse.getDate());
+
+        return timeSheetService.getAllTimeSheetByStatusAndDate(date, dateResponse.isStatus());
+    }
+
+    @GetMapping(value = "/approvedCheckIn")
+    boolean approvedCheckIn(@RequestParam("id") long id) {
+        return timeSheetService.approvedCheckIn(id);
     }
 
 }

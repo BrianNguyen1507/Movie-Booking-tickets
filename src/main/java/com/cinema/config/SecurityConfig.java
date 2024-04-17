@@ -54,6 +54,7 @@ public class SecurityConfig {
     private final String[] PRIVATE_ENDPOINT_MANAGER = {
             "/cinema/getAllTimeSheetByDate"
             ,"/cinema/getAllTimeSheetByStatusAndDate"
+            ,"/cinema/approvedCheckIn"
     };
 
     @Bean
@@ -67,8 +68,8 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST, PRIVATE_ENDPOINT_USER).hasAuthority("SCOPE_USER")
                                 .requestMatchers(HttpMethod.GET, PRIVATE_ENDPOINT_USER).hasAuthority("SCOPE_USER")
                                 .requestMatchers(HttpMethod.GET, PRIVATE_ENDPOINT_EMPLOYEE).hasAuthority("SCOPE_EMPLOYEE")
-                                .requestMatchers(HttpMethod.GET, PRIVATE_ENDPOINT_EMPLOYEE).hasAuthority("SCOPE_MANAGER")
-                                .requestMatchers(HttpMethod.POST, PRIVATE_ENDPOINT_EMPLOYEE).hasAuthority("SCOPE_MANAGER")
+                                .requestMatchers(HttpMethod.GET, PRIVATE_ENDPOINT_MANAGER).hasAuthority("SCOPE_MANAGER")
+                                .requestMatchers(HttpMethod.POST, PRIVATE_ENDPOINT_MANAGER).hasAuthority("SCOPE_MANAGER")
                                 .anyRequest()
                                 .authenticated());
 

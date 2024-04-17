@@ -10,7 +10,7 @@ public interface ITimeSheetsSerVice {
     boolean CheckOut(String userName);
 
     List<TimeSheetsResponse> getAllTimeSheet(Date date);
-    List<TimeSheetsResponse> getAllTimeSheetByStatusAndDate(Date date,String status);
+    List<TimeSheetsResponse> getAllTimeSheetByStatusAndDate(Date date,boolean status);
 
-
+    boolean approvedCheckIn(long id);
 }

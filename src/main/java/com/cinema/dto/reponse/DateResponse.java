@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class DateResponse {
     String date;
-    String status;
+    boolean status;
 }

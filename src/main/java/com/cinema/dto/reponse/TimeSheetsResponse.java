@@ -12,9 +12,10 @@ import java.util.Date;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TimeSheetsResponse {
-    EmployeeResponse employee;
+    long id;
     String timeIn;
     String timeOut;
     String date;
     String status;
+    EmployeeResponse employee;
 }

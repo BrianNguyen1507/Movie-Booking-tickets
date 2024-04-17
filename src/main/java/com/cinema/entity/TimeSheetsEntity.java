@@ -27,6 +27,8 @@ public class TimeSheetsEntity {
     private Date date;
     @Column(name = "salary_per_hour")
     private double salary;
+    @Column(name = "approved_date")
+    private Date approvedDate;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "employee_id", nullable = false)

@@ -15,10 +15,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -107,14 +104,15 @@ public class TimeSheetService implements ITimeSheetsSerVice {
     }
 
     @Override
-    public List<TimeSheetsResponse> getAllTimeSheetByStatusAndDate(Date date, String status) {
+    public List<TimeSheetsResponse> getAllTimeSheetByStatusAndDate(Date date, boolean status) {
+        String statusString = status?STATUS_APPROVED:STATUS_PENDING;
         List<TimeSheetsResponse> timeSheetsResponses = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         List<TimeSheetsEntity> timeSheetsEntities = timeSheetsRepository.findAllByDayAnAndStatus(
                 calendar.get(Calendar.YEAR)
                 ,calendar.get(Calendar.MONTH)+1
-                ,calendar.get(Calendar.DAY_OF_MONTH),status);
+                ,calendar.get(Calendar.DAY_OF_MONTH),statusString);
         if(timeSheetsEntities !=null){
             timeSheetsResponses = timeSheetsEntities.stream().
                     map(timeSheetsEntity ->
@@ -126,5 +124,17 @@ public class TimeSheetService implements ITimeSheetsSerVice {
             return timeSheetsResponses;
         }
         return null;
+    }
+
+    @Override
+    public boolean approvedCheckIn(long id) {
+        TimeSheetsEntity timeSheetsEntity = timeSheetsRepository.getReferenceById(id);
+        if(Objects.equals(timeSheetsEntity.getStatus(), STATUS_PENDING)){
+            timeSheetsEntity.setStatus(STATUS_APPROVED);
+            timeSheetsEntity.setApprovedDate(new Date());
+            timeSheetsRepository.save(timeSheetsEntity);
+            return true;
+        }
+        return false;
     }
 }

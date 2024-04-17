@@ -16,6 +16,7 @@ public class TimeSheetsConverter {
     public TimeSheetsResponse toTimeSheetsResponse(TimeSheetsEntity timeSheetsEntity,long id, String name){
         TimeSheetsResponse response = new TimeSheetsResponse();
 
+        response.setId(timeSheetsEntity.getId());
         response.setTimeIn(DateFormatter.parseTime(timeSheetsEntity.getTimeIn()));
         response.setTimeOut(DateFormatter.parseTime(timeSheetsEntity.getTimeIn()));
         response.setStatus(timeSheetsEntity.getStatus());
