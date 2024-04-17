@@ -32,11 +32,12 @@ public abstract class DateFormatter {
 			e.printStackTrace();
 		}
 		return null;
+
 	}
 	public static String toStringDateTime(Date date) {
 		return sdfdMyTime.format(date);
 	}
-	public static String toSStringDate(Date date) {
+	public static String toStringDate(Date date) {
 		return sdfdMy.format(date);
 	}
 	public static Date datetoDatedMy(Date date) {

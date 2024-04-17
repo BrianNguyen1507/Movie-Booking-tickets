@@ -31,19 +31,23 @@ public class SecurityConfig {
 			,"/cinema/categories"
 			,"/cinema/getAllFilmName"
 			,"/cinema/detailMoviethreater"
+			,"/cinema/getAllMovieThreater"
 	};
-	private final String[] PRIVATE_ENPOINT_ADMIN ={
+	private final String[] PRIVATE_ENDPOINT_ADMIN ={
 			"/cinema/addFilm"
 			,"/cinema/updateFilm"
 			,"/cinema/deleteFilm"
 			,"/cinema/addMovieThreater"
 			,"/cinemae/updateMovieThreater"
 			,"/cinema/deleteMovieThreater"
-			,"/cinema/getAllMovieThreater"
+			
 	};
-	private final String[] PRIVATE_ENPOINT_USER ={
+	private final String[] PRIVATE_ENDPOINT_USER ={
 			"/cinema/addPayment"
 			,"/cinema/getOrder"
+	};
+	private final String[] PRIVATE_ENDPOINT_EMPLOYEE ={
+			"/cinema/checkin"
 	};
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
@@ -52,10 +56,11 @@ public class SecurityConfig {
 		request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS)
 			.permitAll()
 			.requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()
-				.requestMatchers(HttpMethod.POST,PRIVATE_ENPOINT_ADMIN).hasAuthority("SCOPE_ADMIN")
-				.requestMatchers(HttpMethod.GET,PRIVATE_ENPOINT_ADMIN).hasAuthority("SCOPE_ADMIN")
-				.requestMatchers(HttpMethod.POST,PRIVATE_ENPOINT_USER).hasAuthority("SCOPE_USER")
-				.requestMatchers(HttpMethod.GET,PRIVATE_ENPOINT_USER).hasAuthority("SCOPE_USER")
+				.requestMatchers(HttpMethod.POST,PRIVATE_ENDPOINT_ADMIN).hasAuthority("SCOPE_ADMIN")
+				.requestMatchers(HttpMethod.GET,PRIVATE_ENDPOINT_ADMIN).hasAuthority("SCOPE_ADMIN")
+				.requestMatchers(HttpMethod.POST,PRIVATE_ENDPOINT_USER).hasAuthority("SCOPE_USER")
+				.requestMatchers(HttpMethod.GET,PRIVATE_ENDPOINT_USER).hasAuthority("SCOPE_USER")
+				.requestMatchers(HttpMethod.GET,PRIVATE_ENDPOINT_EMPLOYEE).hasAuthority("SCOPE_EMPLOYEE")
 			.anyRequest()
 			.authenticated());
 

@@ -5,7 +5,6 @@ package com.cinema.services.impl;
 
 import java.util.List;
 
-import com.cinema.dto.reponse.AccountResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -14,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.cinema.converter.AccountConverter;
 import com.cinema.dto.request.AccountDTO;
 import com.cinema.entity.AccountEntity;
 import com.cinema.repository.AccountRepository;
@@ -31,15 +29,11 @@ public class AccountService implements IAccountService {
 	@Value("${jwt.signerKey}")
 	protected String SIGNER_KEY;
 
-
 	AccountRepository accountRepository;
-
-	AccountConverter accountConverter;
 
 
 	@Override
 	public AccountEntity checkAccount(AccountDTO accountDTO) {
-		AccountResponse accountResponse = new AccountResponse();
 		try {
 			AccountEntity entity = accountRepository.findOneByUserName(accountDTO.getUser_name());
 			String password = EncrpytPassword.encryptPassword(accountDTO.getPassword());

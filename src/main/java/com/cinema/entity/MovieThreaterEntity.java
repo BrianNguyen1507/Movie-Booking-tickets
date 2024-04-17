@@ -17,7 +17,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "movie_threater")
+@Table(name = "room")
 public class MovieThreaterEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +27,7 @@ public class MovieThreaterEntity {
 	private int seat[][];
 	@Column(name = "time")
 	private Date time;
-	@Column(name = "number_threater")
+	@Column(name = "room_number")
 	private int numberThreater;
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)

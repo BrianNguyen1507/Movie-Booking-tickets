@@ -32,7 +32,7 @@ public class TicketEntity {
 	private int seat;
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "movie_threater_id", nullable = true)
+    @JoinColumn(name = "room_id", nullable = true)
     private MovieThreaterEntity movieThreater;
 	
 	@ManyToMany(fetch = FetchType.LAZY,mappedBy = "tickets")

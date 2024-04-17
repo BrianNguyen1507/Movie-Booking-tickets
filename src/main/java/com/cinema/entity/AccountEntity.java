@@ -35,6 +35,9 @@ public class AccountEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private CustomerEntity customer;
+
+	@OneToOne(mappedBy = "account")
+	EmployeesEntity employee;
     
 	public AccountEntity(long id, String userName, String password,String role) {
 		super();
@@ -76,5 +79,12 @@ public class AccountEntity {
 	public void setRole(String role) {
 		this.role = role;
 	}
-	
+
+	public EmployeesEntity getEmployees() {
+		return employee;
+	}
+
+	public void setEmployees(EmployeesEntity employees) {
+		this.employee = employees;
+	}
 }

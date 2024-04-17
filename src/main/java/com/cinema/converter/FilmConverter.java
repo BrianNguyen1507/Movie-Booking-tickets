@@ -45,7 +45,7 @@ public class FilmConverter {
 		filmDTO.setId(filmEntity.getId());
 		filmDTO.setTitle(filmEntity.getTitle());
 		filmDTO.setLength(filmEntity.getLength());
-		filmDTO.setReleaseDate(DateFormatter.toSStringDate(filmEntity.getReleaseDate()));
+		filmDTO.setReleaseDate(DateFormatter.toStringDate(filmEntity.getReleaseDate()));
 		filmDTO.setActor(filmEntity.getActor());
 		filmDTO.setDirector(filmEntity.getDirector());
 		filmDTO.setDescribe(byteToString(filmEntity.getDescribe()));
