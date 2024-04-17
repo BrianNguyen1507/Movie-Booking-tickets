@@ -15,7 +15,7 @@ public class OrderConverter {
 		entity.setQuantityTicket(dto.getQuantityTicket());
 		entity.setPaymentMethod(dto.getPaymentMethod());
 		entity.setSumtotal(dto.getSumtotal());
-		entity.setDate(DateFormatter.parseTime(dto.getDatetime()));
+		entity.setDate(DateFormatter.parsedMyTime(dto.getDatetime()));
 		return entity;
 	}
 	public PaymentDTO EntitytoPaymentDTO(OrderEntity entity) {

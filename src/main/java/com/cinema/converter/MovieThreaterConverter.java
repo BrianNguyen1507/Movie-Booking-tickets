@@ -37,7 +37,7 @@ public class MovieThreaterConverter {
 		entity.setId(dto.getId());
 		entity.setSeat(dto.getRow(),dto.getColumn());
 		entity.setNumberThreater(dto.getNumberThreater());
-		entity.setTime(DateFormatter.parseTime(dto.getTime()));
+		entity.setTime(DateFormatter.parsedMyTime(dto.getTime()));
 		return entity;
 	}
 	public MovieThreaterResponse toResponse(MovieThreaterEntity entity){

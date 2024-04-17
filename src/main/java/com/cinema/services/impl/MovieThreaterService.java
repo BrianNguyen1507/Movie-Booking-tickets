@@ -39,7 +39,7 @@ public class MovieThreaterService implements IMovieThreaterService {
     public MovieThreaterDTO save(MovieThreaterDTO model) {
         FilmEntity filmEntity = filmRepository.findById(model.getFilm()).orElse(null);
         MovieThreaterEntity entity = movieThreaterRepository
-                .findOneByTimeAndNumberThreater(DateFormatter.parseTime(model.getTime()), model.getNumberThreater());
+                .findOneByTimeAndNumberThreater(DateFormatter.parsedMyTime(model.getTime()), model.getNumberThreater());
         if (entity == null) {
             entity = movieThreaterConverter.toEntity(model);
             entity.setFilm(filmEntity);
@@ -53,7 +53,7 @@ public class MovieThreaterService implements IMovieThreaterService {
     public MTShowDTO showMovieThreater(DateOrder model) {
         MTShowDTO dto = new MTShowDTO();
         MovieThreaterEntity movieThreaterEntity = movieThreaterRepository
-                .findOneByTimeAndNumberThreater(DateFormatter.parseTime(model.getDate()), model.getNumberThreater());
+                .findOneByTimeAndNumberThreater(DateFormatter.parsedMyTime(model.getDate()), model.getNumberThreater());
         FilmEntity filmEntity = movieThreaterEntity.getFilm();
 
         dto.setSeat(movieThreaterEntity.getSeat());

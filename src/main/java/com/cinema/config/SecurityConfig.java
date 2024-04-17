@@ -18,64 +18,71 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableWebSecurity
 public class SecurityConfig {
 
-	@Value("${jwt.signerKey}")
-	String signerKey;
-	private final String[] PUBLIC_ENDPOINTS = {
-			"/cinema/login",
+    @Value("${jwt.signerKey}")
+    String signerKey;
+    private final String[] PUBLIC_ENDPOINTS = {
+            "/cinema/login",
             "/cinema/register",
-			"/cinema/detailFilm"
-			,"/cinema/showAllFilm"
-			,"/cinema/listfeatured"
-			,"/cinema/showSeat"
-			,"/cinema/showMovieThreater"
-			,"/cinema/categories"
-			,"/cinema/getAllFilmName"
-			,"/cinema/detailMoviethreater"
-			,"/cinema/getAllMovieThreater"
-	};
-	private final String[] PRIVATE_ENDPOINT_ADMIN ={
-			"/cinema/addFilm"
-			,"/cinema/updateFilm"
-			,"/cinema/deleteFilm"
-			,"/cinema/addMovieThreater"
-			,"/cinemae/updateMovieThreater"
-			,"/cinema/deleteMovieThreater"
-			
-	};
-	private final String[] PRIVATE_ENDPOINT_USER ={
-			"/cinema/addPayment"
-			,"/cinema/getOrder"
-	};
-	private final String[] PRIVATE_ENDPOINT_EMPLOYEE ={
-			"/cinema/checkin"
-	};
-	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
-		httpSecurity
-		.authorizeHttpRequests(request->
-		request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS)
-			.permitAll()
-			.requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()
-				.requestMatchers(HttpMethod.POST,PRIVATE_ENDPOINT_ADMIN).hasAuthority("SCOPE_ADMIN")
-				.requestMatchers(HttpMethod.GET,PRIVATE_ENDPOINT_ADMIN).hasAuthority("SCOPE_ADMIN")
-				.requestMatchers(HttpMethod.POST,PRIVATE_ENDPOINT_USER).hasAuthority("SCOPE_USER")
-				.requestMatchers(HttpMethod.GET,PRIVATE_ENDPOINT_USER).hasAuthority("SCOPE_USER")
-				.requestMatchers(HttpMethod.GET,PRIVATE_ENDPOINT_EMPLOYEE).hasAuthority("SCOPE_EMPLOYEE")
-			.anyRequest()
-			.authenticated());
+            "/cinema/detailFilm"
+            , "/cinema/showAllFilm"
+            , "/cinema/listfeatured"
+            , "/cinema/showSeat"
+            , "/cinema/showMovieThreater"
+            , "/cinema/categories"
+            , "/cinema/getAllFilmName"
+            , "/cinema/detailMoviethreater"
+            , "/cinema/getAllMovieThreater"
+    };
+    private final String[] PRIVATE_ENDPOINT_ADMIN = {
+            "/cinema/addFilm"
+            , "/cinema/updateFilm"
+            , "/cinema/deleteFilm"
+            , "/cinema/addMovieThreater"
+            , "/cinemae/updateMovieThreater"
+            , "/cinema/deleteMovieThreater"
 
-		httpSecurity.oauth2ResourceServer(oauth2 ->
-				oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())));
-		httpSecurity.csrf(AbstractHttpConfigurer::disable);
-		return httpSecurity.build();
-	}
+    };
+    private final String[] PRIVATE_ENDPOINT_USER = {
+            "/cinema/addPayment"
+            , "/cinema/getOrder"
+    };
+    private final String[] PRIVATE_ENDPOINT_EMPLOYEE = {
+            "/cinema/checkin"
+            ,"/cinema/checkout"
+    };
 
-	@Bean
-	JwtDecoder jwtDecoder(){
-		SecretKeySpec secretKey = new SecretKeySpec(signerKey.getBytes(),"HS256");
-		return NimbusJwtDecoder
-				.withSecretKey(secretKey)
-				.macAlgorithm(MacAlgorithm.HS256)
-				.build();
-	}
+    private final String[] PRIVATE_ENDPOINT_MANAGER = {
+            "/cinema/getAllTimeSheetByDay"
+    };
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity
+                .authorizeHttpRequests(request ->
+                        request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
+                                .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()
+                                .requestMatchers(HttpMethod.POST, PRIVATE_ENDPOINT_ADMIN).hasAuthority("SCOPE_ADMIN")
+                                .requestMatchers(HttpMethod.GET, PRIVATE_ENDPOINT_ADMIN).hasAuthority("SCOPE_ADMIN")
+                                .requestMatchers(HttpMethod.POST, PRIVATE_ENDPOINT_USER).hasAuthority("SCOPE_USER")
+                                .requestMatchers(HttpMethod.GET, PRIVATE_ENDPOINT_USER).hasAuthority("SCOPE_USER")
+                                .requestMatchers(HttpMethod.GET, PRIVATE_ENDPOINT_EMPLOYEE).hasAuthority("SCOPE_EMPLOYEE")
+                                .requestMatchers(HttpMethod.GET, PRIVATE_ENDPOINT_EMPLOYEE).hasAuthority("SCOPE_MANAGER")
+                                .requestMatchers(HttpMethod.POST, PRIVATE_ENDPOINT_EMPLOYEE).hasAuthority("SCOPE_MANAGER")
+                                .anyRequest()
+                                .authenticated());
+
+        httpSecurity.oauth2ResourceServer(oauth2 ->
+                oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())));
+        httpSecurity.csrf(AbstractHttpConfigurer::disable);
+        return httpSecurity.build();
+    }
+
+    @Bean
+    JwtDecoder jwtDecoder() {
+        SecretKeySpec secretKey = new SecretKeySpec(signerKey.getBytes(), "HS256");
+        return NimbusJwtDecoder
+                .withSecretKey(secretKey)
+                .macAlgorithm(MacAlgorithm.HS256)
+                .build();
+    }
 }
