@@ -52,7 +52,8 @@ public class SecurityConfig {
     };
 
     private final String[] PRIVATE_ENDPOINT_MANAGER = {
-            "/cinema/getAllTimeSheetByDay"
+            "/cinema/getAllTimeSheetByDate"
+            ,"/cinema/getAllTimeSheetByStatusAndDate"
     };
 
     @Bean

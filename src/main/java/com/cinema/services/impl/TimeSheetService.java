@@ -27,6 +27,9 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class TimeSheetService implements ITimeSheetsSerVice {
 
+    static final String STATUS_PENDING = "pending";
+    static final String STATUS_APPROVED = "approved";
+
     AccountRepository accountRepository;
 
     TimeSheetsRepository timeSheetsRepository;
@@ -47,7 +50,7 @@ public class TimeSheetService implements ITimeSheetsSerVice {
         if (entityChecked==null){
             TimeSheetsEntity timesheetsEntity = new TimeSheetsEntity();
             timesheetsEntity.setTimeIn(new Date());
-            timesheetsEntity.setStatus("pending");
+            timesheetsEntity.setStatus(STATUS_PENDING);
             timesheetsEntity.setEmployee(employees);
             timesheetsEntity.setSalary(27000);
             timesheetsEntity.setDate(new Date());
@@ -82,13 +85,14 @@ public class TimeSheetService implements ITimeSheetsSerVice {
     }
 
     @Override
-    public List<TimeSheetsResponse> getAllTimeSheet( int day) {
+    public List<TimeSheetsResponse> getAllTimeSheet(Date date) {
         List<TimeSheetsResponse> timeSheetsResponses = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
         List<TimeSheetsEntity> timeSheetsEntities = timeSheetsRepository.findAllByDay(
                 calendar.get(Calendar.YEAR)
                 ,calendar.get(Calendar.MONTH)+1
-                ,day);
+                ,calendar.get(Calendar.DAY_OF_MONTH));
         if(timeSheetsEntities !=null){
             timeSheetsResponses = timeSheetsEntities.stream().
                     map(timeSheetsEntity ->
@@ -96,6 +100,28 @@ public class TimeSheetService implements ITimeSheetsSerVice {
                             timeSheetsEntity
                             ,timeSheetsEntity.getEmployee().getId()
                             ,timeSheetsEntity.getEmployee().getAccount().getCustomer().getName()))
+                    .toList();
+            return timeSheetsResponses;
+        }
+        return null;
+    }
+
+    @Override
+    public List<TimeSheetsResponse> getAllTimeSheetByStatusAndDate(Date date, String status) {
+        List<TimeSheetsResponse> timeSheetsResponses = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        List<TimeSheetsEntity> timeSheetsEntities = timeSheetsRepository.findAllByDayAnAndStatus(
+                calendar.get(Calendar.YEAR)
+                ,calendar.get(Calendar.MONTH)+1
+                ,calendar.get(Calendar.DAY_OF_MONTH),status);
+        if(timeSheetsEntities !=null){
+            timeSheetsResponses = timeSheetsEntities.stream().
+                    map(timeSheetsEntity ->
+                            timeSheetsConverter.toTimeSheetsResponse(
+                                    timeSheetsEntity
+                                    ,timeSheetsEntity.getEmployee().getId()
+                                    ,timeSheetsEntity.getEmployee().getAccount().getCustomer().getName()))
                     .toList();
             return timeSheetsResponses;
         }

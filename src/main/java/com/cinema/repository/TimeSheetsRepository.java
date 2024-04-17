@@ -13,4 +13,7 @@ public interface TimeSheetsRepository extends JpaRepository<TimeSheetsEntity,Lon
 
     @Query(value="SELECT t FROM TimeSheetsEntity t WHERE YEAR(t.date) = ?1 AND MONTH (t.date) = ?2 AND DAY (t.date) = ?3")
     List<TimeSheetsEntity> findAllByDay( int year,int month, int day);
+
+    @Query(value="SELECT t FROM TimeSheetsEntity t WHERE YEAR(t.date) = ?1 AND MONTH (t.date) = ?2 AND DAY (t.date) = ?3 AND t.status = ?4")
+    List<TimeSheetsEntity> findAllByDayAnAndStatus( int year,int month, int day,String status);
 }
