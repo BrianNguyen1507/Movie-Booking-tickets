@@ -2,6 +2,7 @@ package com.cinema.api;
 
 import com.cinema.dto.reponse.DateResponse;
 import com.cinema.dto.reponse.RevenueOrderResponse;
+import com.cinema.dto.reponse.SalaryTotalResponse;
 import com.cinema.dto.reponse.TimeSheetsResponse;
 import com.cinema.services.impl.TimeSheetService;
 import com.cinema.util.DateFormatter;
@@ -58,6 +59,16 @@ public class TimeSheetAPI {
         return timeSheetService.approvedCheckIn(id);
     }
 
+    @GetMapping(value = "/getAllSalaryEmployeeByMonth")
+    List<SalaryTotalResponse> getAllSalaryEmployeeByMonth(@RequestParam("month") int month
+            ,@RequestParam("year") int year) {
+        return timeSheetService.getAllSalaryEmployeeByMonth(month,year);
+    }
+
+    @GetMapping(value = "/getAllSalaryEmployeeByYear")
+    List<SalaryTotalResponse> getAllSalaryEmployeeByYear(@RequestParam("year") int year) {
+        return timeSheetService.getAllSalaryEmployeeByYear(year);
+    }
 
 
 }

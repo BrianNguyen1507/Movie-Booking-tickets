@@ -1,5 +1,6 @@
 package com.cinema.services;
 
+import com.cinema.dto.reponse.SalaryTotalResponse;
 import com.cinema.dto.reponse.TimeSheetsResponse;
 
 import java.util.Date;
@@ -13,4 +14,9 @@ public interface ITimeSheetsSerVice {
     List<TimeSheetsResponse> getAllTimeSheetByStatusAndDate(Date date,boolean status);
 
     boolean approvedCheckIn(long id);
+
+    List<SalaryTotalResponse>getAllSalaryEmployeeByMonth(int month, int year);
+    List<SalaryTotalResponse>getAllSalaryEmployeeByYear( int year);
+
+
 }

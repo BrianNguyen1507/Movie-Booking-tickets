@@ -59,6 +59,6 @@ public abstract class DateFormatter {
     }
 
     public static String toStringMY(Date date){
-        return sdfdMy.format(date);
+        return sdfMy.format(date);
     }
 }

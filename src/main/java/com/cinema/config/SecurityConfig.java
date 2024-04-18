@@ -60,6 +60,8 @@ public class SecurityConfig {
     private final String[] PRIVATE_ENDPOINT_PRESIDENT = {
             "/cinema/getRevenueOrderByDate"
             , "/cinema/getRevenueOrderByMonth"
+            ,"/cinema/getAllSalaryEmployeeByMonth"
+            ,"/cinema/getAllSalaryEmployeeByYear"
     };
 
     @Bean

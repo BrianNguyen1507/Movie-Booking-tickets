@@ -1,11 +1,14 @@
 package com.cinema.services.impl;
 
 import com.cinema.converter.TimeSheetsConverter;
+import com.cinema.dto.reponse.EmployeeResponse;
+import com.cinema.dto.reponse.SalaryTotalResponse;
 import com.cinema.dto.reponse.TimeSheetsResponse;
 import com.cinema.entity.AccountEntity;
 import com.cinema.entity.EmployeesEntity;
 import com.cinema.entity.TimeSheetsEntity;
 import com.cinema.repository.AccountRepository;
+import com.cinema.repository.EmployeesRepository;
 import com.cinema.repository.TimeSheetsRepository;
 import com.cinema.services.ITimeSheetsSerVice;
 import com.cinema.util.DateFormatter;
@@ -32,6 +35,8 @@ public class TimeSheetService implements ITimeSheetsSerVice {
     TimeSheetsRepository timeSheetsRepository;
 
     TimeSheetsConverter timeSheetsConverter;
+
+    EmployeesRepository employeesRepository;
 
     @Override
     public boolean CheckIn(String userName) {
@@ -136,5 +141,38 @@ public class TimeSheetService implements ITimeSheetsSerVice {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<SalaryTotalResponse> getAllSalaryEmployeeByMonth(int month, int year) {
+
+            List<SalaryTotalResponse> salaryTotalResponses = new ArrayList<>();
+            List<EmployeesEntity> employeesEntities = employeesRepository.findAll();
+            for (EmployeesEntity employeesEntity : employeesEntities){
+                List<TimeSheetsEntity> entities = timeSheetsRepository.finAllByMonthAndYearAndId(year,month,employeesEntity.getId());
+                if(!entities.isEmpty()){
+                    SalaryTotalResponse response = timeSheetsConverter.toSalaryTotalResponse(entities);
+                    response.setDate(DateFormatter.toStringMY(entities.getFirst().getDate()));
+                    salaryTotalResponses.add(response);
+                }
+            }
+            return salaryTotalResponses;
+    }
+    @Override
+    public List<SalaryTotalResponse> getAllSalaryEmployeeByYear( int year) {
+        try{
+            List<SalaryTotalResponse> salaryTotalResponses = new ArrayList<>();
+            List<EmployeesEntity> employeesEntities = employeesRepository.findAll();
+            for (EmployeesEntity employeesEntity : employeesEntities){
+                List<TimeSheetsEntity> entities = timeSheetsRepository.finAllByYearAndId(year,employeesEntity.getId());
+                SalaryTotalResponse response = timeSheetsConverter.toSalaryTotalResponse(entities);
+                response.setDate(String.valueOf(year));
+                salaryTotalResponses.add(response);
+            }
+            return salaryTotalResponses;
+        }catch (Exception exception){
+            return null;
+        }
+
     }
 }
