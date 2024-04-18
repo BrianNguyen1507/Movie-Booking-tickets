@@ -1,58 +1,45 @@
 package com.cinema.services.impl;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.cinema.converter.OrderConverter;
+import com.cinema.dto.reponse.RevenueOrderResponse;
 import com.cinema.dto.request.OrderDTO;
 import com.cinema.dto.request.PaymentDTO;
-import com.cinema.entity.AccountEntity;
-import com.cinema.entity.CustomerEntity;
-import com.cinema.entity.MovieThreaterEntity;
-import com.cinema.entity.OrderEntity;
-import com.cinema.entity.TicketEntity;
+import com.cinema.entity.*;
 import com.cinema.repository.AccountRepository;
 import com.cinema.repository.CustomerRepository;
-import com.cinema.repository.FilmRepository;
 import com.cinema.repository.MovieThreaterRepository;
 import com.cinema.repository.OrderRepository;
-import com.cinema.repository.TicketRepository;
 import com.cinema.services.IOrderService;
 import com.cinema.util.DateFormatter;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class OrderService implements IOrderService {
 
-    @Autowired
+
     AccountRepository accountRepository;
 
-    @Autowired
     CustomerRepository customerRepository;
 
-    @Autowired
-    FilmRepository filmRepository;
-
-    @Autowired
     MovieThreaterRepository movieThreaterRepository;
 
-    @Autowired
     OrderConverter orderConverter;
 
-    @Autowired
     OrderRepository orderRepository;
-
-    @Autowired
-    TicketRepository ticketRepository;
 
     @Override
     public PaymentDTO createPayment(PaymentDTO model, String userName) {
         AccountEntity accountEntity = accountRepository.findOneByUserName(userName);
-        CustomerEntity customerEntity = accountRepository.findById(accountEntity.getId()).orElse(null).getCustomer();
+        CustomerEntity customerEntity = Objects.requireNonNull(accountRepository.findById(accountEntity.getId()).orElse(null)).getCustomer();
         OrderEntity orderEntity = orderConverter.PaymentDTOtoEntity(model);
         orderEntity.setCustomer(customerEntity);
         List<TicketEntity> tickets = new ArrayList<>();
@@ -67,10 +54,10 @@ public class OrderService implements IOrderService {
                 ticketEntity.setSeat(model.getSeat()[i]);
                 ticketEntity.setOrder(orderEntity);
                 ticketEntity.setTicketCode(Calendar.getInstance().get(Calendar.YEAR) + ""
-                        + Calendar.getInstance().get(Calendar.MONTH) + ""
-                        + Calendar.getInstance().get(Calendar.DATE) + ""
-                        + Calendar.getInstance().get(Calendar.HOUR) + ""
-                        + Calendar.getInstance().get(Calendar.MINUTE) + ""
+                        + Calendar.getInstance().get(Calendar.MONTH)
+                        + Calendar.getInstance().get(Calendar.DATE)
+                        + Calendar.getInstance().get(Calendar.HOUR)
+                        + Calendar.getInstance().get(Calendar.MINUTE)
                         + Calendar.getInstance().get(Calendar.SECOND) + i);
                 tickets.add(ticketEntity);
             } else {
@@ -90,6 +77,7 @@ public class OrderService implements IOrderService {
             return null;
         }
         CustomerEntity customerEntity = customerRepository.findById(accountEntity.getCustomer().getId()).orElse(null);
+        assert customerEntity != null;
         List<OrderEntity> listOrderEntities = orderRepository.findAllByCustomerId(customerEntity.getId());
         if (listOrderEntities == null) return null;
         for (OrderEntity entity : listOrderEntities) {
@@ -98,6 +86,42 @@ public class OrderService implements IOrderService {
         }
 
         return listOrderDTO;
+    }
+
+    @Override
+    public List<RevenueOrderResponse> getSumRevenueOrderByDate(int month, int year) {
+        List<RevenueOrderResponse> revenueOrderResponses = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        for(int i=1;i<=calendar.getActualMaximum(Calendar.DAY_OF_MONTH);i++){
+            RevenueOrderResponse response = new RevenueOrderResponse();
+            calendar.set(year,month-1,i);
+            String sumTotalDay = orderRepository.sumTotalByDay(year,month,i);
+            if(sumTotalDay==null){
+                sumTotalDay="0";
+            }
+            response.setTime(DateFormatter.toStringDate(calendar.getTime()));
+            response.setRevenue(Double.parseDouble(sumTotalDay));
+            revenueOrderResponses.add(response);
+        }
+        return revenueOrderResponses;
+    }
+
+    @Override
+    public List<RevenueOrderResponse> getSumRevenueOrderByMonth(int year) {
+        List<RevenueOrderResponse> revenueOrderResponses = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        for(int i=1;i<=calendar.getActualMaximum(Calendar.MONTH)+1;i++){
+            RevenueOrderResponse response = new RevenueOrderResponse();
+            calendar.set(year,i-1,1);
+            String sumTotalDay = orderRepository.sumTotalByMonth(year,i);
+            if(sumTotalDay==null){
+                sumTotalDay="0";
+            }
+            response.setTime(DateFormatter.toStringMY(calendar.getTime()));
+            response.setRevenue(Double.parseDouble(sumTotalDay));
+            revenueOrderResponses.add(response);
+        }
+        return revenueOrderResponses;
     }
 
 }

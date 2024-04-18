@@ -2,6 +2,7 @@ package com.cinema.api;
 
 import java.util.List;
 
+import com.cinema.dto.reponse.RevenueOrderResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -35,5 +36,20 @@ public class OrderAPI {
 		var authentication = SecurityContextHolder.getContext().getAuthentication();
 		String userName = authentication.getName();
 		return orderService.getlistOrderDTO(userName);
+	}
+
+	@GetMapping(value = "/getRevenueOrderByDate")
+	List<RevenueOrderResponse> getRevenueByDate(@RequestParam("month") int month,
+												@RequestParam("year") int year)
+	{
+
+		return orderService.getSumRevenueOrderByDate(month,year);
+	}
+	@GetMapping(value = "/getRevenueOrderByMonth")
+	List<RevenueOrderResponse> getRevenueOrderByMonth(
+												@RequestParam("year") int year)
+	{
+
+		return orderService.getSumRevenueOrderByMonth(year);
 	}
 }

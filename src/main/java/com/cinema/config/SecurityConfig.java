@@ -48,13 +48,18 @@ public class SecurityConfig {
     };
     private final String[] PRIVATE_ENDPOINT_EMPLOYEE = {
             "/cinema/checkin"
-            ,"/cinema/checkout"
+            , "/cinema/checkout"
     };
 
     private final String[] PRIVATE_ENDPOINT_MANAGER = {
             "/cinema/getAllTimeSheetByDate"
-            ,"/cinema/getAllTimeSheetByStatusAndDate"
-            ,"/cinema/approvedCheckIn"
+            , "/cinema/getAllTimeSheetByStatusAndDate"
+            , "/cinema/approvedCheckIn"
+    };
+
+    private final String[] PRIVATE_ENDPOINT_PRESIDENT = {
+            "/cinema/getRevenueOrderByDate"
+            , "/cinema/getRevenueOrderByMonth"
     };
 
     @Bean
@@ -70,6 +75,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, PRIVATE_ENDPOINT_EMPLOYEE).hasAuthority("SCOPE_EMPLOYEE")
                                 .requestMatchers(HttpMethod.GET, PRIVATE_ENDPOINT_MANAGER).hasAuthority("SCOPE_MANAGER")
                                 .requestMatchers(HttpMethod.POST, PRIVATE_ENDPOINT_MANAGER).hasAuthority("SCOPE_MANAGER")
+                                .requestMatchers(HttpMethod.GET, PRIVATE_ENDPOINT_PRESIDENT).hasAuthority("SCOPE_PRESIDENT")
                                 .anyRequest()
                                 .authenticated());
 

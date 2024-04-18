@@ -13,6 +13,8 @@ public abstract class DateFormatter {
 
     private static final SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss");
 
+    private static final SimpleDateFormat sdfMy = new SimpleDateFormat("MM-yyyy");
+
     public static Date parse(String date) throws ParseException {
         return sdfyMd.parse(sdfyMd.format(sdfdMy.parse(date)));
     }
@@ -56,4 +58,7 @@ public abstract class DateFormatter {
         return time.format(date);
     }
 
+    public static String toStringMY(Date date){
+        return sdfdMy.format(date);
+    }
 }
