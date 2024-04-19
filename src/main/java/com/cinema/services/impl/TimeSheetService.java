@@ -1,10 +1,8 @@
 package com.cinema.services.impl;
 
 import com.cinema.converter.TimeSheetsConverter;
-import com.cinema.dto.reponse.EmployeeResponse;
 import com.cinema.dto.reponse.SalaryTotalResponse;
 import com.cinema.dto.reponse.TimeSheetsResponse;
-import com.cinema.entity.AccountEntity;
 import com.cinema.entity.EmployeesEntity;
 import com.cinema.entity.TimeSheetsEntity;
 import com.cinema.repository.AccountRepository;
@@ -19,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -45,11 +42,11 @@ public class TimeSheetService implements ITimeSheetsSerVice {
 
         TimeSheetsEntity entityChecked = timeSheetsRepository.checkDuplicateDate(
                 employees.getId()
-                ,calendar.get(Calendar.YEAR)
-                ,calendar.get(Calendar.MONTH)+1
-                ,calendar.get(Calendar.DAY_OF_MONTH)
-                );
-        if (entityChecked==null){
+                , calendar.get(Calendar.YEAR)
+                , calendar.get(Calendar.MONTH) + 1
+                , calendar.get(Calendar.DAY_OF_MONTH)
+        );
+        if (entityChecked == null) {
             TimeSheetsEntity timesheetsEntity = new TimeSheetsEntity();
             timesheetsEntity.setTimeIn(new Date());
             timesheetsEntity.setStatus(STATUS_PENDING);
@@ -69,13 +66,13 @@ public class TimeSheetService implements ITimeSheetsSerVice {
 
         TimeSheetsEntity entityChecked = timeSheetsRepository.checkDuplicateDate(
                 employees.getId()
-                ,calendar.get(Calendar.YEAR)
-                ,calendar.get(Calendar.MONTH)+1
-                ,calendar.get(Calendar.DAY_OF_MONTH)
+                , calendar.get(Calendar.YEAR)
+                , calendar.get(Calendar.MONTH) + 1
+                , calendar.get(Calendar.DAY_OF_MONTH)
         );
-        if (entityChecked!=null){
-            if(entityChecked.getTimeIn()!=null){
-                if (entityChecked.getTimeOut()==null){
+        if (entityChecked != null) {
+            if (entityChecked.getTimeIn() != null) {
+                if (entityChecked.getTimeOut() == null) {
                     TimeSheetsEntity timesheetsEntity = timeSheetsRepository.getReferenceById(entityChecked.getId());
                     timesheetsEntity.setTimeOut(new Date());
                     timeSheetsRepository.save(timesheetsEntity);
@@ -88,20 +85,20 @@ public class TimeSheetService implements ITimeSheetsSerVice {
 
     @Override
     public List<TimeSheetsResponse> getAllTimeSheet(Date date) {
-        List<TimeSheetsResponse> timeSheetsResponses = new ArrayList<>();
+        List<TimeSheetsResponse> timeSheetsResponses ;
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         List<TimeSheetsEntity> timeSheetsEntities = timeSheetsRepository.findAllByDay(
                 calendar.get(Calendar.YEAR)
-                ,calendar.get(Calendar.MONTH)+1
-                ,calendar.get(Calendar.DAY_OF_MONTH));
-        if(timeSheetsEntities !=null){
+                , calendar.get(Calendar.MONTH) + 1
+                , calendar.get(Calendar.DAY_OF_MONTH));
+        if (timeSheetsEntities != null) {
             timeSheetsResponses = timeSheetsEntities.stream().
                     map(timeSheetsEntity ->
                             timeSheetsConverter.toTimeSheetsResponse(
-                            timeSheetsEntity
-                            ,timeSheetsEntity.getEmployee().getId()
-                            ,timeSheetsEntity.getEmployee().getAccount().getCustomer().getName()))
+                                    timeSheetsEntity
+                                    , timeSheetsEntity.getEmployee().getId()
+                                    , timeSheetsEntity.getEmployee().getAccount().getCustomer().getName()))
                     .toList();
             return timeSheetsResponses;
         }
@@ -110,21 +107,21 @@ public class TimeSheetService implements ITimeSheetsSerVice {
 
     @Override
     public List<TimeSheetsResponse> getAllTimeSheetByStatusAndDate(Date date, boolean status) {
-        String statusString = status?STATUS_APPROVED:STATUS_PENDING;
-        List<TimeSheetsResponse> timeSheetsResponses = new ArrayList<>();
+        String statusString = status ? STATUS_APPROVED : STATUS_PENDING;
+        List<TimeSheetsResponse> timeSheetsResponses ;
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         List<TimeSheetsEntity> timeSheetsEntities = timeSheetsRepository.findAllByDayAnAndStatus(
                 calendar.get(Calendar.YEAR)
-                ,calendar.get(Calendar.MONTH)+1
-                ,calendar.get(Calendar.DAY_OF_MONTH),statusString);
-        if(timeSheetsEntities !=null){
+                , calendar.get(Calendar.MONTH) + 1
+                , calendar.get(Calendar.DAY_OF_MONTH), statusString);
+        if (timeSheetsEntities != null) {
             timeSheetsResponses = timeSheetsEntities.stream().
                     map(timeSheetsEntity ->
                             timeSheetsConverter.toTimeSheetsResponse(
                                     timeSheetsEntity
-                                    ,timeSheetsEntity.getEmployee().getId()
-                                    ,timeSheetsEntity.getEmployee().getAccount().getCustomer().getName()))
+                                    , timeSheetsEntity.getEmployee().getId()
+                                    , timeSheetsEntity.getEmployee().getAccount().getCustomer().getName()))
                     .toList();
             return timeSheetsResponses;
         }
@@ -134,7 +131,7 @@ public class TimeSheetService implements ITimeSheetsSerVice {
     @Override
     public boolean approvedCheckIn(long id) {
         TimeSheetsEntity timeSheetsEntity = timeSheetsRepository.getReferenceById(id);
-        if(Objects.equals(timeSheetsEntity.getStatus(), STATUS_PENDING)){
+        if (Objects.equals(timeSheetsEntity.getStatus(), STATUS_PENDING)) {
             timeSheetsEntity.setStatus(STATUS_APPROVED);
             timeSheetsEntity.setApprovedDate(new Date());
             timeSheetsRepository.save(timeSheetsEntity);
@@ -146,31 +143,32 @@ public class TimeSheetService implements ITimeSheetsSerVice {
     @Override
     public List<SalaryTotalResponse> getAllSalaryEmployeeByMonth(int month, int year) {
 
-            List<SalaryTotalResponse> salaryTotalResponses = new ArrayList<>();
-            List<EmployeesEntity> employeesEntities = employeesRepository.findAll();
-            for (EmployeesEntity employeesEntity : employeesEntities){
-                List<TimeSheetsEntity> entities = timeSheetsRepository.finAllByMonthAndYearAndId(year,month,employeesEntity.getId());
-                if(!entities.isEmpty()){
-                    SalaryTotalResponse response = timeSheetsConverter.toSalaryTotalResponse(entities);
-                    response.setDate(DateFormatter.toStringMY(entities.getFirst().getDate()));
-                    salaryTotalResponses.add(response);
-                }
+        List<SalaryTotalResponse> salaryTotalResponses = new ArrayList<>();
+        List<EmployeesEntity> employeesEntities = employeesRepository.findAll();
+        for (EmployeesEntity employeesEntity : employeesEntities) {
+            List<TimeSheetsEntity> entities = timeSheetsRepository.finAllByMonthAndYearAndId(year, month, employeesEntity.getId());
+            if (!entities.isEmpty()) {
+                SalaryTotalResponse response = timeSheetsConverter.toSalaryTotalResponse(entities);
+                response.setDate(DateFormatter.toStringMY(entities.getFirst().getDate()));
+                salaryTotalResponses.add(response);
             }
-            return salaryTotalResponses;
+        }
+        return salaryTotalResponses;
     }
+
     @Override
-    public List<SalaryTotalResponse> getAllSalaryEmployeeByYear( int year) {
-        try{
+    public List<SalaryTotalResponse> getAllSalaryEmployeeByYear(int year) {
+        try {
             List<SalaryTotalResponse> salaryTotalResponses = new ArrayList<>();
             List<EmployeesEntity> employeesEntities = employeesRepository.findAll();
-            for (EmployeesEntity employeesEntity : employeesEntities){
-                List<TimeSheetsEntity> entities = timeSheetsRepository.finAllByYearAndId(year,employeesEntity.getId());
+            for (EmployeesEntity employeesEntity : employeesEntities) {
+                List<TimeSheetsEntity> entities = timeSheetsRepository.finAllByYearAndId(year, employeesEntity.getId());
                 SalaryTotalResponse response = timeSheetsConverter.toSalaryTotalResponse(entities);
                 response.setDate(String.valueOf(year));
                 salaryTotalResponses.add(response);
             }
             return salaryTotalResponses;
-        }catch (Exception exception){
+        } catch (Exception exception) {
             return null;
         }
 

@@ -23,7 +23,12 @@ public class TimeSheetsConverter {
 
         response.setId(timeSheetsEntity.getId());
         response.setTimeIn(DateFormatter.parseTime(timeSheetsEntity.getTimeIn()));
-        response.setTimeOut(DateFormatter.parseTime(timeSheetsEntity.getTimeOut()));
+        if(timeSheetsEntity.getTimeOut()==null){
+            response.setTimeOut("Not yet check out");
+        }
+        else{
+            response.setTimeOut(DateFormatter.parseTime(timeSheetsEntity.getTimeOut()));
+        }
         response.setStatus(timeSheetsEntity.getStatus());
         response.setDate(DateFormatter.toStringDate(timeSheetsEntity.getDate()));
         EmployeeResponse employeeResponse = new EmployeeResponse();
