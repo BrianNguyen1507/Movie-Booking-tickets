@@ -8,6 +8,7 @@ import com.cinema.util.DateFormatter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.util.Calendar;
 import java.util.List;
 
@@ -48,12 +49,12 @@ public class TimeSheetsConverter {
             Calendar timeOut = Calendar.getInstance();
             if (entity.getTimeOut()!=null){
                 timeOut.setTime(entity.getTimeOut());
-                int hourDay = (timeOut.get(Calendar.HOUR_OF_DAY) - timeIn.get(Calendar.HOUR_OF_DAY));
+                long totalDate =  entity.getTimeOut().getTime()-entity.getTimeIn().getTime();
+                int hourDay = (int)(totalDate / (1000 * 60 * 60)) ;
                 if (entity.getStatus().equals(STATUS_APPROVED)) {
                     totalHour += Math.min(hourDay, 8);
                 }
             }
-
         }
         response.setHourWorking(totalHour);
         response.setName(timeSheetsEntities.getFirst().getEmployee().getAccount().getCustomer().getName());
